@@ -37,6 +37,12 @@
     <Filter Include="Externals\MathGeoLib\Time">
       <UniqueIdentifier>{1d07a7ae-7541-4ebe-8134-5a5b5b6088ca}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Externals\ImGui">
+      <UniqueIdentifier>{31c0231f-ffc5-488c-9c7a-36695ef593bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Externals\ImGui\backends">
+      <UniqueIdentifier>{6f516d40-de29-4598-900d-70ec666567ed}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Module.h">
@@ -255,6 +261,33 @@
     <ClInclude Include="glmath.h">
       <Filter>Externals</Filter>
     </ClInclude>
+    <ClInclude Include="ImGui\backends\imgui_impl_opengl3.h">
+      <Filter>Externals\ImGui\backends</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\backends\imgui_impl_opengl3_loader.h">
+      <Filter>Externals\ImGui\backends</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\backends\imgui_impl_sdl.h">
+      <Filter>Externals\ImGui\backends</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imconfig.h">
+      <Filter>Externals\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imgui.h">
+      <Filter>Externals\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imgui_internal.h">
+      <Filter>Externals\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imstb_rectpack.h">
+      <Filter>Externals\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imstb_textedit.h">
+      <Filter>Externals\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imstb_truetype.h">
+      <Filter>Externals\ImGui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -388,6 +421,27 @@
     </ClCompile>
     <ClCompile Include="glmath.cpp">
       <Filter>Externals</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\backends\imgui_impl_opengl3.cpp">
+      <Filter>Externals\ImGui\backends</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\backends\imgui_impl_sdl.cpp">
+      <Filter>Externals\ImGui\backends</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui.cpp">
+      <Filter>Externals\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_demo.cpp">
+      <Filter>Externals\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_draw.cpp">
+      <Filter>Externals\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_tables.cpp">
+      <Filter>Externals\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_widgets.cpp">
+      <Filter>Externals\ImGui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
