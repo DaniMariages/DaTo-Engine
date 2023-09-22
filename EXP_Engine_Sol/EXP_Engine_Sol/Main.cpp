@@ -54,21 +54,12 @@ int main(int argc, char ** argv)
 
 		case MAIN_UPDATE:
 		{
-			SDL_Event e;
 			int update_return = App->Update();
 			if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_UP) {
 				
 				state = MAIN_FINISH;
 			}
-			while (SDL_PollEvent(&e)) {
-				
-				if (e.type == SDL_QUIT) {
-					
-					ImGui_ImplSDL2_ProcessEvent(&e);
-					state = MAIN_FINISH;
-				}
-			}
-
+			
 			if (update_return == UPDATE_ERROR)
 			{
 				LOG("Application Update exits with ERROR");
