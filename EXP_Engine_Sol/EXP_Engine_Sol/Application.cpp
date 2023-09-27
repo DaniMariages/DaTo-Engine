@@ -1,4 +1,5 @@
 #include "Application.h"
+#include "Module.h"
 
 Application::Application()
 {
@@ -13,10 +14,10 @@ Application::Application()
 	// They will CleanUp() in reverse order
 
 	// Main Modules
+	AddModule(editor);
 	AddModule(window);
 	AddModule(camera);
 	AddModule(input);
-	AddModule(editor);
 
 	// Renderer last!
 	AddModule(renderer3D);
