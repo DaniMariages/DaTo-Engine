@@ -1,4 +1,5 @@
 #include "Application.h"
+#include "Module.h"
 
 Application::Application()
 {
@@ -15,11 +16,11 @@ Application::Application()
 	// Main Modules
 	AddModule(window);
 	AddModule(camera);
-	AddModule(editor);
 	AddModule(input);
 
 	// Renderer last!
 	AddModule(renderer3D);
+	AddModule(editor);
 }
 
 Application::~Application()

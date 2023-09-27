@@ -27,6 +27,7 @@ bool ModuleEditor::Init()
 {
 	bool ret = true;
 	mFPSLog.reserve(30);
+	ImGui::CreateContext();
 
 	//// Setup Dear ImGui context
 	//IMGUI_CHECKVERSION();
