@@ -71,7 +71,7 @@ bool ModuleWindow::Init()
 
 	//Title Init
 	char title[80];
-	sprintf_s(title, "DaTo Engine");
+	sprintf_s(title, "Unknown Engine");
 	SetTitle(title);
 
 	return ret;

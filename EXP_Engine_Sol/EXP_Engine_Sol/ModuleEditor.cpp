@@ -19,7 +19,6 @@ ModuleEditor::~ModuleEditor ()
 bool ModuleEditor::Init()
 {
 	bool ret = true;
-	ImGui::CreateContext();
 
 	return ret;
 }
@@ -29,7 +28,7 @@ void ModuleEditor :: DrawEditor()
 	//Start the Dear InGui frame
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplSDL2_NewFrame();
-	ImGui::NewFrame();
+	ImGui :: NewFrame();
 
 	if (ImGui::BeginMainMenuBar())
 	{
