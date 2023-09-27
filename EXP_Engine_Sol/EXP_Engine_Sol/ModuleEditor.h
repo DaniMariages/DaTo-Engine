@@ -17,6 +17,7 @@ public:
 	void DrawEditor();
 	bool CleanUp() override;
 
+	SDL_GLContext context;
 	void AddFPS(const float aFPS);
 
 	std::vector<float> mFPSLog;
