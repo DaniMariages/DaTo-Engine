@@ -154,65 +154,8 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 // PostUpdate present buffer to screen
 update_status ModuleRenderer3D::PostUpdate(float dt)
 {
-	/*App->editor->DrawEditor();*/
-	 //Start the Dear ImGui frame
-	ImGui_ImplOpenGL3_NewFrame();
-	ImGui_ImplSDL2_NewFrame();
-	ImGui::NewFrame();
-
-	// 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
-	if(ImGui::BeginMainMenuBar()) {
-		if (ImGui::BeginMenu("File"))
-		{
-			ImGui::Text("Hello world!");
-			ImGui::EndMenu();
-		}
-		if (ImGui::BeginMenu("Config"))
-		{
-			ImGui::Text("Hello world!");
-			ImGui::EndMenu();
-		}
-		if (ImGui::BeginMenu("About"))
-		{
-			ImGui::Text("Hello world!");
-			ImGui::EndMenu();
-		}
-
-
-		ImGui::EndMainMenuBar();
-	}
-	static float f = 0.0f;
-	static int counter = 0;
-
-	bool show_demo_window = true;
-	bool show_another_window = false;
-
-	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-
-	ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
-
-	ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
-	ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
-	ImGui::Checkbox("Another Window", &show_another_window);
-
-	ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-	ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
-
-	if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-		counter++;
-	ImGui::SameLine();
-	ImGui::Text("counter = %d", counter);
-	ImGui::End();
-
-	ImGuiIO& io = ImGui::GetIO(); (void)io;
-
-
-	// Rendering
-	ImGui::Render();
-	glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
-	//glClearColor(1.0, 1.0, 1.0, 0.0);
-	//glClear(GL_COLOR_BUFFER_BIT);
-	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+	//Render Editor
+	App->editor->DrawEditor();
 
 	Grid.Render();
 	SDL_GL_SwapWindow(App->window->window);
