@@ -62,6 +62,8 @@ bool ModuleRenderer3D::Init()
 			ret = false;
 		}
 
+
+
 		//Initialize Modelview Matrix
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
@@ -114,7 +116,7 @@ bool ModuleRenderer3D::Init()
 	OnResize(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	Grid.axis = true;
-	//App->editor->Init();
+	App->editor->Init();
 	// Setup Dear ImGui context
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
@@ -130,6 +132,7 @@ bool ModuleRenderer3D::Init()
 	// Setup Platform/Renderer backends
 	ImGui_ImplSDL2_InitForOpenGL(App->window->window, context);
 	ImGui_ImplOpenGL3_Init("#version 130");
+
 
 	return ret;
 }

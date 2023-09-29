@@ -17,13 +17,14 @@ public:
 	void DrawEditor();
 	bool CleanUp() override;
 
+
 	SDL_GLContext context;
-	void AddFPS(const float aFPS) {
-		mFPSLog.push_back(aFPS);
-	}
+	/*void AddFPS(const float aFPS);*/
 
 	std::vector<float> mFPSLog;
+	float aFPS;
 
+	void UpdateFPS(const float aFPS);
 };
 
 #endif //MODULE_EDITOR

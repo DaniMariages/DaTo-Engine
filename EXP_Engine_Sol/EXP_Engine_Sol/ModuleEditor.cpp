@@ -26,20 +26,23 @@ ModuleEditor::~ModuleEditor ()
 bool ModuleEditor::Init()
 {
 	bool ret = true;
-    //// Setup Dear ImGui context
-    //IMGUI_CHECKVERSION();
-    //ImGui::CreateContext();
-    //ImGuiIO& io = ImGui::GetIO(); (void)io;
-    ////io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-    ////io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+	mFPSLog.reserve(30);
 
-    //// Setup Dear ImGui style
-    //ImGui::StyleColorsDark();
-    ////ImGui::StyleColorsClassic();
+	//// Setup Dear ImGui context
+	//IMGUI_CHECKVERSION();
+	//ImGui::CreateContext();
+	//ImGuiIO& io = ImGui::GetIO(); (void)io;
+	//ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+	////io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+	////io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 
-    //// Setup Platform/Renderer backends
-    //ImGui_ImplSDL2_InitForOpenGL(App->window->window, context);
-    //ImGui_ImplOpenGL3_Init("#version 130");
+	//// Setup Dear ImGui style
+	//ImGui::StyleColorsDark();
+	////ImGui::StyleColorsClassic();
+
+	//// Setup Platform/Renderer backends
+	//ImGui_ImplSDL2_InitForOpenGL(App->window->window, context);
+	//ImGui_ImplOpenGL3_Init("#version 130");
 	return ret;
 }
 
@@ -48,6 +51,10 @@ void ModuleEditor :: DrawEditor()
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplSDL2_NewFrame();
 	ImGui::NewFrame();
+
+	aFPS = App->FPS();
+
+	UpdateFPS(aFPS);
 
 	// 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
 	if (ImGui::BeginMainMenuBar()) {
@@ -58,15 +65,8 @@ void ModuleEditor :: DrawEditor()
 		}
 		if (ImGui::BeginMenu("Config"))
 		{
-
-			float samples[100];
-			for (int n = 0; n < 100; n++)
-				samples[n] = sinf(n * 0.2f + ImGui::GetTime() * 1.5f);
-			ImGui::PlotLines("Samples", samples, 100);
-
-			AddFPS(60);
-			//ImGui::PlotHistogram("FPS", mFPSLog.data(), mFPSLog.size());
-			ImGui::PlotHistogram("FPS", samples, 100);
+	/*		ImGui::PlotHistogram("FPS", mFPSLog.data(), mFPSLog.size());*/
+			ImGui::PlotHistogram("FPS", &mFPSLog[0], mFPSLog.size(),0,"", 0.0f, 100.0f, ImVec2(300, 100));
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu("About"))
@@ -85,7 +85,7 @@ void ModuleEditor :: DrawEditor()
 	bool show_another_window = false;
 
 	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-
+	ImGui::ShowDemoWindow();
 	ImGui::ShowMetricsWindow();
 
 	ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
@@ -102,7 +102,7 @@ void ModuleEditor :: DrawEditor()
 	ImGui::SameLine();
 	ImGui::Text("counter = %d", counter);
 
-	ImGui::PlotHistogram("FPS", mFPSLog.data(), mFPSLog.size());
+	//ImGui::PlotHistogram("FPS", &mFPSLog[0], mFPSLog.size(), 0, "", 0.0f, 100.0f, ImVec2(300, 100));
 	ImGui::End();
 
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
@@ -127,4 +127,24 @@ bool ModuleEditor::CleanUp()
 
 	//SDL_GL_DeleteContext(context);
 	return true;
+}
+
+void ModuleEditor::UpdateFPS(const float aFPS)
+{
+	if (mFPSLog.size() < 30)
+	{
+		mFPSLog.push_back(aFPS);
+	}
+	else
+	{
+		for (unsigned int i = 0; i < mFPSLog.size(); i++)
+		{
+			if (i + 1 < mFPSLog.size())
+			{
+				float copy = mFPSLog[i + 1];
+				mFPSLog[i] = copy;
+			}
+		}
+		mFPSLog[mFPSLog.capacity() - 1] = aFPS;
+	}
 }
