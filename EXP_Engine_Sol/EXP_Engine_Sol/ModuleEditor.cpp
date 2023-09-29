@@ -65,7 +65,6 @@ void ModuleEditor :: DrawEditor()
 		}
 		if (ImGui::BeginMenu("Config"))
 		{
-	/*		ImGui::PlotHistogram("FPS", mFPSLog.data(), mFPSLog.size());*/
 			ImGui::PlotHistogram("FPS", &mFPSLog[0], mFPSLog.size(),0,"", 0.0f, 100.0f, ImVec2(300, 100));
 			ImGui::EndMenu();
 		}
@@ -102,7 +101,7 @@ void ModuleEditor :: DrawEditor()
 	ImGui::SameLine();
 	ImGui::Text("counter = %d", counter);
 
-	//ImGui::PlotHistogram("FPS", &mFPSLog[0], mFPSLog.size(), 0, "", 0.0f, 100.0f, ImVec2(300, 100));
+	ImGui::PlotHistogram("FPS", &mFPSLog[0], mFPSLog.size(), 0, "", 0.0f, 100.0f, ImVec2(300, 100));
 	ImGui::End();
 
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
