@@ -18,7 +18,9 @@ public:
 	bool CleanUp() override;
 
 	SDL_GLContext context;
-	void AddFPS(const float aFPS);
+	void AddFPS(const float aFPS) {
+		mFPSLog.push_back(aFPS);
+	}
 
 	std::vector<float> mFPSLog;
 

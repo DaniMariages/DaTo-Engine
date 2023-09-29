@@ -58,12 +58,20 @@ void ModuleEditor :: DrawEditor()
 		}
 		if (ImGui::BeginMenu("Config"))
 		{
-			ImGui::PlotHistogram("FPS", mFPSLog.data(), mFPSLog.size());
+
+			float samples[100];
+			for (int n = 0; n < 100; n++)
+				samples[n] = sinf(n * 0.2f + ImGui::GetTime() * 1.5f);
+			ImGui::PlotLines("Samples", samples, 100);
+
+			AddFPS(60);
+			//ImGui::PlotHistogram("FPS", mFPSLog.data(), mFPSLog.size());
+			ImGui::PlotHistogram("FPS", samples, 100);
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu("About"))
 		{
-			ImGui::Text("Hello world!");
+			ImGui::Text("DaTo Engine by Dani Mariages & Toni Romanos");
 			ImGui::EndMenu();
 		}
 
@@ -77,6 +85,8 @@ void ModuleEditor :: DrawEditor()
 	bool show_another_window = false;
 
 	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+
+	ImGui::ShowMetricsWindow();
 
 	ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
 
