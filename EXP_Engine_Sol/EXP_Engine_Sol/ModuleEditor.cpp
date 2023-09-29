@@ -58,7 +58,7 @@ void ModuleEditor :: DrawEditor()
 		}
 		if (ImGui::BeginMenu("Config"))
 		{
-			ImGui::Text("Hello world!");
+			ImGui::PlotHistogram("FPS", mFPSLog.data(), mFPSLog.size());
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu("About"))
@@ -91,6 +91,8 @@ void ModuleEditor :: DrawEditor()
 		counter++;
 	ImGui::SameLine();
 	ImGui::Text("counter = %d", counter);
+
+	ImGui::PlotHistogram("FPS", mFPSLog.data(), mFPSLog.size());
 	ImGui::End();
 
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
