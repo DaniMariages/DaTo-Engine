@@ -110,12 +110,13 @@ bool ModuleRenderer3D::Init()
 		lights[0].Active(true);
 		glEnable(GL_LIGHTING);
 		glEnable(GL_COLOR_MATERIAL);
+
+		glewInit();
 	}
 
 	// Projection matrix for
 	OnResize(SCREEN_WIDTH, SCREEN_HEIGHT);
 
-	Grid.axis = true;
 	App->editor->Init();
 	// Setup Dear ImGui context
 	IMGUI_CHECKVERSION();
@@ -133,6 +134,22 @@ bool ModuleRenderer3D::Init()
 	ImGui_ImplSDL2_InitForOpenGL(App->window->window, context);
 	ImGui_ImplOpenGL3_Init("#version 130");
 
+	Grid.axis = true;
+
+	VBO = 0;
+	//glGenBuffers(1, &VBO);
+	////si quitas glBindBuffer peta.
+	//glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(float) * num_vertices * 3, vertices, GL_STATIC_DRAW);
+	////Hay que resetearlo a 0
+	//glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	//glEnableClientState(GL_VERTEX_ARRAY);
+	//glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	//glVertexPointer(3, GL_FLOAT, 0, NULL);
+	//// … bind and use other buffers
+	//glDrawArrays(GL_TRIANGLES, 0, num_vertices);
+	//glDisableClientState(GL_VERTEX_ARRAY);
 
 	return ret;
 }
@@ -159,9 +176,39 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 update_status ModuleRenderer3D::PostUpdate(float dt)
 {
 	//Render Editor
-	App->editor->DrawEditor();
 
 	Grid.Render();
+	glLineWidth(2.0f);
+	glBegin(GL_TRIANGLES);
+
+	glVertex3d(0,0,0);	glVertex3d(1,1,0);	glVertex3d(1,0,0);
+	glVertex3d(0,0,0);	glVertex3d(0,1,0);	glVertex3d(1,1,0);
+
+	glVertex3d(0, 0, 0);	glVertex3d(0, 1, 1);	glVertex3d(0, 1, 0);
+	glVertex3d(0, 0, 1);	glVertex3d(0, 1, 1);	glVertex3d(0, 0, 0);
+
+	glVertex3d(0, 0, 0);	glVertex3d(1, 0, 1);	glVertex3d(0, 0, 1);
+	glVertex3d(0, 0, 0);	glVertex3d(1, 0, 0);	glVertex3d(1, 0, 1);
+
+	glVertex3d(0, 1, 1);	glVertex3d(0, 0, 1);	glVertex3d(1, 0, 1);
+	glVertex3d(1, 1, 1);	glVertex3d(0, 1, 1);	glVertex3d(1, 0, 1);
+
+	glVertex3d(1, 0, 0);	glVertex3d(1, 1, 0);	glVertex3d(1, 1, 1);
+	glVertex3d(1, 0, 0);	glVertex3d(1, 1, 1);	glVertex3d(1, 0, 1);
+
+	glVertex3d(0, 1, 0);	glVertex3d(0, 1, 1);	glVertex3d(1, 1, 1);
+	glVertex3d(1, 1, 1);	glVertex3d(1, 1, 0);	glVertex3d(0, 1, 0);
+	//Tirangle
+	//glBegin(GL_TRIANGLES);
+
+	//glVertex3d(0,0,0);
+	//glVertex3d(1,0,0);
+	//glVertex3d(0,1,0);
+
+	glEnd();
+	glLineWidth(1.0f);
+
+	App->editor->DrawEditor();
 	SDL_GL_SwapWindow(App->window->window);
 	return UPDATE_CONTINUE;
 }
