@@ -113,7 +113,11 @@ bool ModuleRenderer3D::Init()
 	OnResize(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	Grid.axis = true;
+<<<<<<< HEAD
 
+=======
+	App->editor->Init();
+>>>>>>> parent of f17a14d (clase gl + cubo)
 	// Setup Dear ImGui context
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
@@ -129,6 +133,10 @@ bool ModuleRenderer3D::Init()
 	ImGui_ImplSDL2_InitForOpenGL(App->window->window, context);
 	ImGui_ImplOpenGL3_Init("#version 130");
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> parent of f17a14d (clase gl + cubo)
 	return ret;
 }
 
@@ -153,6 +161,7 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 // PostUpdate present buffer to screen
 update_status ModuleRenderer3D::PostUpdate(float dt)
 {
+<<<<<<< HEAD
 	// Start the Dear ImGui frame
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplSDL2_NewFrame();
@@ -170,6 +179,10 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	//glClearColor(1.0, 1.0, 1.0, 0.0);
 	//glClear(GL_COLOR_BUFFER_BIT);
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+=======
+	//Render Editor
+	App->editor->DrawEditor();
+>>>>>>> parent of f17a14d (clase gl + cubo)
 
 	Grid.Render();
 	SDL_GL_SwapWindow(App->window->window);
