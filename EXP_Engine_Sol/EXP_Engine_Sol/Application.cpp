@@ -104,15 +104,3 @@ void Application::AddModule(Module* mod)
 {
 	list_modules.push_back(mod);
 }
-
-float Application::FPS() {
-	return 1 / dt;
-}
-
-float Application::DT() {
-	return dt;
-}
-
-float Application::MS() {
-	return dt * 100;
-}
