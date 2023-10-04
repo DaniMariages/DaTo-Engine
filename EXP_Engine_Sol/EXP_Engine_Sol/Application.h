@@ -34,6 +34,9 @@ public:
 	bool Init();
 	update_status Update();
 	bool CleanUp();
+	float FPS();
+	float DT();
+	float MS();
 
 private:
 

@@ -17,6 +17,10 @@ Application::Application()
 	AddModule(editor);
 	AddModule(window);
 	AddModule(camera);
+<<<<<<< HEAD
+=======
+	AddModule(editor);
+>>>>>>> f17a14db78303aed6f0b335c6477b31043fdf07b
 	AddModule(input);
 
 	// Renderer last!
@@ -103,4 +107,16 @@ bool Application::CleanUp()
 void Application::AddModule(Module* mod)
 {
 	list_modules.push_back(mod);
+}
+
+float Application::FPS() {
+	return 1 / dt;
+}
+
+float Application::DT() {
+	return dt;
+}
+
+float Application::MS() {
+	return dt * 100;
 }
