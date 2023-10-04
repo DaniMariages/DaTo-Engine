@@ -114,8 +114,11 @@ bool ModuleRenderer3D::Init()
 
 	Grid.axis = true;
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
+=======
+>>>>>>> parent of f17a14d (clase gl + cubo)
 	App->editor->Init();
 >>>>>>> parent of f17a14d (clase gl + cubo)
 	// Setup Dear ImGui context
@@ -134,7 +137,10 @@ bool ModuleRenderer3D::Init()
 	ImGui_ImplOpenGL3_Init("#version 130");
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> parent of f17a14d (clase gl + cubo)
 
 >>>>>>> parent of f17a14d (clase gl + cubo)
 	return ret;
@@ -182,6 +188,9 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 =======
 	//Render Editor
 	App->editor->DrawEditor();
+<<<<<<< HEAD
+>>>>>>> parent of f17a14d (clase gl + cubo)
+=======
 >>>>>>> parent of f17a14d (clase gl + cubo)
 
 	Grid.Render();
