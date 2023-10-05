@@ -55,10 +55,6 @@ int main(int argc, char ** argv)
 		case MAIN_UPDATE:
 		{
 			int update_return = App->Update();
-			if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_UP) {
-				
-				state = MAIN_FINISH;
-			}
 			
 			if (update_return == UPDATE_ERROR)
 			{
@@ -66,8 +62,11 @@ int main(int argc, char ** argv)
 				state = MAIN_EXIT;
 			}
 
-			if (update_return == UPDATE_STOP)
+			if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_UP || App->input->quit == true) {
+
 				state = MAIN_FINISH;
+			}
+
 		}
 			break;
 
