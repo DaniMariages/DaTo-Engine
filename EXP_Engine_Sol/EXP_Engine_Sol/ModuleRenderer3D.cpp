@@ -31,6 +31,25 @@ ModuleRenderer3D::~ModuleRenderer3D()
 {}
 
 // Called before render is available
+static const GLfloat CubeVertices[] = {
+	-1, -1, -1,
+	1, -1, -1,
+	1, 1, -1,
+	-1, 1, -1,
+	-1, -1, 1,
+	1, -1, 1,
+	1, 1, 1,
+	-1, 1, 1
+};
+static const GLuint CubeIndices[] = {
+	0, 1, 3, 3, 1, 2,
+	1, 5, 2, 2, 5, 6,
+	5, 4, 6, 6, 4, 7,
+	4, 0, 7, 7, 0, 3,
+	3, 2, 7, 7, 2, 6,
+	4, 5, 0, 0, 5, 1
+};
+// Called before render is available
 bool ModuleRenderer3D::Init()
 {
 	LOG("Creating 3D Renderer context");
@@ -136,21 +155,27 @@ bool ModuleRenderer3D::Init()
 
 	Grid.axis = true;
 
+	Grid.axis = true;
+
 	VBO = 0;
-	//glGenBuffers(1, &VBO);
-	////si quitas glBindBuffer peta.
-	//glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	//glBufferData(GL_ARRAY_BUFFER, sizeof(float) * num_vertices * 3, vertices, GL_STATIC_DRAW);
-	////Hay que resetearlo a 0
-	//glBindBuffer(GL_ARRAY_BUFFER, 0);
+	EBO = 0;
+	VAO = 0;
+	glGenBuffers(1, &VBO);
+	glGenBuffers(1, &EBO);
+	glGenVertexArrays(1, &VAO);
 
-	//glEnableClientState(GL_VERTEX_ARRAY);
-	//glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	//glVertexPointer(3, GL_FLOAT, 0, NULL);
-	//// … bind and use other buffers
-	//glDrawArrays(GL_TRIANGLES, 0, num_vertices);
-	//glDisableClientState(GL_VERTEX_ARRAY);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(CubeVertices), CubeVertices, GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(CubeIndices), CubeIndices, GL_STATIC_DRAW);
+	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+	glBindVertexArray(VAO);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+	glBindVertexArray(0);
 	return ret;
 }
 
@@ -205,6 +230,11 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	//glVertex3d(1,0,0);
 	//glVertex3d(0,1,0);
 
+	glBindVertexArray(VAO);
+	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+/*	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, NULL);*/ //da error no se por que
+
+
 	glEnd();
 	glLineWidth(1.0f);
 
@@ -217,12 +247,12 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 bool ModuleRenderer3D::CleanUp()
 {
 	LOG("Destroying 3D Renderer");
-	//App->editor->CleanUp();
-	// Cleanup
-	ImGui_ImplOpenGL3_Shutdown();
-	ImGui_ImplSDL2_Shutdown();
-	ImGui::DestroyContext();
 
+	if (VBO != 0)
+	{
+		glDeleteBuffers(1, &VBO);
+		VBO = 0;
+	}
 	SDL_GL_DeleteContext(context);
 
 	return true;

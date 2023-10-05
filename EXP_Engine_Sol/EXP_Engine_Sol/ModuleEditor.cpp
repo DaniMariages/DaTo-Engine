@@ -5,6 +5,7 @@
 #include "ImGui/imgui.h"
 #include "ImGui/backends/imgui_impl_opengl3.h"
 #include "ImGuI/backends/imgui_impl_sdl2.h"
+#include "Glew/include/glew.h"
 #include "SDL\include\SDL_opengl.h"
 #include <gl/GL.h>
 #include <gl/GLU.h>
@@ -89,7 +90,13 @@ void ModuleEditor :: DrawEditor()
 
 	ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
 
-	ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
+	//Display current hardware and driver capabilities
+	ImGui::Text("Vendor: %s", glGetString(GL_VENDOR));
+	ImGui::Text("Renderer: %s", glGetString(GL_RENDERER));
+	ImGui::Text("OpenGL version supported %s", glGetString(GL_VERSION));
+	ImGui::Text("GLSL: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
+
+
 	ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
 	ImGui::Checkbox("Another Window", &show_another_window);
 
