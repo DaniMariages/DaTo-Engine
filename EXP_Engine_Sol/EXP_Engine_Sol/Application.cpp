@@ -48,6 +48,11 @@ bool Application::Init()
 		(*it)->Start();
 	}
 
+	GLenum err = glewInit();
+	// … check for errors
+	LOG("Using Glew %s", glewGetString(GLEW_VERSION));
+	// Should be 2.0
+
 	LOG("Vendor: %s", glGetString(GL_VENDOR));
 	LOG("Renderer: %s", glGetString(GL_RENDERER));
 	LOG("OpenGL version supported %s", glGetString(GL_VERSION));

@@ -25,6 +25,8 @@ public:
 	float aFPS;
 
 	void UpdateFPS(const float aFPS);
+	bool* lighting();
+	bool* lightningOff();
 };
 
 #endif //MODULE_EDITOR

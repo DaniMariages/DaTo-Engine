@@ -66,6 +66,14 @@ void ModuleEditor :: DrawEditor()
 		}
 		if (ImGui::BeginMenu("Config"))
 		{
+			//Display current hardware and driver capabilities
+			ImGui::Text("Using Glew %s", glewGetString(GLEW_VERSION));
+			ImGui::Text("Vendor: %s", glGetString(GL_VENDOR));
+			ImGui::Text("Renderer: %s", glGetString(GL_RENDERER));
+			ImGui::Text("OpenGL version supported %s", glGetString(GL_VERSION));
+			ImGui::Text("GLSL: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
+
+
 			ImGui::PlotHistogram("FPS", &mFPSLog[0], mFPSLog.size(),0,"", 0.0f, 100.0f, ImVec2(300, 100));
 			ImGui::EndMenu();
 		}
@@ -91,6 +99,7 @@ void ModuleEditor :: DrawEditor()
 	ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
 
 	//Display current hardware and driver capabilities
+	ImGui::Text("Using Glew %s", glewGetString(GLEW_VERSION));
 	ImGui::Text("Vendor: %s", glGetString(GL_VENDOR));
 	ImGui::Text("Renderer: %s", glGetString(GL_RENDERER));
 	ImGui::Text("OpenGL version supported %s", glGetString(GL_VERSION));
@@ -98,7 +107,8 @@ void ModuleEditor :: DrawEditor()
 
 
 	ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
-	ImGui::Checkbox("Another Window", &show_another_window);
+	//ImGui::Checkbox("Lightning ON", lighting());
+	//ImGui::Checkbox("Lightning ON", lightingOff());
 
 	ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
 	ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
@@ -154,3 +164,13 @@ void ModuleEditor::UpdateFPS(const float aFPS)
 		mFPSLog[mFPSLog.capacity() - 1] = aFPS;
 	}
 }
+
+//bool* lighting() {
+//	glEnable(GL_LIGHTING);
+//	return true;
+//}
+//
+//bool* lightningOff() {
+//	glDisable(GL_LIGHTING);
+//	return false;
+//}
