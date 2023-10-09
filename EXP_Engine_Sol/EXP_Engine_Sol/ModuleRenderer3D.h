@@ -7,6 +7,7 @@
 #include "MathGeoLib/include/Math/float4x4.h"
 #include "Primitive.h"
 #include "Glew/include/glew.h"
+#include "LoadFBX.h"
 
 //todo: REMOVE this before 1st delivery!!
 #include "glmath.h"
@@ -31,7 +32,8 @@ public:
 	Light lights[MAX_LIGHTS];
 	SDL_GLContext context;
 	CPlane Grid;
-	
+	LoadFBX myModel;
+
 	//You won't need this after using Frustum
 	mat4x4 ProjectionMatrix;
 	uint VBO;

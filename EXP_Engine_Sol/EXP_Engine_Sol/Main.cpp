@@ -1,6 +1,10 @@
+#define _CRTDBG_MAP_ALLOC
+
 #include <stdlib.h>
 #include "Application.h"
 #include "Globals.h"
+#include "stdio.h"
+#include "crtdbg.h"
 
 #include "SDL/include/SDL.h"
 #include "ImGui/imgui.h"
@@ -20,6 +24,10 @@ enum main_states
 int main(int argc, char ** argv)
 {
 	LOG("Starting game '%s'...", TITLE);
+
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+	int* intPtr = new int;
+	*intPtr = 10;
 
 	int main_return = EXIT_FAILURE;
 	main_states state = MAIN_CREATION;
@@ -86,6 +94,9 @@ int main(int argc, char ** argv)
 
 		}
 	}
+
+	delete intPtr;
+	_CrtDumpMemoryLeaks();
 
 	delete App;
 	LOG("Exiting game '%s'...\n", TITLE);

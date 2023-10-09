@@ -5,6 +5,7 @@
 #include "ModuleEditor.h"
 #include <gl/GL.h>
 #include <gl/GLU.h>
+#include "glmath.h"
 
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
 #pragma comment (lib, "glu32.lib") /* link Microsoft OpenGL lib   */
@@ -81,8 +82,6 @@ bool ModuleRenderer3D::Init()
 			ret = false;
 		}
 
-
-
 		//Initialize Modelview Matrix
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
@@ -155,7 +154,7 @@ bool ModuleRenderer3D::Init()
 
 	Grid.axis = true;
 
-	Grid.axis = true;
+	myModel.Load("../Assets_FBX/BakerHouse.fbx");
 
 	VBO = 0;
 	EBO = 0;
@@ -203,26 +202,11 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	//Render Editor
 
 	Grid.Render();
-	glLineWidth(2.0f);
-	glBegin(GL_TRIANGLES);
+	//glLineWidth(2.0f);
+	//glBegin(GL_TRIANGLES);
 
-	glVertex3d(0,0,0);	glVertex3d(1,1,0);	glVertex3d(1,0,0);
-	glVertex3d(0,0,0);	glVertex3d(0,1,0);	glVertex3d(1,1,0);
+	myModel.Draw();
 
-	glVertex3d(0, 0, 0);	glVertex3d(0, 1, 1);	glVertex3d(0, 1, 0);
-	glVertex3d(0, 0, 1);	glVertex3d(0, 1, 1);	glVertex3d(0, 0, 0);
-
-	glVertex3d(0, 0, 0);	glVertex3d(1, 0, 1);	glVertex3d(0, 0, 1);
-	glVertex3d(0, 0, 0);	glVertex3d(1, 0, 0);	glVertex3d(1, 0, 1);
-
-	glVertex3d(0, 1, 1);	glVertex3d(0, 0, 1);	glVertex3d(1, 0, 1);
-	glVertex3d(1, 1, 1);	glVertex3d(0, 1, 1);	glVertex3d(1, 0, 1);
-
-	glVertex3d(1, 0, 0);	glVertex3d(1, 1, 0);	glVertex3d(1, 1, 1);
-	glVertex3d(1, 0, 0);	glVertex3d(1, 1, 1);	glVertex3d(1, 0, 1);
-
-	glVertex3d(0, 1, 0);	glVertex3d(0, 1, 1);	glVertex3d(1, 1, 1);
-	glVertex3d(1, 1, 1);	glVertex3d(1, 1, 0);	glVertex3d(0, 1, 0);
 	//Tirangle
 	//glBegin(GL_TRIANGLES);
 
@@ -232,8 +216,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 
 	glBindVertexArray(VAO);
 	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-/*	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, NULL);*/ //da error no se por que
-
+	//glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, NULL); //da error no se por que
 
 	glEnd();
 	glLineWidth(1.0f);
