@@ -197,9 +197,9 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 		model.Load(App->input->filePath);
 		Models.push_back(model);
 
-
 		LOG("Model vector size is: %d.", Models.size());
 		modelLoaded = true;
+		LOG("Model path was: %s", App->input->filePath);
 		App->input->filePath = nullptr;
 		LOG("Model path is now: %s", App->input->filePath);
 	}
@@ -220,7 +220,6 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	{
 		Models[i].Draw();
 		modelLoaded = false;
-		LOG("Drawing Model");
 	}
 	
 	//Tirangle

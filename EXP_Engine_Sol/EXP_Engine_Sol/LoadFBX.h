@@ -101,9 +101,12 @@ private:
             for (unsigned int j = 0; j < face.mNumIndices; j++)
                 indices.push_back(face.mIndices[j]);
         }
-
+  
         LOG("Num Vertex: %d.", mesh->mNumVertices);
         LOG("Num Index: %d.", mesh->mNumFaces);
+
+        LOG("Vertices: %d", vertices);
+        LOG("Indices: %d", indices);
 
         return Mesh(vertices, indices);
     }
