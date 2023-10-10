@@ -60,6 +60,8 @@ public:
 
 	bool quit;
 
+	const char* filePath = nullptr;
+
 private:
 	KEY_STATE* keyboard;
 	KEY_STATE mouse_buttons[MAX_MOUSE_BUTTONS];

@@ -33,6 +33,8 @@ public:
 	SDL_GLContext context;
 	CPlane Grid;
 	LoadFBX myModel;
+	const char* myModelPath;
+	bool meshLoaded = false;
 
 	//You won't need this after using Frustum
 	mat4x4 ProjectionMatrix;

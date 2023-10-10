@@ -3,6 +3,7 @@
 #include "ModuleInput.h"
 #include "ImGui/backends/imgui_impl_sdl.h"
 
+
 #define MAX_KEYS 300
 
 ModuleInput::ModuleInput(Application* app, bool start_enabled) : Module(app, start_enabled)
@@ -107,6 +108,14 @@ update_status ModuleInput::PreUpdate(float dt)
 			case SDL_QUIT:
 			quit = true;
 			break;
+
+			case SDL_DROPFILE:
+				if (e.drop.file != ERROR) 
+				{
+					filePath = e.drop.file;
+					App->renderer3D->myModelPath = filePath;
+					LOG("Path loaded: %s.", filePath);
+				}
 
 			case SDL_WINDOWEVENT:
 			{

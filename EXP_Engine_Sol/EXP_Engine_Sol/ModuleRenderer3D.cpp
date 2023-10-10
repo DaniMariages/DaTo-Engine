@@ -147,14 +147,11 @@ bool ModuleRenderer3D::Init()
 	// Setup Dear ImGui style
 	ImGui::StyleColorsDark();
 	//ImGui::StyleColorsClassic();
-
 	// Setup Platform/Renderer backends
 	ImGui_ImplSDL2_InitForOpenGL(App->window->window, context);
 	ImGui_ImplOpenGL3_Init("#version 130");
 
 	Grid.axis = true;
-
-	myModel.Load("../Assets_FBX/BakerHouse.fbx");
 
 	VBO = 0;
 	EBO = 0;
@@ -193,6 +190,12 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 	for(uint i = 0; i < MAX_LIGHTS; ++i)
 		lights[i].Render();
 
+	if (meshLoaded == false && App->input->filePath != nullptr)
+	{
+		myModel.Load(App->input->filePath);
+		meshLoaded = true;
+	}
+
 	return UPDATE_CONTINUE;
 }
 
@@ -214,7 +217,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	//glVertex3d(1,0,0);
 	//glVertex3d(0,1,0);
 
-	glBindVertexArray(VAO);
+	//glBindVertexArray(VAO);
 	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	//glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, NULL); //da error no se por que
 

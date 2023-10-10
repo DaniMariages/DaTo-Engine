@@ -33,7 +33,10 @@ private:
 
     void loadModel(const char* file_path)
     {
-        const aiScene * scene = aiImportFile(file_path, aiProcessPreset_TargetRealtime_MaxQuality);
+        const aiScene* scene = nullptr;
+
+        if(file_path != nullptr) 
+            scene = aiImportFile(file_path, aiProcessPreset_TargetRealtime_MaxQuality);
 
         if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
         {
@@ -41,6 +44,7 @@ private:
             return;
         }
         else LOG("Scene loaded succesfully: %s.", file_path);
+
         processNode(scene->mRootNode, scene);
     }
 
@@ -59,7 +63,6 @@ private:
         {
             processNode(node->mChildren[i], scene);
         }
-
     }
 
     Mesh processMesh(aiMesh* mesh, const aiScene* scene)
@@ -72,7 +75,7 @@ private:
         for (unsigned int i = 0; i < mesh->mNumVertices; i++)
         {
             Vertex vertex;
-            vec3 vector; // we declare a placeholder vector since assimp uses its own vector class that doesn't directly convert to glm's vec3 class so we transfer the data to this placeholder glm::vec3 first.
+            float3 vector; // we declare a placeholder vector since assimp uses its own vector class that doesn't directly convert to glm's vec3 class so we transfer the data to this placeholder glm::vec3 first.
             // positions
             vector.x = mesh->mVertices[i].x;
             vector.y = mesh->mVertices[i].y;
