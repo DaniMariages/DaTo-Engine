@@ -104,6 +104,7 @@ private:
 
         LOG("Num Vertex: %d.", mesh->mNumVertices);
         LOG("Num Index: %d.", mesh->mNumFaces);
+
         return Mesh(vertices, indices);
     }
 };

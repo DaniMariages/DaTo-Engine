@@ -190,17 +190,18 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 	for(uint i = 0; i < MAX_LIGHTS; ++i)
 		lights[i].Render();
 
-	if (meshLoaded == false && App->input->filePath != nullptr)
+	if (modelLoaded == false && App->input->filePath != nullptr)
 	{
 		LOG("Loading Model...");
 		LoadFBX model;
 		model.Load(App->input->filePath);
 		Models.push_back(model);
 
+
 		LOG("Model vector size is: %d.", Models.size());
-		meshLoaded = true;
+		modelLoaded = true;
 		App->input->filePath = nullptr;
-		LOG("Model vector path: %s", App->input->filePath);
+		LOG("Model path is now: %s", App->input->filePath);
 	}
 
 	return UPDATE_CONTINUE;
@@ -217,11 +218,11 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 
 	for (unsigned int i = 0; i < Models.size(); ++i)
 	{
-		LOG("Drawing Model: %d.", i);
 		Models[i].Draw();
+		modelLoaded = false;
+		LOG("Drawing Model");
 	}
 	
-
 	//Tirangle
 	//glBegin(GL_TRIANGLES);
 
