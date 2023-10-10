@@ -25,10 +25,6 @@ int main(int argc, char ** argv)
 {
 	LOG("Starting game '%s'...", TITLE);
 
-	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-	int* intPtr = new int;
-	*intPtr = 10;
-
 	int main_return = EXIT_FAILURE;
 	main_states state = MAIN_CREATION;
 	Application* App = NULL;
@@ -94,9 +90,6 @@ int main(int argc, char ** argv)
 
 		}
 	}
-
-	delete intPtr;
-	_CrtDumpMemoryLeaks();
 
 	delete App;
 	LOG("Exiting game '%s'...\n", TITLE);

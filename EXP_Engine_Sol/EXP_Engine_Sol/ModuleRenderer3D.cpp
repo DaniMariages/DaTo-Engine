@@ -192,8 +192,15 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 
 	if (meshLoaded == false && App->input->filePath != nullptr)
 	{
-		myModel.Load(App->input->filePath);
+		LOG("Loading Model...");
+		LoadFBX model;
+		model.Load(App->input->filePath);
+		Models.push_back(model);
+
+		LOG("Model vector size is: %d.", Models.size());
 		meshLoaded = true;
+		App->input->filePath = nullptr;
+		LOG("Model vector path: %s", App->input->filePath);
 	}
 
 	return UPDATE_CONTINUE;
@@ -208,7 +215,12 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	//glLineWidth(2.0f);
 	//glBegin(GL_TRIANGLES);
 
-	myModel.Draw();
+	for (unsigned int i = 0; i < Models.size(); ++i)
+	{
+		LOG("Drawing Model: %d.", i);
+		Models[i].Draw();
+	}
+	
 
 	//Tirangle
 	//glBegin(GL_TRIANGLES);

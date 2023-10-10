@@ -32,9 +32,11 @@ public:
 	Light lights[MAX_LIGHTS];
 	SDL_GLContext context;
 	CPlane Grid;
-	LoadFBX myModel;
+	//LoadFBX myModel;
 	const char* myModelPath;
 	bool meshLoaded = false;
+	int numModel = 0;
+	std::vector<LoadFBX> Models;
 
 	//You won't need this after using Frustum
 	mat4x4 ProjectionMatrix;
