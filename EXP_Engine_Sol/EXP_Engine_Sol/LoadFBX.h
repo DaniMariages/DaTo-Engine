@@ -28,9 +28,10 @@ public:
             meshes[i].Draw();
     }
 
-private:
     // model data
     std::vector<Mesh> meshes;
+
+private:
 
     void loadModel(const char* file_path)
     {
@@ -71,6 +72,7 @@ private:
         // data to fill
         std::vector<Vertex> vertices;
         std::vector<unsigned int> indices;
+        std::vector<float3> faceNormals;
 
         // walk through each of the mesh's vertices
         for (unsigned int i = 0; i < mesh->mNumVertices; i++)
@@ -97,17 +99,27 @@ private:
         for (unsigned int i = 0; i < mesh->mNumFaces; i++)
         {
             aiFace face = mesh->mFaces[i];
+
             // retrieve all indices of the face and store them in the indices vector
             for (unsigned int j = 0; j < face.mNumIndices; j++)
                 indices.push_back(face.mIndices[j]);
         }
   
-        LOG("Num Vertex: %d.", mesh->mNumVertices);
-        LOG("Num Index: %d.", mesh->mNumFaces);
+        LOG("Num Vertices: %d.", mesh->mNumVertices);
+        LOG("Num Caras: %d.", mesh->mNumFaces);
 
         LOG("Vertices: %d", vertices);
         LOG("Indices: %d", indices);
 
         return Mesh(vertices, indices);
+    }
+
+    float3 CalculateFaceNormal(const float3& vertex1, const float3& vertex2, const float3& vertex3)
+    {
+        // Calcula la normal de la cara utilizando los vértices proporcionados
+        float3 edge1 = vertex2 - vertex1;
+        float3 edge2 = vertex3 - vertex1;
+        float3 faceNormal = Cross(edge1, edge2).Normalized();
+        return faceNormal;
     }
 };

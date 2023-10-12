@@ -220,8 +220,28 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	{
 		Models[i].Draw();
 		modelLoaded = false;
+
+		for (unsigned int m = 0; m < Models[i].meshes.size(); ++m) 
+		{
+			for (unsigned int j = 0; j < Models[i].meshes[m].vertices.size(); ++j)
+			{
+				const Vertex& vertex = Models[i].meshes[m].vertices[j];
+				// Puedes usar las posiciones de los vértices y las normales para dibujar las líneas que representan las normales
+				float3 vertexPosition = vertex.Position;
+				float3 vertexNormal = vertex.Normal;
+
+				// Dibuja una línea desde el vértice hacia la dirección de la normal
+				// Puedes usar las funciones de OpenGL, como glBegin, glVertex3f, glEnd, para dibujar las líneas
+				glBegin(GL_LINES);
+				glVertex3f(vertexPosition.x, vertexPosition.y, vertexPosition.z);
+				glVertex3f(vertexPosition.x + vertexNormal.x, vertexPosition.y + vertexNormal.y, vertexPosition.z + vertexNormal.z);
+				glEnd();
+			}
+		}
 	}
 	
+	
+
 	//Tirangle
 	//glBegin(GL_TRIANGLES);
 
