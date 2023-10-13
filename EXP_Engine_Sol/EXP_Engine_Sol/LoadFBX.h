@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Globals.h"
+#include "Application.h"
 #include "Assimp/include/cimport.h"
 #include "Assimp/include/scene.h"
 #include "Assimp/include/postprocess.h"
@@ -30,6 +31,7 @@ public:
 
     void DrawVertex() 
     {
+ 
         for (unsigned int m = 0; m < meshes.size(); ++m)
         {
             for (unsigned int j = 0; j < meshes[m].vertices.size(); ++j)

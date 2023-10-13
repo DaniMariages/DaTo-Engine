@@ -1,6 +1,9 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleRenderer3D.h"
+#include "ModuleWindow.h"
+#include "ModuleCamera3D.h"
+#include "ModuleInput.h"
 #include "SDL\include\SDL_opengl.h"
 #include "ModuleEditor.h"
 #include <gl/GL.h>
@@ -217,11 +220,17 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 
 	for (unsigned int i = 0; i < Models.size(); ++i)
 	{
-		Models[i].Draw();
-		modelLoaded = false;
+		if (App->editor->Draw) {
+			Models[i].Draw();
+			modelLoaded = false;
+		}
 		
-		Models[i].DrawVertex();
-		Models[i].DrawFaces();
+		if (App->editor->vertex) {
+			Models[i].DrawVertex();
+		}
+		if (App->editor->Normals) {
+			Models[i].DrawFaces();
+		}
 	}
 	
 	//Tirangle

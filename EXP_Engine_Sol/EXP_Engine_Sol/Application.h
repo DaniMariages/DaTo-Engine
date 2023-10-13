@@ -2,14 +2,18 @@
 
 #include "Globals.h"
 #include "Timer.h"
-#include "Module.h"
-#include "ModuleWindow.h"
-#include "ModuleInput.h"
-#include "ModuleRenderer3D.h"
-#include "ModuleCamera3D.h"
-#include "ModuleEditor.h"
 
 #include<vector>
+#include<string>
+
+class Module;
+class ModuleWindow;
+class ModuleInput;
+class ModuleSceneIntro;
+class ModuleRenderer3D;
+class ModuleEditor;
+class ModuleCamera3D;
+class ModuleFileSystem;
 
 class Application
 {
@@ -37,6 +41,7 @@ public:
 	float FPS();
 	float DT();
 	float MS();
+	std::vector<float> mFPSLog;
 
 private:
 

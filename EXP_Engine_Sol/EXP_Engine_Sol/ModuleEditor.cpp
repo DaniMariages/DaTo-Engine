@@ -1,12 +1,16 @@
-#include "Globals.h"
 #include "Application.h"
 #include "ModuleEditor.h"
 #include "ModuleWindow.h"
+#include "ModuleRenderer3D.h"
+#include "ModuleInput.h"
+
 #include "ImGui/imgui.h"
 #include "ImGui/backends/imgui_impl_opengl3.h"
 #include "ImGuI/backends/imgui_impl_sdl2.h"
+
 #include "Glew/include/glew.h"
 #include "SDL\include\SDL_opengl.h"
+
 #include <gl/GL.h>
 #include <gl/GLU.h>
 
@@ -27,7 +31,7 @@ ModuleEditor::~ModuleEditor ()
 bool ModuleEditor::Init()
 {
 	bool ret = true;
-	mFPSLog.reserve(30);
+	App->mFPSLog.reserve(30);
 
 	//// Setup Dear ImGui context
 	//IMGUI_CHECKVERSION();
@@ -74,7 +78,7 @@ void ModuleEditor :: DrawEditor()
 			ImGui::Text("GLSL: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
 
 
-			ImGui::PlotHistogram("FPS", &mFPSLog[0], mFPSLog.size(),0,"", 0.0f, 100.0f, ImVec2(300, 100));
+			ImGui::PlotHistogram("FPS", &App->mFPSLog[0], App->mFPSLog.size(),0,"", 0.0f, 100.0f, ImVec2(300, 100));
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu("About"))
@@ -86,6 +90,7 @@ void ModuleEditor :: DrawEditor()
 
 		ImGui::EndMainMenuBar();
 	}
+
 	static float f = 0.0f;
 	static int counter = 0;
 
@@ -106,7 +111,14 @@ void ModuleEditor :: DrawEditor()
 	ImGui::Text("GLSL: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
 
 
-	if (ImGui::Checkbox("Demo Window", &show_demo_window))// Edit bools storing our window open/close state
+	if (ImGui::Checkbox("Vertex", &vertex)) {
+		if (vertex == false) {
+			LOG("Vertex false");
+		}
+		if (vertex == true) {
+			LOG("Vertex");
+		}
+	}// Edit bools storing our window open/close state
 
 	ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
 	ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
@@ -116,7 +128,8 @@ void ModuleEditor :: DrawEditor()
 	ImGui::SameLine();
 	ImGui::Text("counter = %d", counter);
 
-	ImGui::PlotHistogram("FPS", &mFPSLog[0], mFPSLog.size(), 0, "", 0.0f, 100.0f, ImVec2(300, 100));
+	Config();
+
 	ImGui::End();
 
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
@@ -145,30 +158,39 @@ bool ModuleEditor::CleanUp()
 
 void ModuleEditor::UpdateFPS(const float aFPS)
 {
-	if (mFPSLog.size() < 30)
+	if (App->mFPSLog.size() < 30)
 	{
-		mFPSLog.push_back(aFPS);
+		App->mFPSLog.push_back(aFPS);
 	}
 	else
 	{
-		for (unsigned int i = 0; i < mFPSLog.size(); i++)
+		for (unsigned int i = 0; i < App->mFPSLog.size(); i++)
 		{
-			if (i + 1 < mFPSLog.size())
+			if (i + 1 < App->mFPSLog.size())
 			{
-				float copy = mFPSLog[i + 1];
-				mFPSLog[i] = copy;
+				float copy = App->mFPSLog[i + 1];
+				App->mFPSLog[i] = copy;
 			}
 		}
-		mFPSLog[mFPSLog.capacity() - 1] = aFPS;
+		App->mFPSLog[App->mFPSLog.capacity() - 1] = aFPS;
 	}
 }
 
-//bool* lighting() {
-//	glEnable(GL_LIGHTING);
-//	return true;
-//}
-//
-//bool* lightningOff() {
-//	glDisable(GL_LIGHTING);
-//	return false;
-//}
+void ModuleEditor::Config() {
+
+	ImGui::Begin("Configuration");
+	if (ImGui::CollapsingHeader("Framerate"))
+	{
+		ImGui::PlotHistogram("##FPS", &App->mFPSLog[0], App->mFPSLog.size(), 0, "", 0.0f, 100.0f, ImVec2(300, 100));
+	}
+	if (ImGui::CollapsingHeader("Draw Settings"))
+	{
+		if (ImGui::Checkbox("Draw", &Draw)) {
+		}
+		if (ImGui::Checkbox("Normals", &Normals)) {
+		}
+		if (ImGui::Checkbox("Vertex", &vertex)) {
+		}
+	}
+	ImGui::End();
+}

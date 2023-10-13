@@ -2,6 +2,7 @@
 
 #include <stdlib.h>
 #include "Application.h"
+#include "ModuleInput.h"
 #include "Globals.h"
 #include "stdio.h"
 #include "crtdbg.h"
