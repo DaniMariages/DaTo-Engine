@@ -91,46 +91,11 @@ void ModuleEditor :: DrawEditor()
 		ImGui::EndMainMenuBar();
 	}
 
-	static float f = 0.0f;
-	static int counter = 0;
 
-	bool show_demo_window = false;
-	bool show_another_window = false;
-
-	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 	ImGui::ShowDemoWindow();
 	ImGui::ShowMetricsWindow();
 
-	ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
-
-	//Display current hardware and driver capabilities
-	ImGui::Text("Using Glew %s", glewGetString(GLEW_VERSION));
-	ImGui::Text("Vendor: %s", glGetString(GL_VENDOR));
-	ImGui::Text("Renderer: %s", glGetString(GL_RENDERER));
-	ImGui::Text("OpenGL version supported %s", glGetString(GL_VERSION));
-	ImGui::Text("GLSL: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
-
-
-	if (ImGui::Checkbox("Vertex", &vertex)) {
-		if (vertex == false) {
-			LOG("Vertex false");
-		}
-		if (vertex == true) {
-			LOG("Vertex");
-		}
-	}// Edit bools storing our window open/close state
-
-	ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-	ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
-
-	if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-		counter++;
-	ImGui::SameLine();
-	ImGui::Text("counter = %d", counter);
-
 	Config();
-
-	ImGui::End();
 
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 
@@ -179,6 +144,39 @@ void ModuleEditor::UpdateFPS(const float aFPS)
 void ModuleEditor::Config() {
 
 	ImGui::Begin("Configuration");
+	if (ImGui::CollapsingHeader("Display"))
+	{
+		if (ImGui::Checkbox("Fullscreen", &fullscreen)) {
+			App->window->FullScreen(fullscreen);
+		}
+		if (ImGui::Checkbox("Borderless", &borderless)) {
+			App->window->Borderless(borderless);
+		}
+	}
+	if (ImGui::CollapsingHeader("Hardware"))
+	{
+		//Display current hardware and driver capabilities
+
+		ImGui::Text("Using Glew:");
+		ImGui::SameLine();
+		ImGui::TextColored(YELLOW, "%s", glewGetString(GLEW_VERSION));
+	
+		ImGui::Text("Vendor: ");
+		ImGui::SameLine();
+		ImGui::TextColored(YELLOW, "%s", glGetString(GL_VENDOR));
+
+		ImGui::Text("Renderer: ");
+		ImGui::SameLine();
+		ImGui::TextColored(YELLOW, "%s", glGetString(GL_RENDERER));
+
+		ImGui::Text("OpenGL version supported: ");
+		ImGui::SameLine();
+		ImGui::TextColored(YELLOW, "%s", glGetString(GL_VERSION));
+
+		ImGui::Text("GLSL: ");
+		ImGui::SameLine();
+		ImGui::TextColored(YELLOW, "%s", glGetString(GL_SHADING_LANGUAGE_VERSION));
+	}
 	if (ImGui::CollapsingHeader("Framerate"))
 	{
 		ImGui::PlotHistogram("##FPS", &App->mFPSLog[0], App->mFPSLog.size(), 0, "", 0.0f, 100.0f, ImVec2(300, 100));

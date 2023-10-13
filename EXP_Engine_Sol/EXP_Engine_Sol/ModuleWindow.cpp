@@ -97,3 +97,25 @@ void ModuleWindow::SetTitle(const char* title)
 {
 	SDL_SetWindowTitle(window, title);
 }
+
+void ModuleWindow::FullScreen(bool fc_enabled) {
+	if (fc_enabled) 
+	{ 
+		SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
+	}
+	else {
+		SDL_SetWindowFullscreen(window, 0);
+	}
+
+}
+
+void ModuleWindow::Borderless(bool bl_enabled) {
+	if (bl_enabled)
+	{
+		SDL_SetWindowBordered(window, SDL_FALSE);
+	}
+	else {
+		SDL_SetWindowBordered(App->window->window, SDL_TRUE); (window, 0);
+	}
+
+}

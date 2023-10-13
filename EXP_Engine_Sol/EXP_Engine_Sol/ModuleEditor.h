@@ -6,6 +6,8 @@
 #include "Globals.h"
 #include <vector>
 
+#define YELLOW ImVec4(1.0f, 1.0f, 0.0f, 1.0f)
+
 class ModuleEditor : public Module
 {
 public:
@@ -29,10 +31,15 @@ public:
 
 	bool show_console_window = true;
 
+	bool show_demo_window = false;
+	bool show_metrics_window = false;
 	bool Draw = true;
 	bool Normals = false;
 	bool Wireframe = false;
 	bool vertex = false;
+
+	bool fullscreen = false;
+	bool borderless = false;
 
 };
 

@@ -19,6 +19,8 @@ public:
 	bool CleanUp();
 
 	void SetTitle(const char* title);
+	void FullScreen(bool fc_enabled);
+	void Borderless(bool bl_enabled);
 
 public:
 	//The window we'll be rendering to
