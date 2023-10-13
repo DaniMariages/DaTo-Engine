@@ -35,12 +35,11 @@ public:
             for (unsigned int j = 0; j < meshes[m].vertices.size(); ++j)
             {
                 const Vertex& vertex = meshes[m].vertices[j];
-                // Puedes usar las posiciones de los vértices y las normales para dibujar las líneas que representan las normales
+                
                 float3 vertexPosition = vertex.Position;
                 float3 vertexNormal = vertex.Normal;
 
-                // Dibuja una línea desde el vértice hacia la dirección de la normal
-                // Puedes usar las funciones de OpenGL, como glBegin, glVertex3f, glEnd, para dibujar las líneas
+                glColor3f(1.0f, 0.0f, 0.0f);
                 glBegin(GL_LINES);
                 glVertex3f(vertexPosition.x, vertexPosition.y, vertexPosition.z);
                 glVertex3f(vertexPosition.x + vertexNormal.x, vertexPosition.y + vertexNormal.y, vertexPosition.z + vertexNormal.z);
@@ -55,24 +54,21 @@ public:
         {
             for (unsigned int j = 0; j < meshes[m].indices.size(); j += 3)
             {
-                // Obtén los índices de los vértices que forman una cara
                 unsigned int vertexIndex1 = meshes[m].indices[j];
                 unsigned int vertexIndex2 = meshes[m].indices[j + 1];
                 unsigned int vertexIndex3 = meshes[m].indices[j + 2];
 
-                // Calcula el centro de la cara
                 float3 faceCenter = (meshes[m].vertices[vertexIndex1].Position +
                     meshes[m].vertices[vertexIndex2].Position +
                     meshes[m].vertices[vertexIndex3].Position) /
                     3.0f;
 
-                // Obten las normales de la cara
                 float3 faceNormal = CalculateFaceNormal(
                     meshes[m].vertices[vertexIndex1].Position,
                     meshes[m].vertices[vertexIndex2].Position,
                     meshes[m].vertices[vertexIndex3].Position);
 
-                // Dibuja una línea desde el centro de la cara en la dirección de la normal de la cara
+                glColor3f(0.0f, 0.0f, 1.0f);
                 glBegin(GL_LINES);
                 glVertex3f(faceCenter.x, faceCenter.y, faceCenter.z);
                 glVertex3f(faceCenter.x + faceNormal.x, faceCenter.y + faceNormal.y, faceCenter.z + faceNormal.z);

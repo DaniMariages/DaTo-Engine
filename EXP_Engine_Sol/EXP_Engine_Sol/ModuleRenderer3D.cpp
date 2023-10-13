@@ -199,9 +199,8 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 
 		LOG("Model vector size is: %d.", Models.size());
 		modelLoaded = true;
-		LOG("Model path was: %s", App->input->filePath);
+		LOG("Model path: %s", App->input->filePath);
 		App->input->filePath = nullptr;
-		LOG("Model path is now: %s", App->input->filePath);
 	}
 
 	return UPDATE_CONTINUE;
