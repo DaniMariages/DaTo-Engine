@@ -27,6 +27,8 @@ public:
 
 	void OnResize(int width, int height);
 
+	float3 CalculateFaceNormal(const float3& vertex1, const float3& vertex2, const float3& vertex3);
+
 public:
 
 	Light lights[MAX_LIGHTS];

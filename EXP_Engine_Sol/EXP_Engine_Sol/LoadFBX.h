@@ -71,8 +71,9 @@ private:
     {
         // data to fill
         std::vector<Vertex> vertices;
-        std::vector<unsigned int> indices;
-        std::vector<float3> faceNormals;
+        std::vector<unsigned int> indices; 
+        unsigned int carasTotales = 0;
+        unsigned int count = 0; //Inicia un contador para coger una cara cada 3 iteraciones
 
         // walk through each of the mesh's vertices
         for (unsigned int i = 0; i < mesh->mNumVertices; i++)
@@ -107,19 +108,10 @@ private:
   
         LOG("Num Vertices: %d.", mesh->mNumVertices);
         LOG("Num Caras: %d.", mesh->mNumFaces);
-
+        
         LOG("Vertices: %d", vertices);
         LOG("Indices: %d", indices);
 
         return Mesh(vertices, indices);
-    }
-
-    float3 CalculateFaceNormal(const float3& vertex1, const float3& vertex2, const float3& vertex3)
-    {
-        // Calcula la normal de la cara utilizando los vértices proporcionados
-        float3 edge1 = vertex2 - vertex1;
-        float3 edge2 = vertex3 - vertex1;
-        float3 faceNormal = Cross(edge1, edge2).Normalized();
-        return faceNormal;
     }
 };

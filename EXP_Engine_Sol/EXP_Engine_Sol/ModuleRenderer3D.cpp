@@ -237,11 +237,34 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 				glVertex3f(vertexPosition.x + vertexNormal.x, vertexPosition.y + vertexNormal.y, vertexPosition.z + vertexNormal.z);
 				glEnd();
 			}
+
+			for (unsigned int j = 0; j < Models[i].meshes[m].indices.size(); j += 3)
+			{
+				// Obtén los índices de los vértices que forman una cara
+				unsigned int vertexIndex1 = Models[i].meshes[m].indices[j];
+				unsigned int vertexIndex2 = Models[i].meshes[m].indices[j + 1];
+				unsigned int vertexIndex3 = Models[i].meshes[m].indices[j + 2];
+
+				// Calcula el centro de la cara
+				float3 faceCenter = (Models[i].meshes[m].vertices[vertexIndex1].Position +
+					Models[i].meshes[m].vertices[vertexIndex2].Position +
+					Models[i].meshes[m].vertices[vertexIndex3].Position) /
+					3.0f;
+
+				// Obten las normales de la cara
+				float3 faceNormal = CalculateFaceNormal(Models[i].meshes[m].vertices[vertexIndex1].Position,
+					Models[i].meshes[m].vertices[vertexIndex2].Position,
+					Models[i].meshes[m].vertices[vertexIndex3].Position);
+
+				// Dibuja una línea desde el centro de la cara en la dirección de la normal de la cara
+				glBegin(GL_LINES);
+				glVertex3f(faceCenter.x, faceCenter.y, faceCenter.z);
+				glVertex3f(faceCenter.x + faceNormal.x, faceCenter.y + faceNormal.y, faceCenter.z + faceNormal.z);
+				glEnd();
+			}
 		}
 	}
 	
-	
-
 	//Tirangle
 	//glBegin(GL_TRIANGLES);
 
@@ -290,4 +313,11 @@ void ModuleRenderer3D::OnResize(int width, int height)
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+}
+
+float3 ModuleRenderer3D::CalculateFaceNormal(const float3& vertex1, const float3& vertex2, const float3& vertex3)
+{
+	float3 edge1 = vertex2 - vertex1;
+	float3 edge2 = vertex3 - vertex1;
+	return Cross(edge1, edge2).Normalized();
 }
