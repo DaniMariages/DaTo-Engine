@@ -220,49 +220,9 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	{
 		Models[i].Draw();
 		modelLoaded = false;
-
-		for (unsigned int m = 0; m < Models[i].meshes.size(); ++m) 
-		{
-			for (unsigned int j = 0; j < Models[i].meshes[m].vertices.size(); ++j)
-			{
-				const Vertex& vertex = Models[i].meshes[m].vertices[j];
-				// Puedes usar las posiciones de los vértices y las normales para dibujar las líneas que representan las normales
-				float3 vertexPosition = vertex.Position;
-				float3 vertexNormal = vertex.Normal;
-
-				// Dibuja una línea desde el vértice hacia la dirección de la normal
-				// Puedes usar las funciones de OpenGL, como glBegin, glVertex3f, glEnd, para dibujar las líneas
-				glBegin(GL_LINES);
-				glVertex3f(vertexPosition.x, vertexPosition.y, vertexPosition.z);
-				glVertex3f(vertexPosition.x + vertexNormal.x, vertexPosition.y + vertexNormal.y, vertexPosition.z + vertexNormal.z);
-				glEnd();
-			}
-
-			for (unsigned int j = 0; j < Models[i].meshes[m].indices.size(); j += 3)
-			{
-				// Obtén los índices de los vértices que forman una cara
-				unsigned int vertexIndex1 = Models[i].meshes[m].indices[j];
-				unsigned int vertexIndex2 = Models[i].meshes[m].indices[j + 1];
-				unsigned int vertexIndex3 = Models[i].meshes[m].indices[j + 2];
-
-				// Calcula el centro de la cara
-				float3 faceCenter = (Models[i].meshes[m].vertices[vertexIndex1].Position +
-					Models[i].meshes[m].vertices[vertexIndex2].Position +
-					Models[i].meshes[m].vertices[vertexIndex3].Position) /
-					3.0f;
-
-				// Obten las normales de la cara
-				float3 faceNormal = CalculateFaceNormal(Models[i].meshes[m].vertices[vertexIndex1].Position,
-					Models[i].meshes[m].vertices[vertexIndex2].Position,
-					Models[i].meshes[m].vertices[vertexIndex3].Position);
-
-				// Dibuja una línea desde el centro de la cara en la dirección de la normal de la cara
-				glBegin(GL_LINES);
-				glVertex3f(faceCenter.x, faceCenter.y, faceCenter.z);
-				glVertex3f(faceCenter.x + faceNormal.x, faceCenter.y + faceNormal.y, faceCenter.z + faceNormal.z);
-				glEnd();
-			}
-		}
+		
+		Models[i].DrawVertex();
+		Models[i].DrawFaces();
 	}
 	
 	//Tirangle
@@ -313,11 +273,4 @@ void ModuleRenderer3D::OnResize(int width, int height)
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-}
-
-float3 ModuleRenderer3D::CalculateFaceNormal(const float3& vertex1, const float3& vertex2, const float3& vertex3)
-{
-	float3 edge1 = vertex2 - vertex1;
-	float3 edge2 = vertex3 - vertex1;
-	return Cross(edge1, edge2).Normalized();
 }
