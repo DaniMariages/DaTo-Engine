@@ -61,39 +61,15 @@ void ModuleEditor :: DrawEditor()
 
 	UpdateFPS(aFPS);
 
-	// 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
-	if (ImGui::BeginMainMenuBar()) {
-		if (ImGui::BeginMenu("File"))
-		{
-			ImGui::Text("Hello world!");
-			ImGui::EndMenu();
-		}
-		if (ImGui::BeginMenu("Config"))
-		{
-			//Display current hardware and driver capabilities
-			ImGui::Text("Using Glew %s", glewGetString(GLEW_VERSION));
-			ImGui::Text("Vendor: %s", glGetString(GL_VENDOR));
-			ImGui::Text("Renderer: %s", glGetString(GL_RENDERER));
-			ImGui::Text("OpenGL version supported %s", glGetString(GL_VERSION));
-			ImGui::Text("GLSL: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
+	MainMenuBar();
 
-
-			ImGui::PlotHistogram("FPS", &App->mFPSLog[0], App->mFPSLog.size(),0,"", 0.0f, 100.0f, ImVec2(300, 100));
-			ImGui::EndMenu();
-		}
-		if (ImGui::BeginMenu("About"))
-		{
-			ImGui::Text("DaTo Engine by Dani Mariages & Toni Romanos");
-			ImGui::EndMenu();
-		}
-
-
-		ImGui::EndMainMenuBar();
+	if (show_demo_window) {
+		ImGui::ShowDemoWindow(&show_demo_window);
 	}
 
-
-	ImGui::ShowDemoWindow();
-	ImGui::ShowMetricsWindow();
+	if (show_metrics_window) {
+		ImGui::ShowMetricsWindow(&show_metrics_window);
+	}
 
 	Config();
 
@@ -141,54 +117,91 @@ void ModuleEditor::UpdateFPS(const float aFPS)
 	}
 }
 
+void ModuleEditor::MainMenuBar() {
+	if (ImGui::BeginMainMenuBar()) {
+		if (ImGui::BeginMenu("File"))
+		{
+			ImGui::Text("Hello world!");
+			ImGui::EndMenu();
+		}
+		if (ImGui::BeginMenu("Window"))
+		{
+			if (ImGui::MenuItem("Configuration")) {
+				show_config_window = !show_config_window;
+			}
+			if (ImGui::MenuItem("Demo Window")) {
+				show_demo_window = !show_demo_window;
+			}
+			if (ImGui::MenuItem("Metrics Window")) {
+				show_metrics_window = !show_metrics_window;
+			}
+
+			ImGui::EndMenu();
+		}
+		if (ImGui::BeginMenu("About"))
+		{
+			ImGui::Text("DaTo Engine by Dani Mariages & Toni Romanos");
+			ImGui::EndMenu();
+		}
+
+
+		ImGui::EndMainMenuBar();
+	}
+}
+
 void ModuleEditor::Config() {
 
-	ImGui::Begin("Configuration");
-	if (ImGui::CollapsingHeader("Display"))
+	if (show_config_window)
 	{
-		if (ImGui::Checkbox("Fullscreen", &fullscreen)) {
-			App->window->FullScreen(fullscreen);
+		ImGui::Begin("Configuration", &show_config_window);
+		if (ImGui::CollapsingHeader("Display"))
+		{
+			if (ImGui::Checkbox("Fullscreen", &fullscreen)) {
+				App->window->FullScreen(fullscreen);
+			}
+			if (ImGui::Checkbox("Borderless", &borderless)) {
+				App->window->Borderless(borderless);
+			}
 		}
-		if (ImGui::Checkbox("Borderless", &borderless)) {
-			App->window->Borderless(borderless);
-		}
-	}
-	if (ImGui::CollapsingHeader("Hardware"))
-	{
-		//Display current hardware and driver capabilities
+		if (ImGui::CollapsingHeader("Hardware"))
+		{
+			//Display current hardware and driver capabilities
 
-		ImGui::Text("Using Glew:");
-		ImGui::SameLine();
-		ImGui::TextColored(YELLOW, "%s", glewGetString(GLEW_VERSION));
-	
-		ImGui::Text("Vendor: ");
-		ImGui::SameLine();
-		ImGui::TextColored(YELLOW, "%s", glGetString(GL_VENDOR));
+			ImGui::Text("Using Glew:");
+			ImGui::SameLine();
+			ImGui::TextColored(YELLOW, "%s", glewGetString(GLEW_VERSION));
 
-		ImGui::Text("Renderer: ");
-		ImGui::SameLine();
-		ImGui::TextColored(YELLOW, "%s", glGetString(GL_RENDERER));
+			ImGui::Text("Vendor: ");
+			ImGui::SameLine();
+			ImGui::TextColored(YELLOW, "%s", glGetString(GL_VENDOR));
 
-		ImGui::Text("OpenGL version supported: ");
-		ImGui::SameLine();
-		ImGui::TextColored(YELLOW, "%s", glGetString(GL_VERSION));
+			ImGui::Text("Renderer: ");
+			ImGui::SameLine();
+			ImGui::TextColored(YELLOW, "%s", glGetString(GL_RENDERER));
 
-		ImGui::Text("GLSL: ");
-		ImGui::SameLine();
-		ImGui::TextColored(YELLOW, "%s", glGetString(GL_SHADING_LANGUAGE_VERSION));
-	}
-	if (ImGui::CollapsingHeader("Framerate"))
-	{
-		ImGui::PlotHistogram("##FPS", &App->mFPSLog[0], App->mFPSLog.size(), 0, "", 0.0f, 100.0f, ImVec2(300, 100));
-	}
-	if (ImGui::CollapsingHeader("Draw Settings"))
-	{
-		if (ImGui::Checkbox("Draw", &Draw)) {
+			ImGui::Text("OpenGL version supported: ");
+			ImGui::SameLine();
+			ImGui::TextColored(YELLOW, "%s", glGetString(GL_VERSION));
+
+			ImGui::Text("GLSL: ");
+			ImGui::SameLine();
+			ImGui::TextColored(YELLOW, "%s", glGetString(GL_SHADING_LANGUAGE_VERSION));
 		}
-		if (ImGui::Checkbox("Normals", &Normals)) {
+		if (ImGui::CollapsingHeader("Framerate"))
+		{
+			ImGui::PlotHistogram("##FPS", &App->mFPSLog[0], App->mFPSLog.size(), 0, "", 0.0f, 100.0f, ImVec2(300, 100));
 		}
-		if (ImGui::Checkbox("Vertex", &vertex)) {
+		if (ImGui::CollapsingHeader("Draw Settings"))
+		{
+			if (ImGui::Checkbox("Draw", &Draw)) {
+			}
+			if (ImGui::Checkbox("Normals", &Normals)) {
+			}
+			if (ImGui::Checkbox("Vertex", &vertex)) {
+			}
+			if (ImGui::Checkbox("Lights", &lights)) {
+			}
 		}
+		ImGui::End();
 	}
-	ImGui::End();
 }

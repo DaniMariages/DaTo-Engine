@@ -20,6 +20,8 @@ public:
 	bool CleanUp() override;
 
 	void Config();
+	void MainMenuBar();
+	void DemoWindow();
 
 	SDL_GLContext context;
 	/*void AddFPS(const float aFPS);*/
@@ -33,10 +35,12 @@ public:
 
 	bool show_demo_window = false;
 	bool show_metrics_window = false;
+	bool show_config_window = true;
 	bool Draw = true;
 	bool Normals = false;
 	bool Wireframe = false;
 	bool vertex = false;
+	bool lights = true;
 
 	bool fullscreen = false;
 	bool borderless = false;
