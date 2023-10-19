@@ -23,6 +23,8 @@ public:
 	void MainMenuBar();
 	void DemoWindow();
 
+	void RequestBrowser(const char* path);
+
 	SDL_GLContext context;
 	/*void AddFPS(const float aFPS);*/
 
@@ -30,6 +32,8 @@ public:
 	float aFPS;
 
 	void UpdateFPS(const float aFPS);
+
+	char label[32];
 
 	bool show_console_window = true;
 

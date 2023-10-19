@@ -141,6 +141,8 @@ void ModuleEditor::MainMenuBar() {
 		if (ImGui::BeginMenu("About"))
 		{
 			ImGui::Text("DaTo Engine by Dani Mariages & Toni Romanos");
+			sprintf(label, "Github Repository");
+			if (ImGui::Selectable(label, true))	RequestBrowser("https://github.com/DaniMariages/Motors");
 			ImGui::EndMenu();
 		}
 
@@ -149,7 +151,15 @@ void ModuleEditor::MainMenuBar() {
 	}
 }
 
+void ModuleEditor::RequestBrowser(const char* path)
+{
+	ShellExecuteA(0, "Open", path, 0, "", 5);
+}
+
 void ModuleEditor::Config() {
+	
+	ImGuiStyle& style = ImGui::GetStyle();
+	static ImGuiStyle ref_saved_style;
 
 	if (show_config_window)
 	{
@@ -162,6 +172,12 @@ void ModuleEditor::Config() {
 			if (ImGui::Checkbox("Borderless", &borderless)) {
 				App->window->Borderless(borderless);
 			}
+			if (ImGui::SliderFloat("FrameRounding", &style.FrameRounding, 0.0f, 12.0f, "%.0f"))
+			{
+				style.GrabRounding = style.FrameRounding;
+			}
+			if (ImGui::Button("Save Ref"))
+				ref_saved_style = style;
 		}
 		if (ImGui::CollapsingHeader("Hardware"))
 		{
