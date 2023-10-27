@@ -98,12 +98,21 @@ update_status ModuleCamera3D::Update(float dt)
 				Z = float3(0.0f, Z.y > 0.0f ? 1.0f : -1.0f, 0.0f);
 				Y = Z.Cross(X);
 			}
+
 		}
 
 		Position = Reference + Z * Position.Length();
 	}
 
-	LookAt(Reference);
+	if (App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT)
+	{
+		Reference = float3(0.0f, 0.0f, 0.0f);
+
+		LookAt(Reference);
+	}
+	else {
+		Reference = Position;
+	}
 
 	// Recalculate matrix -------------
 	CalculateViewMatrix();
