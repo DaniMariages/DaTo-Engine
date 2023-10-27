@@ -117,6 +117,14 @@
     <ClInclude Include="Assimp\include\vector3.h" />
     <ClInclude Include="Assimp\include\version.h" />
     <ClInclude Include="Color.h" />
+    <ClInclude Include="DevIL\include\devil_cpp_wrapper.hpp" />
+    <ClInclude Include="DevIL\include\devil_internal_exports.h" />
+    <ClInclude Include="DevIL\include\il.h" />
+    <ClInclude Include="DevIL\include\ilu.h" />
+    <ClInclude Include="DevIL\include\ilut.h" />
+    <ClInclude Include="DevIL\include\ilut_config.h" />
+    <ClInclude Include="DevIL\include\ilu_region.h" />
+    <ClInclude Include="DevIL\include\il_wrap.h" />
     <ClInclude Include="glmath.h" />
     <ClInclude Include="Globals.h" />
     <ClInclude Include="ImGui\backends\imgui_impl_opengl3.h" />
@@ -201,6 +209,7 @@
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="Color.cpp" />
+    <ClCompile Include="DevIL\include\luadevil.c" />
     <ClCompile Include="glmath.cpp" />
     <ClCompile Include="ImGui\backends\imgui_impl_opengl3.cpp" />
     <ClCompile Include="ImGui\backends\imgui_impl_sdl.cpp" />
@@ -262,6 +271,11 @@
     <None Include="Assimp\include\vector3.inl" />
     <None Include="Assimp\libx86\assimp.dll" />
     <None Include="Assimp\libx86\assimp.exp" />
+    <None Include="DevIL\include\build-lua" />
+    <None Include="DevIL\include\build-python" />
+    <None Include="DevIL\include\config.h.win" />
+    <None Include="DevIL\include\DevIL.i" />
+    <None Include="DevIL\include\stamp-h.in" />
     <None Include="LoadFBX.h" />
     <None Include="MathGeoLib\include\Geometry\KDTree.inl" />
     <None Include="MathGeoLib\include\Geometry\QuadTree.inl" />
@@ -274,6 +288,9 @@
   <ItemGroup>
     <Library Include="Assimp\libx86\assimp.lib" />
     <Library Include="Assimp\libx86\zlibstatic.lib" />
+    <Library Include="DevIL\libx86\DevIL.lib" />
+    <Library Include="DevIL\libx86\ILU.lib" />
+    <Library Include="DevIL\libx86\ILUT.lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

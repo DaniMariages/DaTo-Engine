@@ -61,6 +61,15 @@
     <Filter Include="Externals\Assimp\include\port\AndroidJNI">
       <UniqueIdentifier>{e9e9a383-f6df-4668-9f72-6f9bf43a14cb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Externals\DevIL">
+      <UniqueIdentifier>{0555b24f-1cb0-4737-831f-528afe3947c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Externals\DevIL\include">
+      <UniqueIdentifier>{5f51ecf0-c809-4561-8e54-6ca3deb19589}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Externals\DevIL\libx86">
+      <UniqueIdentifier>{cb57e325-c395-4998-aca6-d6eabdbedbd8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Module.h">
@@ -420,6 +429,30 @@
     <ClInclude Include="Assimp\include\version.h">
       <Filter>Externals\Assimp\include</Filter>
     </ClInclude>
+    <ClInclude Include="DevIL\include\devil_cpp_wrapper.hpp">
+      <Filter>Externals\DevIL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="DevIL\include\devil_internal_exports.h">
+      <Filter>Externals\DevIL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="DevIL\include\il.h">
+      <Filter>Externals\DevIL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="DevIL\include\il_wrap.h">
+      <Filter>Externals\DevIL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="DevIL\include\ilu.h">
+      <Filter>Externals\DevIL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="DevIL\include\ilu_region.h">
+      <Filter>Externals\DevIL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="DevIL\include\ilut.h">
+      <Filter>Externals\DevIL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="DevIL\include\ilut_config.h">
+      <Filter>Externals\DevIL\include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -578,6 +611,9 @@
     <ClCompile Include="ModuleEditor.cpp">
       <Filter>Sources\Modules</Filter>
     </ClCompile>
+    <ClCompile Include="DevIL\include\luadevil.c">
+      <Filter>Externals\DevIL\include</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\include\Geometry\KDTree.inl">
@@ -631,6 +667,21 @@
     <None Include="Mesh.h">
       <Filter>Sources\Modules</Filter>
     </None>
+    <None Include="DevIL\include\build-lua">
+      <Filter>Externals\DevIL\include</Filter>
+    </None>
+    <None Include="DevIL\include\build-python">
+      <Filter>Externals\DevIL\include</Filter>
+    </None>
+    <None Include="DevIL\include\config.h.win">
+      <Filter>Externals\DevIL\include</Filter>
+    </None>
+    <None Include="DevIL\include\DevIL.i">
+      <Filter>Externals\DevIL\include</Filter>
+    </None>
+    <None Include="DevIL\include\stamp-h.in">
+      <Filter>Externals\DevIL\include</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Library Include="Assimp\libx86\assimp.lib">
@@ -638,6 +689,15 @@
     </Library>
     <Library Include="Assimp\libx86\zlibstatic.lib">
       <Filter>Externals\Assimp\libx86</Filter>
+    </Library>
+    <Library Include="DevIL\libx86\DevIL.lib">
+      <Filter>Externals\DevIL\libx86</Filter>
+    </Library>
+    <Library Include="DevIL\libx86\ILU.lib">
+      <Filter>Externals\DevIL\libx86</Filter>
+    </Library>
+    <Library Include="DevIL\libx86\ILUT.lib">
+      <Filter>Externals\DevIL\libx86</Filter>
     </Library>
   </ItemGroup>
 </Project>
