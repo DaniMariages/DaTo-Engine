@@ -47,6 +47,11 @@ public:
 	bool drawAllFaces = false;
 	bool drawAllVertex = false;
 
+	bool top = false;
+	bool front = false;
+	bool side_1 = false;
+	bool side_2 = false;
+
 	bool drawSelected = false;
 	bool drawSelectedVertex = false;
 	bool drawSelectedFaces = false;

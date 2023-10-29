@@ -223,6 +223,17 @@ void ModuleEditor::Config() {
 			if (ImGui::Checkbox("Lights", &lights)) {
 			}
 		}
+		if (ImGui::CollapsingHeader("View"))
+		{
+			if (ImGui::Checkbox("Top", &top)) {
+			}
+			if (ImGui::Checkbox("Front", &front)) {
+			}
+			if (ImGui::Checkbox("Left side", &side_1)) {
+			}
+			if (ImGui::Checkbox("Right side", &side_2)) {
+			}
+		}
 		ImGui::End();
 	}
 

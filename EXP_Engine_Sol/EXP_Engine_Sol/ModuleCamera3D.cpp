@@ -3,6 +3,7 @@
 #include "ModuleCamera3D.h"
 #include "MathGeoLib/include/Math/Quat.h"
 #include "ModuleInput.h"
+#include "ModuleEditor.h"
 
 ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -114,7 +115,7 @@ update_status ModuleCamera3D::Update(float dt)
 		Reference = Position;
 	}
 	//Top view
-	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT) {
+	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT || App->editor->top == true) {
 		Reference = float3(0.0f, 0.0f, 0.0f);
 
 		Position.Set(0.0f, 10.0f, 0.0f);
@@ -125,7 +126,7 @@ update_status ModuleCamera3D::Update(float dt)
 	}
 
 	//Front view
-	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT) {
+	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT || App->editor->front == true) {
 		Reference = float3(0.0f, 0.0f, 0.0f);
 
 		Position.Set(0.0f, 0.0f, 10.0f);
@@ -136,7 +137,7 @@ update_status ModuleCamera3D::Update(float dt)
 	}
 
 	//Side view
-	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT) {
+	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT || App->editor->side_1 == true) {
 		Reference = float3(0.0f, 0.0f, 0.0f);
 
 		Position.Set(10.0f, 00.0f, 0.0f);
@@ -146,7 +147,7 @@ update_status ModuleCamera3D::Update(float dt)
 	else {
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT) {
+	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT || App->editor->side_2 == true) {
 		Reference = float3(0.0f, 0.0f, 0.0f);
 
 		Position.Set(-10.0f, 00.0f, 0.0f);
