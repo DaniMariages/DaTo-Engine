@@ -135,7 +135,12 @@ void ModuleEditor::MainMenuBar() {
 			if (ImGui::MenuItem("Metrics Window")) {
 				show_metrics_window = !show_metrics_window;
 			}
-
+			if (ImGui::MenuItem("Game Objects")) {
+				show_gameobjects_window = !show_gameobjects_window;
+			}
+			if (ImGui::MenuItem("Inspector")) {
+				show_inspector_window = !show_inspector_window;
+			}
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu("About"))
@@ -209,14 +214,45 @@ void ModuleEditor::Config() {
 		}
 		if (ImGui::CollapsingHeader("Draw Settings"))
 		{
-			if (ImGui::Checkbox("Draw", &Draw)) {
+			if (ImGui::Checkbox("Draw", &drawAll)) {
 			}
-			if (ImGui::Checkbox("Normals", &Normals)) {
+			if (ImGui::Checkbox("Normals", &drawAllFaces)) {
 			}
-			if (ImGui::Checkbox("Vertex", &vertex)) {
+			if (ImGui::Checkbox("Vertex", &drawAllVertex)) {
 			}
 			if (ImGui::Checkbox("Lights", &lights)) {
 			}
+		}
+		ImGui::End();
+	}
+
+	if (show_gameobjects_window)
+	{
+		ImGui::Begin("Game Objects", &show_gameobjects_window);
+		static int seleccion = -1;
+		for (int i = 0; i < App->renderer3D->Models.size(); i++)
+		{
+			if (ImGui::Selectable(App->renderer3D->Models[i].modelName.c_str(), seleccion == i))
+			{
+				show_inspector_window = !show_inspector_window;
+			}
+			ImGui::Text("%d", i);
+		}
+		ImGui::End();
+	}
+
+	if (show_inspector_window)
+	{
+		ImGui::Begin("Inspector", &show_inspector_window);
+		if (ImGui::TreeNode("Draw options")) 
+		{
+			
+			ImGui::TreePop();
+		}
+		if (ImGui::TreeNode("Information"))
+		{
+			
+			ImGui::TreePop();
 		}
 		ImGui::End();
 	}

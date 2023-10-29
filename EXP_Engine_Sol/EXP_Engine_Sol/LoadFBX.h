@@ -79,8 +79,38 @@ public:
         }
     }
 
+    void GetUniqueModelName(const std::string& baseName, std::vector<LoadFBX>& models)
+    {
+        int counter = 0;
+        if (models.size() > 0)
+        {
+            for (int i = 0; i < models.size(); i++)
+            {
+                counter++;
+                if (baseName == models[i].modelName)
+                    existingName(baseName, counter);
+            }
+        }
+    }
+    
+    int GetUniqueModelID(std::vector<LoadFBX>& models) 
+    {
+        if (models.size() != 0)
+        {
+            for (int i = 0; i < models.size(); ++i)
+            {
+                modelID = i;
+            }
+        }
+        else modelID = 0;
+
+        return modelID;
+    }
+
     // model data
     std::vector<Mesh> meshes;
+    std::string modelName;
+    int modelID;
 
 private:
 
@@ -96,7 +126,11 @@ private:
             LOG("Error loading scene: %s", file_path);
             return;
         }
-        else LOG("Scene loaded succesfully: %s.", file_path);
+        else
+        {
+            LOG("Scene loaded succesfully: %s.", file_path);
+            modelName = GetModelName(file_path);
+        }
 
         processNode(scene->mRootNode, scene);
     }
@@ -169,5 +203,42 @@ private:
         float3 edge1 = vertex2 - vertex1;
         float3 edge2 = vertex3 - vertex1;
         return Cross(edge1, edge2).Normalized();
+    }
+
+    std::string GetModelName(const char* file_path)
+    {
+        std::string getName(file_path);
+        size_t lastSeparator = getName.find_last_of("\\");
+        
+        std::string name;
+        if (lastSeparator != std::string::npos)
+        {
+            name = getName.substr(lastSeparator + 1);
+        }
+        else
+        {
+            name = getName;
+        }
+
+        LOG("El nombre del modelo es: %s", name.c_str());
+        return name;
+    }
+
+    std::string existingName(std::string name, int counter)
+    {
+        std::string uniqueName = name + " (" + std::to_string(counter) + ")";
+        std::string newName;
+
+        size_t first = uniqueName.find_first_of("(");
+
+        if (first > 0)
+        {
+            newName = uniqueName.erase(first - 1);
+            newName = uniqueName + " (" + std::to_string(counter) + ")";
+        }
+        
+        modelName = newName;
+
+        return uniqueName;
     }
 };

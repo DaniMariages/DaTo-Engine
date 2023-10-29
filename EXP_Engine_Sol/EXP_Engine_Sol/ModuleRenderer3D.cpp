@@ -198,12 +198,15 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 		for (uint i = 0; i < MAX_LIGHTS; ++i)
 			lights[i].Render();
 
-	if (modelLoaded == false && App->input->filePath != nullptr)
+	if (App->input->filePath != nullptr)
 	{
 		LOG("Loading Model...");
 		LoadFBX model;
+
 		model.Load(App->input->filePath);
 		Models.push_back(model);
+		modelID = model.GetUniqueModelID(Models);
+		if (Models.size() != 0) model.GetUniqueModelName(Models[modelID].modelName, Models);
 
 		LOG("Model vector size is: %d.", Models.size());
 		modelLoaded = true;
@@ -218,36 +221,14 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 update_status ModuleRenderer3D::PostUpdate(float dt)
 {
 	//Render Editor
-
 	Grid.Render();
-	//glLineWidth(2.0f);
-	//glBegin(GL_TRIANGLES);
 
-	for (unsigned int i = 0; i < Models.size(); ++i)
+	for(int i = 0; i < Models.size(); ++i)
 	{
-		if (App->editor->Draw) {
-			Models[i].Draw();
-			modelLoaded = false;
-		}
-		
-		if (App->editor->vertex) {
-			Models[i].DrawVertex();
-		}
-		if (App->editor->Normals) {
-			Models[i].DrawFaces();
-		}
+		if (App->editor->drawAll) Models[i].Draw();
+		if (App->editor->drawAllVertex) Models[i].DrawVertex();
+		if (App->editor->drawAllFaces) Models[i].DrawFaces();
 	}
-	
-	//Tirangle
-	//glBegin(GL_TRIANGLES);
-
-	//glVertex3d(0,0,0);
-	//glVertex3d(1,0,0);
-	//glVertex3d(0,1,0);
-
-	//glBindVertexArray(VAO);
-	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	//glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, NULL); //da error no se por que
 
 	glEnd();
 	glLineWidth(1.0f);
