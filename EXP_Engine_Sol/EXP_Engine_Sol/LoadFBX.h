@@ -79,16 +79,18 @@ public:
         }
     }
 
-    void GetUniqueModelName(const std::string& baseName, std::vector<LoadFBX>& models)
+    void GetUniqueModelName(std::vector<LoadFBX>& models)
     {
         int counter = 0;
         if (models.size() > 0)
         {
             for (int i = 0; i < models.size(); i++)
             {
-                counter++;
-                if (baseName == models[i].modelName)
-                    existingName(baseName, counter);
+                if (modelName == models[i].modelName)
+                {
+                    counter++;
+                    existingName(modelName, counter);
+                }
             }
         }
     }

@@ -204,9 +204,12 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 		LoadFBX model;
 
 		model.Load(App->input->filePath);
+		if (Models.size() != 0) 
+		{
+			model.GetUniqueModelName(Models);
+		}
 		Models.push_back(model);
-		modelID = model.GetUniqueModelID(Models);
-		if (Models.size() != 0) model.GetUniqueModelName(Models[modelID].modelName, Models);
+		
 
 		LOG("Model vector size is: %d.", Models.size());
 		modelLoaded = true;
