@@ -113,6 +113,48 @@ update_status ModuleCamera3D::Update(float dt)
 	else {
 		Reference = Position;
 	}
+	//Top view
+	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT) {
+		Reference = float3(0.0f, 0.0f, 0.0f);
+
+		Position.Set(0.0f, 10.0f, 0.0f);
+
+		LookAt(Reference);
+	}
+	else {
+	}
+
+	//Front view
+	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT) {
+		Reference = float3(0.0f, 0.0f, 0.0f);
+
+		Position.Set(0.0f, 0.0f, 10.0f);
+
+		LookAt(Reference);
+	}
+	else {
+	}
+
+	//Side view
+	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT) {
+		Reference = float3(0.0f, 0.0f, 0.0f);
+
+		Position.Set(10.0f, 00.0f, 0.0f);
+
+		LookAt(Reference);
+	}
+	else {
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT) {
+		Reference = float3(0.0f, 0.0f, 0.0f);
+
+		Position.Set(-10.0f, 00.0f, 0.0f);
+
+		LookAt(Reference);
+	}
+	else {
+	}
 
 	// Recalculate matrix -------------
 	CalculateViewMatrix();
