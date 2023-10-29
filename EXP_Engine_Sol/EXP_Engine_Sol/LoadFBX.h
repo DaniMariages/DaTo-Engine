@@ -28,10 +28,9 @@ public:
         for (unsigned int i = 0; i < meshes.size(); i++)
             meshes[i].Draw();
     }
-
+    
     void DrawVertex() 
     {
- 
         for (unsigned int m = 0; m < meshes.size(); ++m)
         {
             for (unsigned int j = 0; j < meshes[m].vertices.size(); ++j)
@@ -95,24 +94,10 @@ public:
         }
     }
     
-    int GetUniqueModelID(std::vector<LoadFBX>& models) 
-    {
-        if (models.size() != 0)
-        {
-            for (int i = 0; i < models.size(); ++i)
-            {
-                modelID = i;
-            }
-        }
-        else modelID = 0;
-
-        return modelID;
-    }
-
     // model data
     std::vector<Mesh> meshes;
     std::string modelName;
-    int modelID;
+    bool hide = false;
 
 private:
 

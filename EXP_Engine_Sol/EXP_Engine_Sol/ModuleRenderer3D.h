@@ -36,7 +36,6 @@ public:
 	std::vector<LoadFBX> Models;
 	bool modelLoaded = false;
 	const char* myModelPath;
-	int modelID;
 
 	//You won't need this after using Frustum
 	mat4x4 ProjectionMatrix;

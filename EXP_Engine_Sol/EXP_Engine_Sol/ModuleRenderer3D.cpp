@@ -228,9 +228,14 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 
 	for(int i = 0; i < Models.size(); ++i)
 	{
-		if (App->editor->drawAll) Models[i].Draw();
-		if (App->editor->drawAllVertex) Models[i].DrawVertex();
-		if (App->editor->drawAllFaces) Models[i].DrawFaces();
+		if (App->editor->drawAll && !Models[i].hide) 
+			Models[i].Draw();
+
+		if (App->editor->drawAllVertex && !Models[i].hide) 
+			Models[i].DrawVertex();
+
+		if (App->editor->drawAllFaces && !Models[i].hide) 
+			Models[i].DrawFaces();
 	}
 
 	glEnd();

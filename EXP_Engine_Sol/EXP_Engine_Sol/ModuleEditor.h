@@ -47,7 +47,11 @@ public:
 	bool drawAllFaces = false;
 	bool drawAllVertex = false;
 
-	//Public variable to know what model is selected
+	bool drawSelected = false;
+	bool drawSelectedVertex = false;
+	bool drawSelectedFaces = false;
+
+	//Public variable to know which model is selected
 	int selected = -1;
 
 	bool Wireframe = false;
