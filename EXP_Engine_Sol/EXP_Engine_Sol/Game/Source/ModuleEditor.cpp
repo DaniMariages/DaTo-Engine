@@ -121,7 +121,10 @@ void ModuleEditor::MainMenuBar() {
 	if (ImGui::BeginMainMenuBar()) {
 		if (ImGui::BeginMenu("File"))
 		{
-			ImGui::Text("Hello world!");
+			if (ImGui::MenuItem("Quit")) {
+				
+				App->input->quit = true;
+			}
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu("Window"))
@@ -233,6 +236,17 @@ void ModuleEditor::Config() {
 			}
 			if (ImGui::Checkbox("Right side", &side_2)) {
 			}
+		}
+		if(ImGui::CollapsingHeader("OpenGL")) {
+			if (ImGui::Checkbox("Shader", &shader)) {
+				if (shader) {
+					glEnable(GL_LIGHTING);
+				}				
+				else {
+					glDisable(GL_LIGHTING);
+				}
+			}
+			
 		}
 		ImGui::End();
 	}

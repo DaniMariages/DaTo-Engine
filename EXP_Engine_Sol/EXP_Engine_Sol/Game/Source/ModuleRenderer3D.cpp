@@ -233,6 +233,8 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 		lights[0].Active(true);
 	}
 
+	
+
 	for(int i = 0; i < Models.size(); ++i)
 	{
 		if (App->editor->drawAll && !Models[i].hide) 
