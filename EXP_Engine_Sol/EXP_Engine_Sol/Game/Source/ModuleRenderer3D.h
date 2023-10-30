@@ -7,7 +7,7 @@
 #include "../External/MathGeoLib/include/Math/float4x4.h"
 #include "Primitive.h"
 #include "../External/Glew/include/glew.h"
-#include "LoadFBX.h"
+#include "Model.h"
 
 //todo: REMOVE this before 1st delivery!!
 #include "glmath.h"
@@ -33,7 +33,7 @@ public:
 	SDL_GLContext context;
 	CPlane Grid;
 
-	std::vector<LoadFBX> Models;
+	std::vector<Model> Models;
 	bool modelLoaded = false;
 	const char* myModelPath;
 

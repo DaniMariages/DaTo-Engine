@@ -276,7 +276,7 @@
     <ClInclude Include="Game\Source\glmath.h" />
     <ClInclude Include="Game\Source\Globals.h" />
     <ClInclude Include="Game\Source\Light.h" />
-    <ClInclude Include="Game\Source\LoadFBX.h" />
+    <ClInclude Include="Game\Source\Model.h" />
     <ClInclude Include="Game\Source\Mesh.h" />
     <ClInclude Include="Game\Source\Module.h" />
     <ClInclude Include="Game\Source\ModuleCamera3D.h" />

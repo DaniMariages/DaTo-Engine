@@ -5,18 +5,19 @@
 #include "../External/Assimp/include/cimport.h"
 #include "../External/Assimp/include/scene.h"
 #include "../External/Assimp/include/postprocess.h"
+#include "../External//MathGeoLib/include/MathGeoLib.h"
 #pragma comment (lib, "Game/External/Assimp/libx86/assimp.lib")
 
 #include "Mesh.h"
 #include <vector>
 #include <string>
 
-class LoadFBX
+class Model
 {
 public:
 
-    LoadFBX() {}
-    ~LoadFBX() {}
+    Model() {}
+    ~Model() {}
 
 	void Load(const char* path) 
 	{
@@ -78,7 +79,7 @@ public:
         }
     }
 
-    void GetUniqueModelName(std::vector<LoadFBX>& models)
+    void GetUniqueModelName(std::vector<Model>& models)
     {
         int counter = 0;
         if (models.size() > 0)

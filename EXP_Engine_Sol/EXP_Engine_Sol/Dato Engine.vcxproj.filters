@@ -429,7 +429,7 @@
     <ClInclude Include="Game\Source\Light.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Source\LoadFBX.h">
+    <ClInclude Include="Game\Source\Model.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Game\Source\Mesh.h">
