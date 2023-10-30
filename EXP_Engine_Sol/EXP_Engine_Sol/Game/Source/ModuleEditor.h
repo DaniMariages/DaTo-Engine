@@ -52,6 +52,8 @@ public:
 	bool side_1 = false;
 	bool side_2 = false;
 
+	bool shader = true;
+
 	bool drawSelected = false;
 	bool drawSelectedVertex = false;
 	bool drawSelectedFaces = false;
