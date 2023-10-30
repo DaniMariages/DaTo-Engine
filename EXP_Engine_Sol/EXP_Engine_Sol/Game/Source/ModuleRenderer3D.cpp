@@ -201,7 +201,7 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 	if (App->input->filePath != nullptr)
 	{
 		LOG("Loading Model...");
-		LoadFBX model;
+		Model model;
 
 		model.Load(App->input->filePath);
 		if (Models.size() != 0) 
