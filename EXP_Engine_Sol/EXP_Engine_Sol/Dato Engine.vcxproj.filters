@@ -67,6 +67,9 @@
     <Filter Include="External\SDL\libx86">
       <UniqueIdentifier>{3f67dfb5-5640-439e-932f-4ba11cfc4307}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Modules">
+      <UniqueIdentifier>{f0edbaff-c56c-4fc5-b3c8-47df13ca39e3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\External\DevIL\include\devil_cpp_wrapper.hpp">
@@ -432,24 +435,6 @@
     <ClInclude Include="Game\Source\Mesh.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Source\Module.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Source\ModuleCamera3D.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Source\ModuleEditor.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Source\ModuleInput.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Source\ModuleRenderer3D.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Source\ModuleWindow.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Source\Primitive.h">
       <Filter>Source</Filter>
     </ClInclude>
@@ -693,6 +678,24 @@
     <ClInclude Include="Game\External\SDL\include\SDL_vulkan.h">
       <Filter>External\SDL\include</Filter>
     </ClInclude>
+    <ClInclude Include="Game\Source\Module.h">
+      <Filter>Source\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Source\ModuleCamera3D.h">
+      <Filter>Source\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Source\ModuleEditor.h">
+      <Filter>Source\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Source\ModuleInput.h">
+      <Filter>Source\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Source\ModuleRenderer3D.h">
+      <Filter>Source\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Source\ModuleWindow.h">
+      <Filter>Source\Modules</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game\External\DevIL\include\luadevil.c">
@@ -833,26 +836,26 @@
     <ClCompile Include="Game\Source\Main.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Source\ModuleCamera3D.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Source\ModuleEditor.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Source\ModuleInput.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Source\ModuleRenderer3D.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Source\ModuleWindow.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Game\Source\Primitive.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Game\Source\Timer.cpp">
       <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Source\ModuleCamera3D.cpp">
+      <Filter>Source\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Source\ModuleEditor.cpp">
+      <Filter>Source\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Source\ModuleInput.cpp">
+      <Filter>Source\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Source\ModuleRenderer3D.cpp">
+      <Filter>Source\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Source\ModuleWindow.cpp">
+      <Filter>Source\Modules</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -226,6 +226,13 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	//Render Editor
 	Grid.Render();
 
+	if (App->editor->lights == false) {
+		lights[0].Active(false);
+	}
+	else {
+		lights[0].Active(true);
+	}
+
 	for(int i = 0; i < Models.size(); ++i)
 	{
 		if (App->editor->drawAll && !Models[i].hide) 

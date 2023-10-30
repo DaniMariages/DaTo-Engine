@@ -64,6 +64,18 @@ update_status ModuleCamera3D::Update(float dt)
 
 	// Mouse motion ----------------
 
+	//Zoom
+	if (App->input->GetMouseZ() != 0) {
+		float3 newPos(0, 0, 0);
+		float speed = 17.0f * dt;
+		
+		if (App->input->GetMouseZ() > 0 ) newPos -= Z * speed;
+		if (App->input->GetMouseZ() < 0) newPos += Z * speed;
+
+		Position += newPos;
+
+	}
+
 	if(App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
 	{
 		int dx = -App->input->GetMouseXMotion();
