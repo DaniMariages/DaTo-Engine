@@ -237,13 +237,29 @@ void ModuleEditor::Config() {
 			if (ImGui::Checkbox("Right side", &side_2)) {
 			}
 		}
-		if(ImGui::CollapsingHeader("OpenGL")) {
+		if(ImGui::CollapsingHeader("Renderer")) {
 			if (ImGui::Checkbox("Shader", &shader)) {
 				if (shader) {
 					glEnable(GL_LIGHTING);
 				}				
 				else {
 					glDisable(GL_LIGHTING);
+				}
+			}
+			if (ImGui::Checkbox("Cull face", &cullface)) {
+				if (cullface) {
+					glEnable(GL_CULL_FACE);
+				}
+				else {
+					glDisable(GL_CULL_FACE);
+				}
+			}
+			if (ImGui::Checkbox("Cull face", &cullface)) {
+				if (cullface) {
+					glEnable(GL_CULL_FACE);
+				}
+				else {
+					glDisable(GL_CULL_FACE);
 				}
 			}
 			

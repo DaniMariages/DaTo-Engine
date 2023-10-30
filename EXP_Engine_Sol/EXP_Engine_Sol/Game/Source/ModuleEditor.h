@@ -53,6 +53,7 @@ public:
 	bool side_2 = false;
 
 	bool shader = true;
+	bool cullface = true;
 
 	bool drawSelected = false;
 	bool drawSelectedVertex = false;
