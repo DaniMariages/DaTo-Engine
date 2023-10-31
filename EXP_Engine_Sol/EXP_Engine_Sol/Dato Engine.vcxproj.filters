@@ -696,8 +696,11 @@
     <ClInclude Include="Game\Source\ModuleWindow.h">
       <Filter>Source\Modules</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Source\Texture.h">
-      <Filter>Source</Filter>
+    <ClInclude Include="Game\Source\ModuleTexture.h">
+      <Filter>Source\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Source\ModuleMesh.h">
+      <Filter>Source\Modules</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -860,8 +863,11 @@
     <ClCompile Include="Game\Source\ModuleWindow.cpp">
       <Filter>Source\Modules</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Source\Texture.cpp">
-      <Filter>Source</Filter>
+    <ClCompile Include="Game\Source\ModuleTexture.cpp">
+      <Filter>Source\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Source\ModuleMesh.cpp">
+      <Filter>Source\Modules</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

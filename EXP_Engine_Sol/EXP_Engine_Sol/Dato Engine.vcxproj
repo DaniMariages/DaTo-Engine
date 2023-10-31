@@ -282,10 +282,11 @@
     <ClInclude Include="Game\Source\ModuleCamera3D.h" />
     <ClInclude Include="Game\Source\ModuleEditor.h" />
     <ClInclude Include="Game\Source\ModuleInput.h" />
+    <ClInclude Include="Game\Source\ModuleMesh.h" />
     <ClInclude Include="Game\Source\ModuleRenderer3D.h" />
     <ClInclude Include="Game\Source\ModuleWindow.h" />
     <ClInclude Include="Game\Source\Primitive.h" />
-    <ClInclude Include="Game\Source\Texture.h" />
+    <ClInclude Include="Game\Source\ModuleTexture.h" />
     <ClInclude Include="Game\Source\Timer.h" />
   </ItemGroup>
   <ItemGroup>
@@ -338,10 +339,11 @@
     <ClCompile Include="Game\Source\ModuleCamera3D.cpp" />
     <ClCompile Include="Game\Source\ModuleEditor.cpp" />
     <ClCompile Include="Game\Source\ModuleInput.cpp" />
+    <ClCompile Include="Game\Source\ModuleMesh.cpp" />
     <ClCompile Include="Game\Source\ModuleRenderer3D.cpp" />
     <ClCompile Include="Game\Source\ModuleWindow.cpp" />
     <ClCompile Include="Game\Source\Primitive.cpp" />
-    <ClCompile Include="Game\Source\Texture.cpp" />
+    <ClCompile Include="Game\Source\ModuleTexture.cpp" />
     <ClCompile Include="Game\Source\Timer.cpp" />
   </ItemGroup>
   <ItemGroup>

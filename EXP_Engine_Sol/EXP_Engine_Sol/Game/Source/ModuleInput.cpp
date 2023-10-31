@@ -2,6 +2,8 @@
 #include "Application.h"
 #include "ModuleInput.h"
 #include "ModuleRenderer3D.h"
+#include "ModuleMesh.h"
+#include "ModuleTexture.h"
 #include "../External/ImGui/backends/imgui_impl_sdl2.h"
 
 
@@ -114,7 +116,10 @@ update_status ModuleInput::PreUpdate(float dt)
 				if (e.drop.file != ERROR) 
 				{
 					filePath = e.drop.file;
-					App->renderer3D->myModelPath = filePath;
+					App->mesh->LoadMesh(e.drop.file);
+					App->texture->LoadTexture(e.drop.file);
+					App->renderer3D->BindVBO();
+					SDL_free(e.drop.file);
 					LOG("Path loaded: %s.", filePath);
 				}
 

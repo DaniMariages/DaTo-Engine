@@ -164,6 +164,13 @@ private:
                 vector.z = mesh->mNormals[i].z;
                 vertex.Normal = vector;
             }
+            // texCoords
+            if (mesh->mTextureCoords[0]) 
+            {
+                vertex.TexCoords.x = mesh->mTextureCoords[0][i].x;
+                vertex.TexCoords.y = mesh->mTextureCoords[0][i].y;
+            }
+            else vertex.TexCoords = float2(0.0f, 0.0f);
 
             vertices.push_back(vertex);
         }
@@ -179,9 +186,6 @@ private:
   
         LOG("Num Vertices: %d.", mesh->mNumVertices);
         LOG("Num Caras: %d.", mesh->mNumFaces);
-        
-        LOG("Vertices: %d", vertices);
-        LOG("Indices: %d", indices);
 
         return Mesh(vertices, indices);
     }

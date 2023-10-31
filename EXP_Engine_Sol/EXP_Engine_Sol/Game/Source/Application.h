@@ -13,7 +13,8 @@ class ModuleSceneIntro;
 class ModuleRenderer3D;
 class ModuleEditor;
 class ModuleCamera3D;
-class ModuleFileSystem;
+class ModuleTexture;
+class ModuleMesh;
 
 class Application
 {
@@ -23,6 +24,8 @@ public:
 	ModuleRenderer3D* renderer3D;
 	ModuleCamera3D* camera;
 	ModuleEditor* editor;
+	ModuleTexture* texture;
+	ModuleMesh* mesh;
 
 private:
 

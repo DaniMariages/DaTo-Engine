@@ -8,7 +8,8 @@
 #include "ModuleEditor.h"
 #include <gl/GL.h>
 #include <gl/GLU.h>
-#include "glmath.h"
+#include "ModuleMesh.h"
+#include "ModuleTexture.h"
 
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */	
 #pragma comment (lib, "glu32.lib") /* link Microsoft OpenGL lib   */
@@ -111,7 +112,6 @@ bool ModuleRenderer3D::Init()
 			ret = false;
 		}
 		
-
 		GLfloat LightModelAmbient[] = {0.0f, 0.0f, 0.0f, 1.0f};
 
 		glLightModelfv(GL_LIGHT_MODEL_AMBIENT, LightModelAmbient);
@@ -158,30 +158,56 @@ bool ModuleRenderer3D::Init()
 	ImGui_ImplSDL2_InitForOpenGL(App->window->window, context);
 	ImGui_ImplOpenGL3_Init("#version 130");
 
+	for (int i = 0; i < CHECKERS_WIDTH; i++) {
+		for (int j = 0; j < CHECKERS_HEIGHT; j++) {
+			int c = ((((i & 0x8) == 0) ^ (((j & 0x8)) == 0))) * 255;
+			checkerImage[i][j][0] = (GLubyte)c;
+			checkerImage[i][j][1] = (GLubyte)c;
+			checkerImage[i][j][2] = (GLubyte)c;
+			checkerImage[i][j][3] = (GLubyte)255;
+		}
+	}
+
+	glEnable(GL_TEXTURE_2D);
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	glGenTextures(1, &checkersTexture);
+	glBindTexture(GL_TEXTURE_2D, checkersTexture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERS_WIDTH, CHECKERS_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, checkerImage);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glDisable(GL_TEXTURE_2D);
+	BindVBO();
+
 	Grid.axis = true;
-
-	VBO = 0;
-	EBO = 0;
-	VAO = 0;
-	glGenBuffers(1, &VBO);
-	glGenBuffers(1, &EBO);
-	glGenVertexArrays(1, &VAO);
-
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(CubeVertices), CubeVertices, GL_STATIC_DRAW);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(CubeIndices), CubeIndices, GL_STATIC_DRAW);
-	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-	glBindVertexArray(VAO);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
-	glBindVertexArray(0);
+	ilInit();
+	tex = App->texture->LoadTexture("../Assets/Textures/BakerHouse.png");
+	if (tex) LOG("TEXTURA CARGADA CORRECTAMENTE")
+	else LOG("TEXTURA NO CARGADA");
 
 	return ret;
 }
+
+void ModuleRenderer3D::BindVBO()
+{
+	for (int i = 0; i < App->mesh->meshes.size(); i++) {
+
+		glGenBuffers(1, &App->mesh->meshes[i].VBO);
+		glBindBuffer(GL_ARRAY_BUFFER, App->mesh->meshes[i].VBO);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(ModuleMesh::Vertex) * App->mesh->meshes[i].vertices.size(), &App->mesh->meshes[i].vertices[0], GL_STATIC_DRAW);
+
+		glGenBuffers(1, &App->mesh->meshes[i].EBO);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, App->mesh->meshes[i].EBO);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * App->mesh->meshes[i].indices.size(), &App->mesh->meshes[i].indices[0], GL_STATIC_DRAW);
+
+
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	}
+}
+
 
 // PreUpdate: clear buffer
 update_status ModuleRenderer3D::PreUpdate(float dt)
@@ -198,25 +224,7 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 		for (uint i = 0; i < MAX_LIGHTS; ++i)
 			lights[i].Render();
 
-	if (App->input->filePath != nullptr)
-	{
-		LOG("Loading Model...");
-		Model model;
-
-		model.Load(App->input->filePath);
-		if (Models.size() != 0) 
-		{
-			model.GetUniqueModelName(Models);
-		}
-		Models.push_back(model);
-		
-
-		LOG("Model vector size is: %d.", Models.size());
-		modelLoaded = true;
-		LOG("Model path: %s", App->input->filePath);
-		App->input->filePath = nullptr;
-	}
-
+	
 	return UPDATE_CONTINUE;
 }
 
@@ -233,19 +241,31 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 		lights[0].Active(true);
 	}
 
-	
+	for (int i = 0; i < App->mesh->meshes.size(); i++) {
+		glEnable(GL_TEXTURE_2D);
+		glEnable(GL_TEXTURE_COORD_ARRAY);
+		//Bind Mesh
+		glBindBuffer(GL_ARRAY_BUFFER, App->mesh->meshes[i].VBO);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, App->mesh->meshes[i].EBO);
+		glEnableClientState(GL_VERTEX_ARRAY);
+		glVertexPointer(3, GL_FLOAT, sizeof(ModuleMesh::Vertex), (void*)0);
 
-	for(int i = 0; i < Models.size(); ++i)
-	{
-		if (App->editor->drawAll && !Models[i].hide) 
-			Models[i].Draw();
+		//Bind Textures
+		glBindTexture(GL_TEXTURE_2D, tex->textID);
+		glNormalPointer(GL_FLOAT, sizeof(ModuleMesh::Vertex), (void*)offsetof(ModuleMesh::Vertex, Normal));
+		glTexCoordPointer(2, GL_FLOAT, sizeof(ModuleMesh::Vertex), (void*)offsetof(ModuleMesh::Vertex, TexCoords));
 
-		if (App->editor->drawAllVertex && !Models[i].hide) 
-			Models[i].DrawVertex();
+		glDrawElements(GL_TRIANGLES, App->mesh->meshes[i].indices.size(), GL_UNSIGNED_INT, NULL);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-		if (App->editor->drawAllFaces && !Models[i].hide) 
-			Models[i].DrawFaces();
+		glDisable(GL_TEXTURE_2D);
+		glDisableClientState(GL_VERTEX_ARRAY);
+		glBindTexture(GL_TEXTURE_2D, 0);
+		glDisable(GL_TEXTURE_COORD_ARRAY);
+
 	}
+
 
 	glEnd();
 	glLineWidth(1.0f);
@@ -285,3 +305,5 @@ void ModuleRenderer3D::OnResize(int width, int height)
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 }
+
+
