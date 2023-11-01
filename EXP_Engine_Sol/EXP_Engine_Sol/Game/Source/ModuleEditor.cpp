@@ -222,9 +222,10 @@ void ModuleEditor::Config() {
 			if (ImGui::Checkbox("Normals", &drawAllFaces)) {
 			}
 			if (ImGui::Checkbox("Vertex", &drawAllVertex)) {
+			}			
+			if (ImGui::Checkbox("Textures", &drawTextures)) {
 			}
-			if (ImGui::Checkbox("Lights", &lights)) {
-			}
+			
 		}
 		if (ImGui::CollapsingHeader("View"))
 		{

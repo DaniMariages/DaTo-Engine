@@ -17,7 +17,6 @@ Application::Application()
 	editor = new ModuleEditor(this);
 	mesh = new ModuleMesh(this);
 	texture = new ModuleTexture(this);
-	
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
 	// They will CleanUp() in reverse order

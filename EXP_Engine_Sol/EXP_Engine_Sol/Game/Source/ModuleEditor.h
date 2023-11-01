@@ -46,6 +46,7 @@ public:
 	bool drawAll = true;
 	bool drawAllFaces = false;
 	bool drawAllVertex = false;
+	bool drawTextures = true;
 
 	bool top = false;
 	bool front = false;
