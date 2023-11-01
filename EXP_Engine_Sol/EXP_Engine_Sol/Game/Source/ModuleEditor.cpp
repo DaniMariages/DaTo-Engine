@@ -57,6 +57,8 @@ void ModuleEditor :: DrawEditor()
 	ImGui_ImplSDL2_NewFrame();
 	ImGui::NewFrame();
 
+	ImGui::DockSpaceOverViewport(NULL, ImGuiDockNodeFlags_PassthruCentralNode);
+
 	aFPS = App->FPS();
 
 	UpdateFPS(aFPS);
@@ -171,7 +173,7 @@ void ModuleEditor::Config() {
 
 	if (show_config_window)
 	{
-		ImGui::Begin("Configuration", &show_config_window);
+		ImGui::Begin("Configuration", &show_config_window, ImGuiWindowFlags_DockNodeHost);
 		if (ImGui::CollapsingHeader("Display"))
 		{
 			if (ImGui::Checkbox("Fullscreen", &fullscreen)) {
