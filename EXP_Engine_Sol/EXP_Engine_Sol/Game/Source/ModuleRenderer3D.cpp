@@ -394,10 +394,10 @@ void ModuleRenderer3D::DrawMesh(mesh* mesh, uint id)
 	glVertexPointer(3, GL_FLOAT, sizeof(Vertex), (void*)0);
 
 	////Bind Textures
-	//ComponentTexture* componentTex = (ComponentTexture*)App->renderer3D->selectedGameObject->GetComponent(typeComponent::Material);
-	//glBindTexture(GL_TEXTURE_2D, id);
-	//glNormalPointer(GL_FLOAT, sizeof(Vertex), (void*)offsetof(Vertex, Normal));
-	//glTexCoordPointer(2, GL_FLOAT, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords));
+	ComponentTexture* componentTex = (ComponentTexture*)App->renderer3D->selectedGameObject->GetComponent(typeComponent::Material);
+	glBindTexture(GL_TEXTURE_2D, id);
+	glNormalPointer(GL_FLOAT, sizeof(Vertex), (void*)offsetof(Vertex, Normal));
+	glTexCoordPointer(2, GL_FLOAT, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords));
 
 	
 	glDrawElements(GL_TRIANGLES, mesh->indices.size(), GL_UNSIGNED_INT, NULL);
