@@ -74,6 +74,7 @@ void ModuleEditor :: DrawEditor()
 	}
 
 	Config();
+	Console();
 
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 
@@ -146,6 +147,9 @@ void ModuleEditor::MainMenuBar() {
 			if (ImGui::MenuItem("Inspector")) {
 				show_inspector_window = !show_inspector_window;
 			}
+			if (ImGui::MenuItem("Console")) {
+				show_console = !show_console;
+			}
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu("About"))
@@ -169,7 +173,6 @@ void ModuleEditor::RequestBrowser(const char* path)
 void ModuleEditor::Config() {
 	
 	ImGuiStyle& style = ImGui::GetStyle();
-	static ImGuiStyle ref_saved_style;
 
 	if (show_config_window)
 	{
@@ -252,6 +255,21 @@ void ModuleEditor::Config() {
 				}
 			}
 			
+		}
+		ImGui::End();
+	}
+}
+
+void ModuleEditor::Console()
+{
+	ImGuiStyle& style = ImGui::GetStyle();
+
+	if (show_console) {
+		ImGui::Begin("Console", &show_console);
+
+		for (int i = 0; i < log_history.size(); i++)
+		{
+			ImGui::Text("%s", log_history[i].c_str());
 		}
 		ImGui::End();
 	}

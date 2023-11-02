@@ -7,9 +7,12 @@
 #include "ModuleEditor.h"
 #include "ModuleImport.h"
 
+extern  Application* App_ = nullptr;
 
 Application::Application()
 {
+	App_ = this;
+
 	window = new ModuleWindow(this);
 	input = new ModuleInput(this);
 	renderer3D = new ModuleRenderer3D(this);
@@ -135,3 +138,5 @@ float Application::DT() {
 float Application::MS() {
 	return dt * 100;
 }
+
+Application* App = nullptr;

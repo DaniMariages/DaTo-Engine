@@ -2,6 +2,8 @@
 #ifndef MODULE_EDITOR
 #define MODUEL_EDITOR
 
+#include <string>
+
 #include "Module.h"
 #include "Globals.h"
 #include <vector>
@@ -25,13 +27,14 @@ public:
 
 	void RequestBrowser(const char* path);
 
-	SDL_GLContext context;
+	
 	/*void AddFPS(const float aFPS);*/
 
-	std::vector<std::string> log_record;
+	std::vector<std::string> log_history;
 	float aFPS;
 
 	void UpdateFPS(const float aFPS);
+	void ModuleEditor::Console();
 
 	char label[32];
 
@@ -42,6 +45,7 @@ public:
 	bool show_config_window = true;
 	bool show_gameobjects_window = true;
 	bool show_inspector_window = false;
+	bool show_console = false;
 
 	bool drawAll = true;
 	bool drawAllFaces = false;
