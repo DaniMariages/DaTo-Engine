@@ -1,3 +1,5 @@
+#include "Application.h"
+#include "ModuleRenderer3D.h"
 #include "ModuleImport.h"
 
 #include "../External/Assimp/include/cimport.h"
@@ -26,17 +28,23 @@ void ModuleImport::ReadFile(const char* file_path)
 { 
 	LOG("Reading file, path: %s.", file_path);
 
-	std::string name = GetName(file_path);
+	name = GetName(file_path);
+	path = file_path;
 	typeFile extension = ReadExtension(name);
 
 	switch (extension) {
 	case typeFile::MODEL:
 		LOG("START LOADING MODEL");
 		LoadMesh(file_path);
+		break;
 
 	case typeFile::TEXTURE:
 		LOG("START LOADING TEXTURE");
-		LoadTexture(file_path);
+		//LoadTexture(file_path);
+		ComponentTexture* tempCompTex = new ComponentTexture(App->renderer3D->selectedGameObject);
+		tempCompTex->SetTexture(LoadTexture(file_path));
+		App->renderer3D->selectedGameObject->AddComponent(tempCompTex);
+		break;
 	}
 }
 
@@ -117,6 +125,7 @@ void ModuleImport::LoadMesh(const char* file_path)
 					vertex.Normal.x = scene->mMeshes[i]->mNormals[j].x;
 					vertex.Normal.y = scene->mMeshes[i]->mNormals[j].y;
 					vertex.Normal.z = scene->mMeshes[i]->mNormals[j].z;
+					
 				}
 				if (scene->mMeshes[i]->HasTextureCoords(0))
 				{
@@ -151,10 +160,13 @@ void ModuleImport::LoadMesh(const char* file_path)
 			compMesh->SetPath(std::string(file_path));
 			compMesh->SetMesh(&Mesh);
 
+			gObject->AddComponent(compMesh);
+			App->renderer3D->BindVBO();
 			meshes.push_back(Mesh);
 		}
 
 		LOG("Scene loaded correctly");
+		App->renderer3D->AddGameObject(gObject);
 		aiReleaseImport(scene);
 	}
 	else LOG("Error loading scene % s", file_path);

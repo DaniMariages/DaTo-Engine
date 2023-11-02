@@ -54,12 +54,12 @@ Component* GameObject::AddComponent(Component* component)
 	/*case(typeComponent::Transform):
 		ret = new ComponentTransform(this);
 		break;*/
-	/*case(typeComponent::Material):
-		if (this->GetComponent(ComponentType::Material) != nullptr) {
+	case(typeComponent::Material):
+		if (this->GetComponent(typeComponent::Material) != nullptr) {
 			return nullptr;
 		}
 		ret = new ComponentTexture(this);
-		break;*/
+		break;
 	case(typeComponent::Mesh):
 		ret = new ComponentMesh(this);
 		break;

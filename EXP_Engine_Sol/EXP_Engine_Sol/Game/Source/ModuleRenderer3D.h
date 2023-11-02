@@ -16,6 +16,8 @@
 #define CHECKERS_WIDTH 64
 #define CHECKERS_HEIGHT 64
 
+struct mesh;
+
 class ModuleRenderer3D : public Module
 {
 public:
@@ -28,7 +30,18 @@ public:
 	bool CleanUp();
 
 	void OnResize(int width, int height);
+
+	void UseCheckerTexture();
 	void BindVBO();
+	void SetUpBuffers(mesh* mesh);
+
+	void IterateDrawMesh();
+	void DrawMesh(mesh* mesh, uint id = 0);
+	void DrawNormals(mesh* mesh);
+	
+	float3 CalculateFaceNormal(const float3& vertex1, const float3& vertex2, const float3& vertex3);
+
+	void AddGameObject(GameObject* object);
 
 public:
 

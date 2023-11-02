@@ -7,6 +7,7 @@
 
 ComponentTexture::ComponentTexture(GameObject* parent) : Component(parent)
 {
+	texture = new Texture();
 	texture->textID = -1;
 	texture->height = -1;
 	texture->width = -1;

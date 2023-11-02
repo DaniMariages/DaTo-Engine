@@ -28,6 +28,9 @@
 
 ModuleRenderer3D::ModuleRenderer3D(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
+	gameObject = new GameObject("BakerHouse");
+	gameObjects.push_back(gameObject);
+	selectedGameObject = gameObject;
 }
 
 // Destructor
@@ -157,39 +160,17 @@ bool ModuleRenderer3D::Init()
 	ImGui_ImplSDL2_InitForOpenGL(App->window->window, context);
 	ImGui_ImplOpenGL3_Init("#version 130");
 
-	for (int i = 0; i < CHECKERS_WIDTH; i++) {
-		for (int j = 0; j < CHECKERS_HEIGHT; j++) {
-			int c = ((((i & 0x8) == 0) ^ (((j & 0x8)) == 0))) * 255;
-			checkerImage[i][j][0] = (GLubyte)c;
-			checkerImage[i][j][1] = (GLubyte)c;
-			checkerImage[i][j][2] = (GLubyte)c;
-			checkerImage[i][j][3] = (GLubyte)255;
-		}
-	}
-
-	glEnable(GL_TEXTURE_2D);
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-	glGenTextures(1, &checkersTexture);
-	glBindTexture(GL_TEXTURE_2D, checkersTexture);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERS_WIDTH, CHECKERS_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, checkerImage);
-	glBindTexture(GL_TEXTURE_2D, 0);
-	glDisable(GL_TEXTURE_2D);
+	UseCheckerTexture();
 	BindVBO();
 
 	Grid.axis = true;
 
+	ilInit();
+	App->importer->ReadFile("../Assets/Models/BakerHouse.fbx");
+	App->importer->ReadFile("../Assets/Textures/BakerHouse.png");
+
 	return ret;
 }
-
-void ModuleRenderer3D::BindVBO()
-{
-
-}
-
 
 // PreUpdate: clear buffer
 update_status ModuleRenderer3D::PreUpdate(float dt)
@@ -203,9 +184,13 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 	// light 0 on cam pos
 	lights[0].SetPos(App->camera->Position.x, App->camera->Position.y, App->camera->Position.z);
 
-		for (uint i = 0; i < MAX_LIGHTS; ++i)
+	for (uint i = 0; i < MAX_LIGHTS; ++i)
 			lights[i].Render();
 
+	for (uint n = 0; n < gameObjects.size(); n++)
+	{
+		gameObjects[n]->Update();
+	}
 	
 	return UPDATE_CONTINUE;
 }
@@ -216,19 +201,14 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	//Render Editor
 	Grid.Render();
 
-
-	lights[0].Active(true);
-
-	if (App->editor->drawAll == true) {
-		
-
+	if (App->editor->lights == false) {
+		lights[0].Active(false);
 	}
-	
-
-	if (App->editor->drawAllVertex == true) {
-		
+	else {
+		lights[0].Active(true);
 	}
 
+	IterateDrawMesh();
 
 	glEnd();
 	glLineWidth(1.0f);
@@ -269,4 +249,159 @@ void ModuleRenderer3D::OnResize(int width, int height)
 	glLoadIdentity();
 }
 
+void ModuleRenderer3D::UseCheckerTexture() {
 
+	for (int i = 0; i < 64; i++) {
+		for (int j = 0; j < 64; j++) {
+			int c = ((((i & 0x8) == 0) ^ (((j & 0x8)) == 0))) * 255;
+			checkerImage[i][j][0] = (GLubyte)c;
+			checkerImage[i][j][1] = (GLubyte)c;
+			checkerImage[i][j][2] = (GLubyte)c;
+			checkerImage[i][j][3] = (GLubyte)255;
+		}
+	}
+
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	glGenTextures(1, &checkerID);
+	glBindTexture(GL_TEXTURE_2D, checkerID);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 64, 64,
+		0, GL_RGBA, GL_UNSIGNED_BYTE, checkerImage);
+
+}
+
+void ModuleRenderer3D::BindVBO()
+{
+	for (int i = 0; i < App->importer->meshes.size(); i++) {
+
+		glGenBuffers(1, &App->importer->meshes[i].VBO);
+		glBindBuffer(GL_ARRAY_BUFFER, App->importer->meshes[i].VBO);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * App->importer->meshes[i].vertices.size(), &App->importer->meshes[i].vertices[0], GL_STATIC_DRAW);
+
+		glGenBuffers(1, &App->importer->meshes[i].EBO);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, App->importer->meshes[i].EBO);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * App->importer->meshes[i].indices.size(), &App->importer->meshes[i].indices[0], GL_STATIC_DRAW);
+
+
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	}
+}
+
+void ModuleRenderer3D::IterateDrawMesh()
+{
+	for (uint i = 0; i < App->renderer3D->gameObjects.size(); i++)
+	{
+		if (App->renderer3D->gameObjects[i]->GetComponent(typeComponent::Mesh) != nullptr)
+		{
+
+			std::vector<Component*> meshComponents = App->renderer3D->gameObjects[i]->GetComponents(typeComponent::Mesh);
+
+			std::vector<Component*>::iterator item = meshComponents.begin();
+			for (; item != meshComponents.end(); ++item) {
+
+				ComponentTexture* componentTex = (ComponentTexture*)App->renderer3D->gameObjects[i]->GetComponent(typeComponent::Material);
+				ComponentMesh* tempComponentMesh = (ComponentMesh*)(*item);
+				if (componentTex != nullptr)
+				{
+					DrawMesh(tempComponentMesh->GetMesh(), componentTex->GetTexture()->textID);
+					if (App->editor->drawAllFaces) DrawNormals(tempComponentMesh->GetMesh());
+				}
+				else
+				{
+					DrawMesh(tempComponentMesh->GetMesh());
+					if (App->editor->drawAllFaces) DrawNormals(tempComponentMesh->GetMesh());
+				}
+			}
+		}
+	}
+}
+
+void ModuleRenderer3D::DrawMesh(mesh* mesh, uint id)
+{
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, id);
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);		
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, checkerID);
+	
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_NORMAL_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+	glBindBuffer(GL_ARRAY_BUFFER, 1);
+	glVertexPointer(3, GL_FLOAT, 0, NULL);
+
+	glBindBuffer(GL_ARRAY_BUFFER, 2);
+	glNormalPointer(GL_FLOAT, 0, NULL);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+	glBindBuffer(GL_ARRAY_BUFFER, 3);
+	glTexCoordPointer(2, GL_FLOAT, 0, NULL);
+
+	glDrawElements(GL_TRIANGLES, 0, GL_UNSIGNED_INT, NULL);
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_NORMAL_ARRAY, 0);
+
+	glDisableClientState(GL_NORMAL_ARRAY);
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+	glDisable(GL_TEXTURE_2D);
+}
+
+void ModuleRenderer3D::DrawNormals(mesh* mesh)
+{
+	
+	for (unsigned int j = 0; j < mesh->indices.size(); j += 3)
+	{
+		// Obtén los índices de los vértices que forman una cara
+		unsigned int vertexIndex1 = mesh->indices[j];
+		unsigned int vertexIndex2 = mesh->indices[j + 1];
+		unsigned int vertexIndex3 = mesh->indices[j + 2];
+
+		// Calcula el centro de la cara
+		float3 faceCenter = (
+			mesh->vertices[vertexIndex1].Position +
+			mesh->vertices[vertexIndex2].Position +
+			mesh->vertices[vertexIndex3].Position) /
+			3.0f;
+
+		// Obten las normales de la cara
+		float3 faceNormal = CalculateFaceNormal(
+			mesh->vertices[vertexIndex1].Position,
+			mesh->vertices[vertexIndex2].Position,
+			mesh->vertices[vertexIndex3].Position);
+
+		// Dibuja una línea desde el centro de la cara en la dirección de la normal de la cara
+		glBegin(GL_LINES);
+		glVertex3f(faceCenter.x, faceCenter.y, faceCenter.z);
+		glVertex3f(faceCenter.x + faceNormal.x, faceCenter.y + faceNormal.y, faceCenter.z + faceNormal.z);
+		glEnd();
+	}
+}
+
+float3 ModuleRenderer3D::CalculateFaceNormal(const float3& vertex1, const float3& vertex2, const float3& vertex3)
+{
+	float3 edge1 = vertex2 - vertex1;
+	float3 edge2 = vertex3 - vertex1;
+	return Cross(edge1, edge2).Normalized();
+}
+
+void ModuleRenderer3D::AddGameObject(GameObject* object)
+{
+	selectedGameObject = object;
+	object->SetParent(gameObject);
+	gameObject->AddChildren(object);
+	gameObjects.push_back(object);
+}
