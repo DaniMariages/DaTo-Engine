@@ -35,15 +35,19 @@ void ModuleImport::ReadFile(const char* file_path)
 	switch (extension) {
 	case typeFile::MODEL:
 		LOG("START LOADING MODEL");
+		BakerHouse = new GameObject(name);
 		LoadMesh(file_path);
+		LOG("MODEL LOADED");
+		App->renderer3D->gameObjects.push_back(BakerHouse);
 		break;
 
 	case typeFile::TEXTURE:
 		LOG("START LOADING TEXTURE");
 		LoadTexture(file_path);
-		ComponentTexture* tempCompTex = new ComponentTexture(App->renderer3D->selectedGameObject);
+		ComponentTexture* tempCompTex = new ComponentTexture(BakerHouse);
 		tempCompTex->SetTexture(LoadTexture(file_path));
-		App->renderer3D->selectedGameObject->AddComponent(tempCompTex);
+		LOG("TEXTURE LOADED")
+		BakerHouse->AddComponent(tempCompTex);
 		break;
 	}
 }
@@ -104,12 +108,11 @@ void ModuleImport::LoadMesh(const char* file_path)
 
 	if (scene != nullptr && scene->HasMeshes())
 	{
-		GameObject* gObject = new GameObject(name);
-
+		
 		for (int i = 0; i < scene->mNumMeshes; i++)
 		{
-			mesh Mesh;
-			ComponentMesh* compMesh = new ComponentMesh(gObject);
+			mesh* Mesh = new mesh();
+ 			ComponentMesh* compMesh = new ComponentMesh(BakerHouse);
 
 			for (unsigned int j = 0; j < scene->mMeshes[i]->mNumVertices; j++)
 			{
@@ -138,12 +141,12 @@ void ModuleImport::LoadMesh(const char* file_path)
 					vertex.TexCoords.y = 0.0f;
 				}
 				
-				Mesh.vertices.push_back(vertex);
+				Mesh->vertices.push_back(vertex);
 			}
 
 			if (scene->mMeshes[i]->HasFaces())
 			{
-				Mesh.indices.resize(scene->mMeshes[i]->mNumFaces * 3);	//assume each face is a triangle
+				Mesh->indices.resize(scene->mMeshes[i]->mNumFaces * 3);	//assume each face is a triangle
 
 				for (uint y = 0; y < scene->mMeshes[i]->mNumFaces; y++)
 				{
@@ -153,20 +156,19 @@ void ModuleImport::LoadMesh(const char* file_path)
 					}
 					else
 					{
-						memcpy(&Mesh.indices[y * 3], scene->mMeshes[i]->mFaces[y].mIndices, 3 * sizeof(unsigned int));
+						memcpy(&Mesh->indices[y * 3], scene->mMeshes[i]->mFaces[y].mIndices, 3 * sizeof(unsigned int));
 					}
 				}
 			}
 			compMesh->SetPath(std::string(file_path));
-			compMesh->SetMesh(&Mesh);
+			compMesh->SetMesh(Mesh);
 
-			gObject->AddComponent(compMesh);
-			App->renderer3D->SetUpBuffers(&Mesh);
-			meshes.push_back(Mesh);
+			BakerHouse->AddComponent(compMesh);
+			App->renderer3D->SetUpBuffers(Mesh);
+			meshes.push_back(*Mesh);
 		}
 
 		LOG("Scene loaded correctly");
-		App->renderer3D->AddGameObject(gObject);
 		aiReleaseImport(scene);
 	}
 	else LOG("Error loading scene % s", file_path);

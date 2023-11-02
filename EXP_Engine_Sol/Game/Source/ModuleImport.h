@@ -77,6 +77,9 @@ private:
 
 	void LoadMesh(const char* file_path);
 	Texture* LoadTexture(const char* file_path);
+
+	GameObject* BakerHouse = nullptr;
+
 	std::string path;
 	std::string name;
 };

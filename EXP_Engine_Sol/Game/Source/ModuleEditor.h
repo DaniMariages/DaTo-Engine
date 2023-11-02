@@ -25,9 +25,10 @@ public:
 	void MainMenuBar();
 	void DemoWindow();
 
+	void HierarchyWindow();
+
 	void RequestBrowser(const char* path);
 
-	
 	/*void AddFPS(const float aFPS);*/
 
 	std::vector<std::string> log_history;
@@ -43,7 +44,7 @@ public:
 	bool show_demo_window = false;
 	bool show_metrics_window = false;
 	bool show_config_window = true;
-	bool show_gameobjects_window = true;
+	bool show_hierarchy_window = true;
 	bool show_inspector_window = false;
 	bool show_console = false;
 

@@ -141,8 +141,8 @@ void ModuleEditor::MainMenuBar() {
 			if (ImGui::MenuItem("Metrics Window")) {
 				show_metrics_window = !show_metrics_window;
 			}
-			if (ImGui::MenuItem("Game Objects")) {
-				show_gameobjects_window = !show_gameobjects_window;
+			if (ImGui::MenuItem("Hierarchy")) {
+				show_hierarchy_window = !show_hierarchy_window;
 			}
 			if (ImGui::MenuItem("Inspector")) {
 				show_inspector_window = !show_inspector_window;
@@ -254,8 +254,22 @@ void ModuleEditor::Config() {
 					glDisable(GL_CULL_FACE);
 				}
 			}
-			
 		}
+		if (show_hierarchy_window)
+		{
+			ImGui::Begin("Hierarchy", &show_hierarchy_window);
+			static int seleccion = -1;
+			for (int i = 0; i < App->renderer3D->gameObjects.size(); i++)
+			{
+				if (ImGui::Selectable(App->renderer3D->gameObjects[i]->Name.c_str(), seleccion == i))
+				{
+					show_inspector_window = !show_inspector_window;
+				}
+				ImGui::Text("%d", i);
+			}
+			ImGui::End();
+		}
+
 		ImGui::End();
 	}
 }
