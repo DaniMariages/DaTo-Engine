@@ -32,18 +32,15 @@ public:
 	void OnResize(int width, int height);
 
 	void UseCheckerTexture();
-	void BindVBO();
+	
 	void SetUpBuffers(mesh* mesh);
 
 	void IterateDrawMesh();
-	void DrawMeshSinceImporter();
 	void DrawMesh(mesh* mesh, uint id = 0);
 	void DrawFaceNormals();
 	void DrawVertexNormals();
 	
 	float3 CalculateFaceNormal(const float3& vertex1, const float3& vertex2, const float3& vertex3);
-
-	void AddGameObject(GameObject* object);
 
 public:
 

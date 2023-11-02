@@ -158,8 +158,6 @@ bool ModuleRenderer3D::Init()
 	ImGui_ImplOpenGL3_Init("#version 130");
 
 	UseCheckerTexture();
-	BindVBO();
-
 	Grid.axis = true;
 
 	ilInit();
@@ -269,23 +267,6 @@ void ModuleRenderer3D::UseCheckerTexture() {
 
 }
 
-void ModuleRenderer3D::BindVBO()
-{
-	for (int i = 0; i < App->importer->meshes.size(); i++) {
-
-		glGenBuffers(1, &App->importer->meshes[i].VBO);
-		glBindBuffer(GL_ARRAY_BUFFER, App->importer->meshes[i].VBO);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * App->importer->meshes[i].vertices.size(), &App->importer->meshes[i].vertices[0], GL_STATIC_DRAW);
-
-		glGenBuffers(1, &App->importer->meshes[i].EBO);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, App->importer->meshes[i].EBO);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * App->importer->meshes[i].indices.size(), &App->importer->meshes[i].indices[0], GL_STATIC_DRAW);
-
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-	}
-}
-
 void ModuleRenderer3D::SetUpBuffers(mesh* mesh)
 {
 	glGenBuffers(1, &mesh->VBO);
@@ -295,6 +276,8 @@ void ModuleRenderer3D::SetUpBuffers(mesh* mesh)
 	glGenBuffers(1, &mesh->EBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * mesh->indices.size(), &mesh->indices[0], GL_STATIC_DRAW);
+
+
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -344,6 +327,7 @@ void ModuleRenderer3D::DrawMesh(mesh* mesh, uint id)
 	glTexCoordPointer(2, GL_FLOAT, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords));
 
 	// Bind the texture
+	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, id);
 
 	// Draw the mesh using glDrawElements
@@ -359,47 +343,6 @@ void ModuleRenderer3D::DrawMesh(mesh* mesh, uint id)
 	glDisableClientState(GL_NORMAL_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
-}
-
-void ModuleRenderer3D::DrawMeshSinceImporter()
-{
-	gameObjects;
-	if (App->editor->drawAll == true) {
-		for (int i = 0; i < App->importer->meshes.size(); i++) 
-		{
-			glEnable(GL_TEXTURE_2D);
-			glEnable(GL_TEXTURE_COORD_ARRAY);
-
-			//Bind Mesh
-			glBindBuffer(GL_ARRAY_BUFFER, App->importer->meshes[i].VBO);
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, App->importer->meshes[i].EBO);
-			glEnableClientState(GL_VERTEX_ARRAY);
-			glVertexPointer(3, GL_FLOAT, sizeof(Vertex), (void*)0);
-
-			//Bind Textures
-			if (App->editor->drawTextures == false)
-			{
-				if (selectedGameObject->GetComponent(typeComponent::Material))
-				{
-					ComponentTexture* componentTex = (ComponentTexture*)App->renderer3D->selectedGameObject->GetComponent(typeComponent::Material);
-					glBindTexture(GL_TEXTURE_2D, componentTex->GetTexture()->textID);
-					glNormalPointer(GL_FLOAT, sizeof(Vertex), (void*)offsetof(Vertex, Normal));
-					glTexCoordPointer(2, GL_FLOAT, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords));
-				}
-			}
-
-			//Draw
-			glDrawElements(GL_TRIANGLES, App->importer->meshes[i].indices.size(), GL_UNSIGNED_INT, NULL);
-			glBindBuffer(GL_ARRAY_BUFFER, 0);
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-			glDisable(GL_TEXTURE_2D);
-			glDisableClientState(GL_VERTEX_ARRAY);
-			glBindTexture(GL_TEXTURE_2D, 0);
-			glDisable(GL_TEXTURE_COORD_ARRAY);
-
-		}
-	}
 }
 
 void ModuleRenderer3D::DrawFaceNormals()
@@ -458,12 +401,4 @@ void ModuleRenderer3D::DrawVertexNormals()
 			glEnd();
 		}
 	}
-}
-
-void ModuleRenderer3D::AddGameObject(GameObject* object)
-{
-	selectedGameObject = object;
-	object->SetParent(gameObject);
-	gameObject->AddChildren(object);
-	gameObjects.push_back(object);
 }
