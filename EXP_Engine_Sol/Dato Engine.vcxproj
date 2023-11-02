@@ -290,6 +290,7 @@
     <ClInclude Include="Game\Source\ModuleWindow.h" />
     <ClInclude Include="Game\Source\Primitive.h" />
     <ClInclude Include="Game\Source\Timer.h" />
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game\External\DevIL\include\luadevil.c" />
@@ -382,6 +383,13 @@
     <Library Include="Game\External\DevIL\libx86\ILUT.lib" />
     <Library Include="Game\External\SDL\libx86\SDL2.lib" />
     <Library Include="Game\External\SDL\libx86\SDL2main.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Icon.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="C:\Users\alexd\OneDrive\Escritorio\Icon.png" />
+    <Image Include="icon1.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

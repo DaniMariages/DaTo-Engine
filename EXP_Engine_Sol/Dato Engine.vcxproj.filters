@@ -70,6 +70,9 @@
     <Filter Include="Source\Modules">
       <UniqueIdentifier>{f0edbaff-c56c-4fc5-b3c8-47df13ca39e3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Icon">
+      <UniqueIdentifier>{69be2175-ac24-4315-a7c7-cd0e1913c236}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\External\DevIL\include\devil_cpp_wrapper.hpp">
@@ -708,6 +711,9 @@
     <ClInclude Include="Game\Source\ModuleImport.h">
       <Filter>Source\Modules</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Icon</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game\External\DevIL\include\luadevil.c">
@@ -972,5 +978,18 @@
     <Library Include="Game\External\SDL\libx86\SDL2main.lib">
       <Filter>External\SDL\libx86</Filter>
     </Library>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="C:\Users\alexd\OneDrive\Escritorio\Icon.png">
+      <Filter>Icon</Filter>
+    </Image>
+    <Image Include="icon1.ico">
+      <Filter>Icon</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Icon.rc">
+      <Filter>Icon</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>
