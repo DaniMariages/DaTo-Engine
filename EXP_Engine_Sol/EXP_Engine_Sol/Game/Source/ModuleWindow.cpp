@@ -101,7 +101,7 @@ void ModuleWindow::SetTitle(const char* title)
 void ModuleWindow::FullScreen(bool fc_enabled) {
 	if (fc_enabled) 
 	{ 
-		SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
+		SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
 	}
 	else {
 		SDL_SetWindowFullscreen(window, 0);

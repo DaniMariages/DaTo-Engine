@@ -217,7 +217,8 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 	{
 		gameObjects[n]->Update();
 	}
-	
+
+
 	return UPDATE_CONTINUE;
 }
 
@@ -227,38 +228,35 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	//Render Editor
 	Grid.Render();
 
-	if (App->editor->lights == false) {
-		lights[0].Active(false);
-	}
-	else {
-		lights[0].Active(true);
-	}
-
-	for (int i = 0; i < App->importer->meshes.size(); i++) {
-		glEnable(GL_TEXTURE_2D);
-		glEnable(GL_TEXTURE_COORD_ARRAY);
-		//Bind Mesh
-		glBindBuffer(GL_ARRAY_BUFFER, App->importer->meshes[i].VBO);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, App->importer->meshes[i].EBO);
-		glEnableClientState(GL_VERTEX_ARRAY);
-		glVertexPointer(3, GL_FLOAT, sizeof(Vertex), (void*)0);
+	if (App->editor->drawAll == true) {
+		for (int i = 0; i < App->importer->meshes.size(); i++) {
+			glEnable(GL_TEXTURE_2D);
+			glEnable(GL_TEXTURE_COORD_ARRAY);
+			////Bind Mesh
+			glBindBuffer(GL_ARRAY_BUFFER, App->importer->meshes[i].VBO);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, App->importer->meshes[i].EBO);
+			glEnableClientState(GL_VERTEX_ARRAY);
+			glVertexPointer(3, GL_FLOAT, sizeof(Vertex), (void*)0);
 
 
-		//Bind Textures
-		ComponentTexture* componentTex = (ComponentTexture*)App->renderer3D->selectedGameObject->GetComponent(typeComponent::Material);
-		glBindTexture(GL_TEXTURE_2D, componentTex->GetTexture()->textID);
-		glNormalPointer(GL_FLOAT, sizeof(Vertex), (void*)offsetof(Vertex, Normal));
-		glTexCoordPointer(2, GL_FLOAT, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords));
+			////Bind Textures
+			if (App->editor->drawTextures == true) {
+				ComponentTexture* componentTex = (ComponentTexture*)App->renderer3D->selectedGameObject->GetComponent(typeComponent::Material);
+				glBindTexture(GL_TEXTURE_2D, componentTex->GetTexture()->textID);
+				glNormalPointer(GL_FLOAT, sizeof(Vertex), (void*)offsetof(Vertex, Normal));
+				glTexCoordPointer(2, GL_FLOAT, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords));
+			}
 
-		glDrawElements(GL_TRIANGLES, App->importer->meshes[i].indices.size(), GL_UNSIGNED_INT, NULL);
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+			glDrawElements(GL_TRIANGLES, App->importer->meshes[i].indices.size(), GL_UNSIGNED_INT, NULL);
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-		glDisable(GL_TEXTURE_2D);
-		glDisableClientState(GL_VERTEX_ARRAY);
-		glBindTexture(GL_TEXTURE_2D, 0);
-		glDisable(GL_TEXTURE_COORD_ARRAY);
+			glDisable(GL_TEXTURE_2D);
+			glDisableClientState(GL_VERTEX_ARRAY);
+			glBindTexture(GL_TEXTURE_2D, 0);
+			glDisable(GL_TEXTURE_COORD_ARRAY);
 
+		}
 	}
 
 	IterateDrawMesh();
@@ -373,12 +371,12 @@ void ModuleRenderer3D::IterateDrawMesh()
 				if (componentTex != nullptr)
 				{
 					DrawMesh(tempComponentMesh->GetMesh(), componentTex->GetTexture()->textID);
-					if (App->editor->drawAllFaces) DrawNormals(tempComponentMesh->GetMesh());
+					//if (App->editor->drawAllFaces == true) DrawNormals(tempComponentMesh->GetMesh());
 				}
 				else
 				{
 					DrawMesh(tempComponentMesh->GetMesh());
-					if (App->editor->drawAllFaces) DrawNormals(tempComponentMesh->GetMesh());
+					//if (App->editor->drawAllFaces == true) DrawNormals(tempComponentMesh->GetMesh());
 				}
 			}
 		}
@@ -395,12 +393,13 @@ void ModuleRenderer3D::DrawMesh(mesh* mesh, uint id)
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glVertexPointer(3, GL_FLOAT, sizeof(Vertex), (void*)0);
 
-	//Bind Textures
-	ComponentTexture* componentTex = (ComponentTexture*)App->renderer3D->selectedGameObject->GetComponent(typeComponent::Material);
-	glBindTexture(GL_TEXTURE_2D, id);
-	glNormalPointer(GL_FLOAT, sizeof(Vertex), (void*)offsetof(Vertex, Normal));
-	glTexCoordPointer(2, GL_FLOAT, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords));
+	////Bind Textures
+	//ComponentTexture* componentTex = (ComponentTexture*)App->renderer3D->selectedGameObject->GetComponent(typeComponent::Material);
+	//glBindTexture(GL_TEXTURE_2D, id);
+	//glNormalPointer(GL_FLOAT, sizeof(Vertex), (void*)offsetof(Vertex, Normal));
+	//glTexCoordPointer(2, GL_FLOAT, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords));
 
+	
 	glDrawElements(GL_TRIANGLES, mesh->indices.size(), GL_UNSIGNED_INT, NULL);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);

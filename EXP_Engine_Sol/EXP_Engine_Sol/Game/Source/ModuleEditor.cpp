@@ -182,12 +182,6 @@ void ModuleEditor::Config() {
 			if (ImGui::Checkbox("Borderless", &borderless)) {
 				App->window->Borderless(borderless);
 			}
-			if (ImGui::SliderFloat("FrameRounding", &style.FrameRounding, 0.0f, 12.0f, "%.0f"))
-			{
-				style.GrabRounding = style.FrameRounding;
-			}
-			if (ImGui::Button("Save Ref"))
-				ref_saved_style = style;
 		}
 		if (ImGui::CollapsingHeader("Hardware"))
 		{
@@ -247,14 +241,6 @@ void ModuleEditor::Config() {
 				}				
 				else {
 					glDisable(GL_LIGHTING);
-				}
-			}
-			if (ImGui::Checkbox("Cull face", &cullface)) {
-				if (cullface) {
-					glEnable(GL_CULL_FACE);
-				}
-				else {
-					glDisable(GL_CULL_FACE);
 				}
 			}
 			if (ImGui::Checkbox("Cull face", &cullface)) {
