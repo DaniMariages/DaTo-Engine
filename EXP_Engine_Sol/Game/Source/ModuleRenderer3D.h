@@ -37,8 +37,8 @@ public:
 
 	void IterateDrawMesh();
 	void DrawMesh(mesh* mesh, uint id = 0);
-	void DrawFaceNormals();
-	void DrawVertexNormals();
+	void DrawFaceNormals(mesh* Mesh);
+	void DrawVertexNormals(mesh* Mesh);
 	
 	float3 CalculateFaceNormal(const float3& vertex1, const float3& vertex2, const float3& vertex3);
 
@@ -48,8 +48,6 @@ public:
 	SDL_GLContext context;
 	CPlane Grid;
 
-	GameObject* gameObject = nullptr;
-	GameObject* selectedGameObject = nullptr;
 	std::vector<GameObject*> gameObjects;
 
 	bool modelLoaded = false;

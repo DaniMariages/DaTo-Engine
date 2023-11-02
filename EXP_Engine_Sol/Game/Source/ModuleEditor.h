@@ -26,6 +26,7 @@ public:
 	void DemoWindow();
 
 	void HierarchyWindow();
+	void GameObjectsTree();
 
 	void RequestBrowser(const char* path);
 

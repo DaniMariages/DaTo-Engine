@@ -23,5 +23,4 @@ public:
 
 	virtual void DrawInspector() {};
 	Component(GameObject* parent) : active(true), parent(parent), type(typeComponent::Error) {};
-
 };

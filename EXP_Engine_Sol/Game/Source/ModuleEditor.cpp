@@ -73,11 +73,13 @@ void ModuleEditor :: DrawEditor()
 		ImGui::ShowMetricsWindow(&show_metrics_window);
 	}
 
+	if (show_hierarchy_window) HierarchyWindow();
+	if (show_inspector_window) GameObjectsTree();
+
 	Config();
 	Console();
 
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
-
 
 	// Rendering
 	ImGui::Render();
@@ -85,7 +87,6 @@ void ModuleEditor :: DrawEditor()
 	//glClearColor(1.0, 1.0, 1.0, 0.0);
 	//glClear(GL_COLOR_BUFFER_BIT);
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
- 
 }
 
 // Called before quitting
@@ -255,21 +256,6 @@ void ModuleEditor::Config() {
 				}
 			}
 		}
-		if (show_hierarchy_window)
-		{
-			ImGui::Begin("Hierarchy", &show_hierarchy_window);
-			static int seleccion = -1;
-			for (int i = 0; i < App->renderer3D->gameObjects.size(); i++)
-			{
-				if (ImGui::Selectable(App->renderer3D->gameObjects[i]->Name.c_str(), seleccion == i))
-				{
-					show_inspector_window = !show_inspector_window;
-				}
-				ImGui::Text("%d", i);
-			}
-			ImGui::End();
-		}
-
 		ImGui::End();
 	}
 }
@@ -287,4 +273,62 @@ void ModuleEditor::Console()
 		}
 		ImGui::End();
 	}
+}
+
+void ModuleEditor::HierarchyWindow()
+{
+	if (show_hierarchy_window)
+	{
+		ImGui::Begin("Hierarchy", &show_hierarchy_window);
+
+		for (int i = 0; i < App->renderer3D->gameObjects.size(); i++)
+		{
+			if (ImGui::Selectable(App->renderer3D->gameObjects[i]->Name.c_str(), selected == i))
+			{
+				selected = i;
+				show_inspector_window = !show_inspector_window;
+			}
+
+			if (ImGui::BeginPopupContextItem())
+			{
+				selected = i;
+
+				ImGui::MenuItem(App->renderer3D->gameObjects[i]->Name.c_str(), NULL, false, false);
+				if (ImGui::MenuItem("Hide"))
+				{
+					App->renderer3D->gameObjects[selected]->active = !App->renderer3D->gameObjects[selected]->active;
+				}
+				if (ImGui::MenuItem("Delete"))
+				{
+					if (selected >= 0 && selected < App->renderer3D->gameObjects.size())
+						App->renderer3D->gameObjects.erase(App->renderer3D->gameObjects.begin() + selected);
+				}
+				ImGui::EndPopup();
+			}
+			//ImGui::SetItemTooltip("Right-click to open popup");
+			ImGui::Text("%d", i);
+		}
+
+		ImGui::End();
+	}
+}
+
+void ModuleEditor::GameObjectsTree()
+{
+	if (show_inspector_window) 
+	{
+		ImGui::Begin("Inspector", &show_inspector_window);
+		if (ImGui::TreeNode("Draw options"))
+		{
+
+			ImGui::TreePop();
+		}
+		if (ImGui::TreeNode("Information"))
+		{
+			ImGui::Text("Name: %s", App->renderer3D->gameObjects[selected]->Name.c_str());
+			ImGui::TreePop();
+		}
+
+	}
+	ImGui::End();
 }
