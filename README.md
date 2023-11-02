@@ -1,5 +1,7 @@
 # DaTo Engine by Toni Romanos & Dani Mariages.
 Github repository: https://github.com/DaniMariages/DaTo-Engine
+https://github.com/DaniMariages
+https://github.com/Toto-RR
 ## Keybinds:
 -W --> Move forward
 -A --> Move left
