@@ -5,8 +5,12 @@ Github repository: https://github.com/DaniMariages/DaTo-Engine
 -A --> Move left
 -S --> Move backwards
 -D --> Move right
+-Q --> Move up
+-E --> Move down
+-F --> Focus geometry
+-Left shift --> Duplicate movement speed
 -Right Click --> FPS camera
--Left Alt + Right Click --> Orbital camera
+-Left Alt + Left Click --> Orbital camera
 -Up Arrow --> Top view
 -Right Arrow --> Right view
 -Left Arrow --> Left view
