@@ -1,4 +1,9 @@
 # DaTo Engine by Toni Romanos & Dani Mariages.
+DaTo Engine is a videogame engine developed for the MOTORS DE VIDEOJOCS course at CITM.
+
+This engine is developed by:
+Dani Mariages - [DaniMariages](<https://github.com/DaniMariages>)
+Toni Romanos - [Toto-RR](<https://github.com/Toto-RR>)
 Github repository: https://github.com/DaniMariages/DaTo-Engine
 https://github.com/DaniMariages
 https://github.com/Toto-RR
