@@ -162,8 +162,8 @@ bool ModuleRenderer3D::Init()
 
 	ilInit();
 
-	App->importer->ReadFile("../Assets/Models/BakerHouse.fbx");
-	App->importer->ReadFile("../Assets/Textures/BakerHouse.png");
+	App->importer->ReadFile("Assets/Models/BakerHouse.fbx");
+	App->importer->ReadFile("Assets/Textures/BakerHouse.png");
 
 	gOselected = gameObjects[0];
 
@@ -442,25 +442,25 @@ void ModuleRenderer3D::DrawSelectedNormals(GameObject* gObject)
 
 void  ModuleRenderer3D::ImportCube()
 {
-	App->importer->ReadFile("../Assets/Models/Primitives/Cube.fbx");
+	App->importer->ReadFile("Assets/Models/Primitives/Cube.fbx");
 }
 
 void  ModuleRenderer3D::ImportSphere()
 {
-	App->importer->ReadFile("../Assets/Models/Primitives/Sphere.fbx");
+	App->importer->ReadFile("Assets/Models/Primitives/Sphere.fbx");
 }
 
 void  ModuleRenderer3D::ImportCone()
 {
-	App->importer->ReadFile("../Assets/Models/Primitives/Cone.fbx");
+	App->importer->ReadFile("Assets/Models/Primitives/Cone.fbx");
 }
 
 void  ModuleRenderer3D::ImportCylinder()
 {
-	App->importer->ReadFile("../Assets/Models/Primitives/Cylinder.fbx");
+	App->importer->ReadFile("Assets/Models/Primitives/Cylinder.fbx");
 }
 
 void  ModuleRenderer3D::ImportTorus()
 {
-	App->importer->ReadFile("../Assets/Models/Primitives/Torus.fbx");
+	App->importer->ReadFile("Assets/Models/Primitives/Torus.fbx");
 }

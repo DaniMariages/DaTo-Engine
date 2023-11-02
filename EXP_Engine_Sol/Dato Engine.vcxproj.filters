@@ -983,9 +983,6 @@
     </Library>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="C:\Users\alexd\OneDrive\Escritorio\Icon.png">
-      <Filter>Icon</Filter>
-    </Image>
     <Image Include="icon1.ico">
       <Filter>Icon</Filter>
     </Image>
