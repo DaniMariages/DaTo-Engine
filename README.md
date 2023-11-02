@@ -13,7 +13,5 @@ Github repository: https://github.com/DaniMariages/DaTo-Engine
 -Down Arrow --> Front view
 -Scroll up --> Zoom in
 -Scroll down --> Zoom out
-##
-Using Glew 2.1.0
-OpenGL version supported 4.6.0 NVIDIA 537.42
-GLSL: 4.60 NVIDIA
+##Additional functionalities
+-Top, side and front view.
