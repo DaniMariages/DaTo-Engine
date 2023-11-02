@@ -125,6 +125,25 @@ void ModuleEditor::MainMenuBar() {
 	if (ImGui::BeginMainMenuBar()) {
 		if (ImGui::BeginMenu("File"))
 		{
+			if (ImGui::BeginMenu("Primitives")) {
+				if (ImGui::MenuItem("Cube")) {
+					App->renderer3D->ImportCube();
+				}
+				if (ImGui::MenuItem("Sphere")) {
+					App->renderer3D->ImportSphere();
+				}
+				if (ImGui::MenuItem("Cone")) {
+					App->renderer3D->ImportCone();
+				}
+				if (ImGui::MenuItem("Torus")) {
+					App->renderer3D->ImportTorus();
+				}
+				if (ImGui::MenuItem("Cylinder")) {
+					App->renderer3D->ImportCylinder();
+				}
+
+				ImGui::EndMenu();
+			}
 			if (ImGui::MenuItem("Quit")) {
 				
 				App->input->quit = true;

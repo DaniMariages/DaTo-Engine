@@ -40,6 +40,12 @@ public:
 	void DrawFaceNormals(mesh* Mesh);
 	void DrawVertexNormals(mesh* Mesh);
 	
+	void ImportCube();
+	void ImportSphere();
+	void ImportCone();
+	void ImportCylinder();
+	void ImportTorus();
+
 	float3 CalculateFaceNormal(const float3& vertex1, const float3& vertex2, const float3& vertex3);
 
 public:
