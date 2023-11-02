@@ -46,7 +46,7 @@ void ModuleImport::ReadFile(const char* file_path)
 		LoadTexture(file_path);
 		ComponentTexture* tempCompTex = new ComponentTexture(BakerHouse);
 		tempCompTex->SetTexture(LoadTexture(file_path));
-		LOG("TEXTURE LOADED")
+		LOG("TEXTURE LOADED");
 		BakerHouse->AddComponent(tempCompTex);
 		break;
 	}
@@ -83,7 +83,7 @@ typeFile ModuleImport::ReadExtension(std::string name)
 
 	typeFile typeExtension = typeFile::UNKNOWN;
 
-	if (extension == "fbx")
+	if (extension == "fbx" || extension == "FBX")
 	{
 		typeExtension = typeFile::MODEL;
 		LOG("File dropped is: Model");
@@ -108,7 +108,6 @@ void ModuleImport::LoadMesh(const char* file_path)
 
 	if (scene != nullptr && scene->HasMeshes())
 	{
-		
 		for (int i = 0; i < scene->mNumMeshes; i++)
 		{
 			mesh* Mesh = new mesh();
@@ -185,12 +184,11 @@ Texture* ModuleImport::LoadTexture(const char* file_path)
 	if (ilLoadImage(file_path))
 	{
 		ILinfo ImageInfo;
-		iluGetImageInfo(&ImageInfo);
-
 		GLuint texture_id;
+
+		iluGetImageInfo(&ImageInfo);
 		glGenTextures(1, &texture_id);
 		glBindTexture(GL_TEXTURE_2D, texture_id);
-
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
@@ -199,8 +197,7 @@ Texture* ModuleImport::LoadTexture(const char* file_path)
 			iluFlipImage();
 		}
 
-		glTexImage2D(GL_TEXTURE_2D, 0, ilGetInteger(IL_IMAGE_BPP), ImageInfo.Width, ImageInfo.Height, 0, ilGetInteger(IL_IMAGE_FORMAT), GL_UNSIGNED_BYTE, ilGetData());
-
+		glTexImage2D(GL_TEXTURE_2D, 0, ilGetInteger(IL_IMAGE_BPP), ImageInfo.Width, ImageInfo.Height, 0, ilGetInteger(IL_IMAGE_FORMAT), GL_UNSIGNED_BYTE, ilGetData()); 
 		ilDeleteImages(1, &image);
 
 		LOG("Texture loaded correctly");

@@ -158,8 +158,6 @@ bool ModuleRenderer3D::Init()
 	ImGui_ImplOpenGL3_Init("#version 130");
 
 	UseCheckerTexture();
-	BindVBO();
-
 	Grid.axis = true;
 
 	ilInit();
@@ -202,10 +200,6 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 
 	IterateDrawMesh();
 
-	//DrawMeshSinceImporter();
-	if (App->editor->drawAllFaces) DrawFaceNormals();
-	if (App->editor->drawAllVertex) DrawVertexNormals();
-	
 	glEnd();
 	glLineWidth(1.0f);
 
@@ -269,23 +263,6 @@ void ModuleRenderer3D::UseCheckerTexture() {
 
 }
 
-void ModuleRenderer3D::BindVBO()
-{
-	for (int i = 0; i < App->importer->meshes.size(); i++) {
-
-		glGenBuffers(1, &App->importer->meshes[i].VBO);
-		glBindBuffer(GL_ARRAY_BUFFER, App->importer->meshes[i].VBO);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * App->importer->meshes[i].vertices.size(), &App->importer->meshes[i].vertices[0], GL_STATIC_DRAW);
-
-		glGenBuffers(1, &App->importer->meshes[i].EBO);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, App->importer->meshes[i].EBO);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * App->importer->meshes[i].indices.size(), &App->importer->meshes[i].indices[0], GL_STATIC_DRAW);
-
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-	}
-}
-
 void ModuleRenderer3D::SetUpBuffers(mesh* mesh)
 {
 	glGenBuffers(1, &mesh->VBO);
@@ -296,31 +273,35 @@ void ModuleRenderer3D::SetUpBuffers(mesh* mesh)
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * mesh->indices.size(), &mesh->indices[0], GL_STATIC_DRAW);
 
+	//TexCoords?
+
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
 void ModuleRenderer3D::IterateDrawMesh()
 {
-	for (uint i = 0; i < App->renderer3D->gameObjects.size(); i++)
+	for (unsigned int i = 0; i < App->renderer3D->gameObjects.size(); i++)
 	{
 		if (App->renderer3D->gameObjects[i]->GetComponent(typeComponent::Mesh) != nullptr)
 		{
 			std::vector<Component*> meshComponents = App->renderer3D->gameObjects[i]->GetComponents(typeComponent::Mesh);
 			std::vector<Component*>::iterator item = meshComponents.begin();
-			for (; item != meshComponents.end(); ++item) {
-
+			for (; item != meshComponents.end(); ++item) 
+			{
 				ComponentTexture* componentTex = (ComponentTexture*)App->renderer3D->gameObjects[i]->GetComponent(typeComponent::Material);
 				ComponentMesh* tempComponentMesh = (ComponentMesh*)(*item);
-				if (componentTex != nullptr)
+				if (componentTex != nullptr && gameObjects[i]->active && App->editor->drawAll)
 				{
 					DrawMesh(tempComponentMesh->GetMesh(), componentTex->GetTexture()->textID);
-					//if (App->editor->drawAllFaces == true) DrawNormals(tempComponentMesh->GetMesh());
+					if (App->editor->drawAllFaces == true) DrawFaceNormals(tempComponentMesh->GetMesh());
+					if (App->editor->drawAllVertex == true) DrawVertexNormals(tempComponentMesh->GetMesh());
 				}
-				else
+				else if (gameObjects[i]->active && App->editor->drawAll)
 				{
 					DrawMesh(tempComponentMesh->GetMesh());
-					//if (App->editor->drawAllFaces == true) DrawNormals(tempComponentMesh->GetMesh());
+					if (App->editor->drawAllFaces == true) DrawFaceNormals(tempComponentMesh->GetMesh());
+					if (App->editor->drawAllVertex == true) DrawVertexNormals(tempComponentMesh->GetMesh());
 				}
 			}
 		}
@@ -343,9 +324,13 @@ void ModuleRenderer3D::DrawMesh(mesh* mesh, uint id)
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 	glTexCoordPointer(2, GL_FLOAT, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords));
 
-	// Bind the texture
-	glBindTexture(GL_TEXTURE_2D, id);
-
+	if (App->editor->drawTextures)
+	{
+		// Bind the texture
+		glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, id);
+	}
+	
 	// Draw the mesh using glDrawElements
 	glDrawElements(GL_TRIANGLES, mesh->indices.size(), GL_UNSIGNED_INT, 0);
 
@@ -361,75 +346,30 @@ void ModuleRenderer3D::DrawMesh(mesh* mesh, uint id)
 
 }
 
-void ModuleRenderer3D::DrawMeshSinceImporter()
+void ModuleRenderer3D::DrawFaceNormals(mesh* Mesh)
 {
-	gameObjects;
-	if (App->editor->drawAll == true) {
-		for (int i = 0; i < App->importer->meshes.size(); i++) 
-		{
-			glEnable(GL_TEXTURE_2D);
-			glEnable(GL_TEXTURE_COORD_ARRAY);
-
-			//Bind Mesh
-			glBindBuffer(GL_ARRAY_BUFFER, App->importer->meshes[i].VBO);
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, App->importer->meshes[i].EBO);
-			glEnableClientState(GL_VERTEX_ARRAY);
-			glVertexPointer(3, GL_FLOAT, sizeof(Vertex), (void*)0);
-
-			//Bind Textures
-			if (App->editor->drawTextures == false)
-			{
-				if (selectedGameObject->GetComponent(typeComponent::Material))
-				{
-					ComponentTexture* componentTex = (ComponentTexture*)App->renderer3D->selectedGameObject->GetComponent(typeComponent::Material);
-					glBindTexture(GL_TEXTURE_2D, componentTex->GetTexture()->textID);
-					glNormalPointer(GL_FLOAT, sizeof(Vertex), (void*)offsetof(Vertex, Normal));
-					glTexCoordPointer(2, GL_FLOAT, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords));
-				}
-			}
-
-			//Draw
-			glDrawElements(GL_TRIANGLES, App->importer->meshes[i].indices.size(), GL_UNSIGNED_INT, NULL);
-			glBindBuffer(GL_ARRAY_BUFFER, 0);
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-			glDisable(GL_TEXTURE_2D);
-			glDisableClientState(GL_VERTEX_ARRAY);
-			glBindTexture(GL_TEXTURE_2D, 0);
-			glDisable(GL_TEXTURE_COORD_ARRAY);
-
-		}
-	}
-}
-
-void ModuleRenderer3D::DrawFaceNormals()
-{
-	for (unsigned int i = 0; i < App->importer->meshes.size(); ++i)
+	for (unsigned int i = 0; i < Mesh->indices.size(); i += 3)
 	{
-		mesh Mesh = App->importer->meshes[i];
-		for (unsigned int j = 0; j < Mesh.indices.size(); j += 3)
-		{
-			const unsigned int idx1 = Mesh.indices[j];
-			const unsigned int idx2 = Mesh.indices[j + 1];
-			const unsigned int idx3 = Mesh.indices[j + 2];
+		const unsigned int idx1 = Mesh->indices[i];
+		const unsigned int idx2 = Mesh->indices[i + 1];
+		const unsigned int idx3 = Mesh->indices[i + 2];
 
-			const float3 vertex1 = Mesh.vertices[idx1].Position;
-			const float3 vertex2 = Mesh.vertices[idx2].Position;
-			const float3 vertex3 = Mesh.vertices[idx3].Position;
+		const float3 vertex1 = Mesh->vertices[idx1].Position;
+		const float3 vertex2 = Mesh->vertices[idx2].Position;
+		const float3 vertex3 = Mesh->vertices[idx3].Position;
 
-			// Calculate the face normal
-			float3 faceNormal = CalculateFaceNormal(vertex1, vertex2, vertex3);
+		// Calculate the face normal
+		float3 faceNormal = CalculateFaceNormal(vertex1, vertex2, vertex3);
 
-			// Calculate the face centroid
-			float3 centroid = (vertex1 + vertex2 + vertex3) / 3.0f;
+		// Calculate the face centroid
+		float3 centroid = (vertex1 + vertex2 + vertex3) / 3.0f;
 
-			// Draw the face normal line
-			glColor3f(0.0f, 0.0f, 1.0f);
-			glBegin(GL_LINES);
-			glVertex3f(centroid.x, centroid.y, centroid.z);
-			glVertex3f(centroid.x + 1.0f * faceNormal.x, centroid.y + 1.0f * faceNormal.y, centroid.z + 1.0f * faceNormal.z);
-			glEnd();
-		}
+		// Draw the face normal line
+		glBegin(GL_LINES);
+		glColor3f(0.0f, 0.0f, 1.0f);
+		glVertex3f(centroid.x, centroid.y, centroid.z);
+		glVertex3f(centroid.x + 1.0f * faceNormal.x, centroid.y + 1.0f * faceNormal.y, centroid.z + 1.0f * faceNormal.z);
+		glEnd();
 	}
 }
 
@@ -440,30 +380,18 @@ float3 ModuleRenderer3D::CalculateFaceNormal(const float3& vertex1, const float3
 	return Cross(edge1, edge2).Normalized();
 }
 
-void ModuleRenderer3D::DrawVertexNormals()
+void ModuleRenderer3D::DrawVertexNormals(mesh* Mesh)
 {
-	for (int i = 0; i < App->importer->meshes.size(); ++i)
+	for (unsigned int j = 0; j < Mesh->vertices.size(); ++j)
 	{
-		mesh Mesh = App->importer->meshes[i];
-		for (unsigned int j = 0; j < Mesh.vertices.size(); ++j)
-		{
-			const float3 vertex = Mesh.vertices[j].Position;
-			const float3 normal = Mesh.vertices[j].Normal;
+		const float3 vertex = Mesh->vertices[j].Position;
+		const float3 normal = Mesh->vertices[j].Normal;
 
-			// Draw the vertex normal line
-			glColor3f(1.0f, 0.0f, 0.0f);
-			glBegin(GL_LINES);
-			glVertex3f(vertex.x, vertex.y, vertex.z);
-			glVertex3f(vertex.x + 1.0f * normal.x, vertex.y + 1.0f * normal.y, vertex.z + 1.0f * normal.z);
-			glEnd();
-		}
+		// Draw the vertex normal line
+		glColor3f(1.0f, 0.0f, 0.0f);
+		glBegin(GL_LINES);
+		glVertex3f(vertex.x, vertex.y, vertex.z);
+		glVertex3f(vertex.x + 1.0f * normal.x, vertex.y + 1.0f * normal.y, vertex.z + 1.0f * normal.z);
+		glEnd();
 	}
-}
-
-void ModuleRenderer3D::AddGameObject(GameObject* object)
-{
-	selectedGameObject = object;
-	object->SetParent(gameObject);
-	gameObject->AddChildren(object);
-	gameObjects.push_back(object);
 }

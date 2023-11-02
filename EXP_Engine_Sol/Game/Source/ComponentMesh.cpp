@@ -21,7 +21,8 @@ void ComponentMesh::DrawInspector()
 {
 	if (ImGui::CollapsingHeader("Component Mesh"))
 	{
-
+		ImGui::Text("Index: %d", Mesh->indices);
+		ImGui::Text("Vertices: %d", Mesh->vertices);
 	}
 }
 
