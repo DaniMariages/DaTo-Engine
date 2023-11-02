@@ -6,6 +6,7 @@
 
 ComponentMesh::ComponentMesh(GameObject* parent) : Component(parent)
 {
+	Mesh = nullptr;
 	path = "NO PATH";
 	type = typeComponent::Mesh;
 }

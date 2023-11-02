@@ -28,9 +28,6 @@
 
 ModuleRenderer3D::ModuleRenderer3D(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
-	gameObject = new GameObject("BakerHouse");
-	gameObjects.push_back(gameObject);
-	selectedGameObject = gameObject;
 }
 
 // Destructor
@@ -167,33 +164,8 @@ bool ModuleRenderer3D::Init()
 
 	ilInit();
 
-	for (int i = 0; i < CHECKERS_WIDTH; i++) {
-		for (int j = 0; j < CHECKERS_HEIGHT; j++) {
-			int c = ((((i & 0x8) == 0) ^ (((j & 0x8)) == 0))) * 255;
-			checkerImage[i][j][0] = (GLubyte)c;
-			checkerImage[i][j][1] = (GLubyte)c;
-			checkerImage[i][j][2] = (GLubyte)c;
-			checkerImage[i][j][3] = (GLubyte)255;
-		}
-	}
-
-	glEnable(GL_TEXTURE_2D);
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-	glGenTextures(1, &checkersTexture);
-	glBindTexture(GL_TEXTURE_2D, checkersTexture);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERS_WIDTH, CHECKERS_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, checkerImage);
-	glBindTexture(GL_TEXTURE_2D, 0);
-	glDisable(GL_TEXTURE_2D);
-	BindVBO();
-
 	App->importer->ReadFile("../Assets/Models/BakerHouse.fbx");
 	App->importer->ReadFile("../Assets/Textures/BakerHouse.png");
-	
-	BindVBO();
 
 	return ret;
 }
@@ -228,9 +200,9 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	//Render Editor
 	Grid.Render();
 
-	//IterateDrawMesh();
+	IterateDrawMesh();
 
-	DrawMeshSinceImporter();
+	//DrawMeshSinceImporter();
 	if (App->editor->drawAllFaces) DrawFaceNormals();
 	if (App->editor->drawAllVertex) DrawVertexNormals();
 	
@@ -357,34 +329,41 @@ void ModuleRenderer3D::IterateDrawMesh()
 
 void ModuleRenderer3D::DrawMesh(mesh* mesh, uint id)
 {
-	glEnable(GL_TEXTURE_2D);
-	glEnable(GL_TEXTURE_COORD_ARRAY);
-	//Bind Mesh
+	// Bind the VBO and EBO for the mesh
 	glBindBuffer(GL_ARRAY_BUFFER, mesh->VBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->EBO);
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glVertexPointer(3, GL_FLOAT, sizeof(Vertex), (void*)0);
 
-	////Bind Textures
-	ComponentTexture* componentTex = (ComponentTexture*)App->renderer3D->selectedGameObject->GetComponent(typeComponent::Material);
-	glBindTexture(GL_TEXTURE_2D, id);
+	// Enable vertex and normal arrays and specify the pointers
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glVertexPointer(3, GL_FLOAT, sizeof(Vertex), (void*)offsetof(Vertex, Position));
+	glEnableClientState(GL_NORMAL_ARRAY);
 	glNormalPointer(GL_FLOAT, sizeof(Vertex), (void*)offsetof(Vertex, Normal));
+
+	// Enable the texture coordinate array and specify the pointer
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 	glTexCoordPointer(2, GL_FLOAT, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords));
 
-	
-	glDrawElements(GL_TRIANGLES, mesh->indices.size(), GL_UNSIGNED_INT, NULL);
+	// Bind the texture
+	glBindTexture(GL_TEXTURE_2D, id);
+
+	// Draw the mesh using glDrawElements
+	glDrawElements(GL_TRIANGLES, mesh->indices.size(), GL_UNSIGNED_INT, 0);
+
+	// Unbind the VBO, EBO, and texture
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-	glDisable(GL_TEXTURE_2D);
-	glDisableClientState(GL_VERTEX_ARRAY);
 	glBindTexture(GL_TEXTURE_2D, 0);
-	glDisable(GL_TEXTURE_COORD_ARRAY);
+
+	// Disable vertex, normal, and texture coordinate arrays
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_NORMAL_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
 }
 
 void ModuleRenderer3D::DrawMeshSinceImporter()
 {
+	gameObjects;
 	if (App->editor->drawAll == true) {
 		for (int i = 0; i < App->importer->meshes.size(); i++) 
 		{
@@ -398,7 +377,7 @@ void ModuleRenderer3D::DrawMeshSinceImporter()
 			glVertexPointer(3, GL_FLOAT, sizeof(Vertex), (void*)0);
 
 			//Bind Textures
-			if (App->editor->drawTextures == true)
+			if (App->editor->drawTextures == false)
 			{
 				if (selectedGameObject->GetComponent(typeComponent::Material))
 				{

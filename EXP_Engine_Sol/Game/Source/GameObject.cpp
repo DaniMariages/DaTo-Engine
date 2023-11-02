@@ -62,7 +62,7 @@ Component* GameObject::AddComponent(Component* component)
 		break;
 	case(typeComponent::Mesh):
 		ret = new ComponentMesh(this);
-		LOG("Component mesh added to %s", component->parent->Name);
+		LOG("Component mesh added to %s", component->parent->Name.c_str());
 		break;
 
 	}
