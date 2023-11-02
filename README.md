@@ -2,11 +2,10 @@
 DaTo Engine is a videogame engine developed for the MOTORS DE VIDEOJOCS course at CITM.
 
 This engine is developed by:
-Dani Mariages - [DaniMariages](<https://github.com/DaniMariages>)
-Toni Romanos - [Toto-RR](<https://github.com/Toto-RR>)
-Github repository: https://github.com/DaniMariages/DaTo-Engine
-https://github.com/DaniMariages
-https://github.com/Toto-RR
+- Dani Mariages - [DaniMariages](<https://github.com/DaniMariages>)
+- Toni Romanos - [Toto-RR](<https://github.com/Toto-RR>)
+- Github repository: [DaTo Engine](<https://github.com/DaniMariages/DaTo-Engine>)
+
 ## Keybinds:
 - W --> Move forward
 - A --> Move left
@@ -36,3 +35,16 @@ https://github.com/Toto-RR
 - Hierarchy system
 - Drag & Drop for all supported formats
 - Game Objects with texture, mesh and transform components
+
+## Libraries
+- [Assimp](<https://github.com/assimp/assimp.git>)
+- [DevIL](<https://openil.sourceforge.net>)
+- [Glew](<https://glew.sourceforge.net>)
+- [ImGui](<https://github.com/ocornut/imgui.git>)
+- [MathGeoLib](>https://github.com/juj/MathGeoLib.git>)
+- [SDL](<https://www.libsdl.org>)
+
+## Photos and references
+**This is what the engine looks like**
+
+![DatoEngine](https://github.com/DaniMariages/DaTo-Engine/assets/99719601/b742fc76-1015-4a76-ba85-9370b2fc070e)
