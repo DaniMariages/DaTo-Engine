@@ -165,6 +165,8 @@ bool ModuleRenderer3D::Init()
 	App->importer->ReadFile("../Assets/Models/BakerHouse.fbx");
 	App->importer->ReadFile("../Assets/Textures/BakerHouse.png");
 
+	gOselected = gameObjects[0];
+
 	return ret;
 }
 
@@ -281,15 +283,15 @@ void ModuleRenderer3D::SetUpBuffers(mesh* mesh)
 
 void ModuleRenderer3D::IterateDrawMesh()
 {
-	for (unsigned int i = 0; i < App->renderer3D->gameObjects.size(); i++)
+	for (unsigned int i = 0; i < gameObjects.size(); i++)
 	{
-		if (App->renderer3D->gameObjects[i]->GetComponent(typeComponent::Mesh) != nullptr)
+		if (gameObjects[i]->GetComponent(typeComponent::Mesh) != nullptr)
 		{
-			std::vector<Component*> meshComponents = App->renderer3D->gameObjects[i]->GetComponents(typeComponent::Mesh);
+			std::vector<Component*> meshComponents = gameObjects[i]->GetComponents(typeComponent::Mesh);
 			std::vector<Component*>::iterator item = meshComponents.begin();
 			for (; item != meshComponents.end(); ++item) 
 			{
-				ComponentTexture* componentTex = (ComponentTexture*)App->renderer3D->gameObjects[i]->GetComponent(typeComponent::Material);
+				ComponentTexture* componentTex = (ComponentTexture*)gameObjects[i]->GetComponent(typeComponent::Material);
 				ComponentMesh* tempComponentMesh = (ComponentMesh*)(*item);
 				if (componentTex != nullptr && gameObjects[i]->active && App->editor->drawAll)
 				{
@@ -302,6 +304,27 @@ void ModuleRenderer3D::IterateDrawMesh()
 					DrawMesh(tempComponentMesh->GetMesh());
 					if (App->editor->drawAllFaces == true) DrawFaceNormals(tempComponentMesh->GetMesh());
 					if (App->editor->drawAllVertex == true) DrawVertexNormals(tempComponentMesh->GetMesh());
+				}
+
+				if (App->editor->drawSelectedFaces)
+				{
+					std::vector<Component*> meshComp = gameObjects[App->editor->selected]->GetComponents(typeComponent::Mesh);
+					std::vector<Component*>::iterator it = meshComp.begin();
+					for (; it != meshComp.end(); ++it)
+					{
+						ComponentMesh* tempCompMesh = (ComponentMesh*)(*item);
+						DrawFaceNormals(tempCompMesh->GetMesh());
+					}
+				}
+				if (App->editor->drawSelectedVertex)
+				{
+					std::vector<Component*> meshComp = gameObjects[App->editor->selected]->GetComponents(typeComponent::Mesh);
+					std::vector<Component*>::iterator it = meshComp.begin();
+					for (; it != meshComp.end(); ++it)
+					{
+						ComponentMesh* tempCompMesh = (ComponentMesh*)(*item);
+						DrawVertexNormals(tempCompMesh->GetMesh());
+					}
 				}
 			}
 		}
@@ -366,7 +389,7 @@ void ModuleRenderer3D::DrawFaceNormals(mesh* Mesh)
 
 		// Draw the face normal line
 		glBegin(GL_LINES);
-		glColor3f(0.0f, 0.0f, 1.0f);
+		glColor4f(0.0f, 0.0f, 1.0f, 0.0f);
 		glVertex3f(centroid.x, centroid.y, centroid.z);
 		glVertex3f(centroid.x + 1.0f * faceNormal.x, centroid.y + 1.0f * faceNormal.y, centroid.z + 1.0f * faceNormal.z);
 		glEnd();
@@ -393,6 +416,27 @@ void ModuleRenderer3D::DrawVertexNormals(mesh* Mesh)
 		glVertex3f(vertex.x, vertex.y, vertex.z);
 		glVertex3f(vertex.x + 1.0f * normal.x, vertex.y + 1.0f * normal.y, vertex.z + 1.0f * normal.z);
 		glEnd();
+	}
+}
+
+void ModuleRenderer3D::DrawSelectedNormals(GameObject* gObject)
+{
+	std::vector<Component*> meshComponents = gObject->GetComponents(typeComponent::Mesh);
+	std::vector<Component*>::iterator item = meshComponents.begin();
+	for (; item != meshComponents.end(); ++item)
+	{
+		ComponentTexture* componentTex = (ComponentTexture*)gObject->GetComponent(typeComponent::Material);
+		ComponentMesh* tempComponentMesh = (ComponentMesh*)(*item);
+		if (componentTex != nullptr && gObject->active)
+		{
+			if (App->editor->drawSelectedFaces)	 DrawFaceNormals(tempComponentMesh->GetMesh());
+			if (App->editor->drawSelectedVertex) DrawVertexNormals(tempComponentMesh->GetMesh());
+		}
+		else if (gObject->active)
+		{
+			if (App->editor->drawSelectedFaces)  DrawFaceNormals(tempComponentMesh->GetMesh());
+			if (App->editor->drawSelectedVertex) DrawVertexNormals(tempComponentMesh->GetMesh());
+		}
 	}
 }
 

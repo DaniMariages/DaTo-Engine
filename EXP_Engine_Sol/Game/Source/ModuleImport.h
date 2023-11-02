@@ -5,6 +5,7 @@
 #include "GameObject.h"
 #include "ComponentMesh.h"
 #include "ComponentTexture.h"
+#include "ComponentTransform.h"
 
 #include "../External/MathGeoLib/include/MathGeolib.h"
 

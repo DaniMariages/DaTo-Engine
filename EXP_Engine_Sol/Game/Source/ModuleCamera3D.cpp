@@ -4,6 +4,9 @@
 #include "../External/MathGeoLib/include/Math/Quat.h"
 #include "ModuleInput.h"
 #include "ModuleEditor.h"
+#include "GameObject.h"
+#include "ComponentTransform.h"
+#include "ModuleRenderer3D.h"
 
 ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -50,9 +53,8 @@ update_status ModuleCamera3D::Update(float dt)
 		speed = 8.0f * dt;
 
 	
-
-	if(App->input->GetKey(SDL_SCANCODE_Q) == KEY_REPEAT) newPos.y += speed;
-	if(App->input->GetKey(SDL_SCANCODE_E) == KEY_REPEAT) newPos.y -= speed;
+	if(App->input->GetKey(SDL_SCANCODE_R) == KEY_REPEAT) newPos.y += speed;
+	if(App->input->GetKey(SDL_SCANCODE_F) == KEY_REPEAT) newPos.y -= speed;
 
 	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) {
 		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) 

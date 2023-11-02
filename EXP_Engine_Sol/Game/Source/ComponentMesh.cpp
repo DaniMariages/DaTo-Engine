@@ -6,6 +6,7 @@
 
 ComponentMesh::ComponentMesh(GameObject* parent) : Component(parent)
 {
+	Mesh = new mesh();
 	Mesh = nullptr;
 	path = "NO PATH";
 	type = typeComponent::Mesh;
@@ -21,8 +22,8 @@ void ComponentMesh::DrawInspector()
 {
 	if (ImGui::CollapsingHeader("Component Mesh"))
 	{
-		ImGui::Text("Index: %d", Mesh->indices);
-		ImGui::Text("Vertices: %d", Mesh->vertices);
+		ImGui::Text("Indices: %d.", Mesh->indices.size());
+		ImGui::Text("Vertices: %d.", Mesh->vertices.size());
 	}
 }
 

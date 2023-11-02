@@ -40,6 +40,8 @@ public:
 	void DrawFaceNormals(mesh* Mesh);
 	void DrawVertexNormals(mesh* Mesh);
 	
+	void DrawSelectedNormals(GameObject* gObject);
+
 	void ImportCube();
 	void ImportSphere();
 	void ImportCone();
@@ -54,6 +56,7 @@ public:
 	SDL_GLContext context;
 	CPlane Grid;
 
+	GameObject* gOselected = nullptr;
 	std::vector<GameObject*> gameObjects;
 
 	bool modelLoaded = false;

@@ -167,6 +167,9 @@ void ModuleImport::LoadMesh(const char* file_path)
 			meshes.push_back(*Mesh);
 		}
 
+		ComponentTransform* compTrans = new ComponentTransform(BakerHouse);
+		BakerHouse->AddComponent(compTrans);
+
 		LOG("Scene loaded correctly");
 		aiReleaseImport(scene);
 	}

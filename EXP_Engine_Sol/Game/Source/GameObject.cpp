@@ -51,14 +51,16 @@ Component* GameObject::AddComponent(Component* component)
 	case(typeComponent::Error):
 		//LOG("Component Type Error! Something broke...");
 		break;
-	/*case(typeComponent::Transform):
+	case(typeComponent::Transform):
 		ret = new ComponentTransform(this);
-		break;*/
+		LOG("Component Transform added to %s", component->parent->Name.c_str());
+		break;
 	case(typeComponent::Material):
 		if (this->GetComponent(typeComponent::Material) != nullptr) {
 			return nullptr;
 		}
 		ret = new ComponentTexture(this);
+		LOG("Component Texture added to %s", component->parent->Name.c_str());
 		break;
 	case(typeComponent::Mesh):
 		ret = new ComponentMesh(this);

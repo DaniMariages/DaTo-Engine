@@ -73,6 +73,9 @@
     <Filter Include="Icon">
       <UniqueIdentifier>{69be2175-ac24-4315-a7c7-cd0e1913c236}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Modules\GameObjects">
+      <UniqueIdentifier>{37263bf4-e696-4a16-88ef-4fabd4430b98}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\External\DevIL\include\devil_cpp_wrapper.hpp">
@@ -693,26 +696,26 @@
     <ClInclude Include="Game\Source\ModuleWindow.h">
       <Filter>Source\Modules</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Source\Component.h">
-      <Filter>Source\Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Source\ComponentMesh.h">
-      <Filter>Source\Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Source\ComponentTexture.h">
-      <Filter>Source\Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Source\ComponentTransform.h">
-      <Filter>Source\Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Source\GameObject.h">
-      <Filter>Source\Modules</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Source\ModuleImport.h">
       <Filter>Source\Modules</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Icon</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Source\Component.h">
+      <Filter>Source\Modules\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Source\ComponentMesh.h">
+      <Filter>Source\Modules\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Source\ComponentTexture.h">
+      <Filter>Source\Modules\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Source\ComponentTransform.h">
+      <Filter>Source\Modules\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Source\GameObject.h">
+      <Filter>Source\Modules\GameObjects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -875,20 +878,20 @@
     <ClCompile Include="Game\Source\ModuleWindow.cpp">
       <Filter>Source\Modules</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Source\ComponentMesh.cpp">
-      <Filter>Source\Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Source\ComponentTexture.cpp">
-      <Filter>Source\Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Source\ComponentTransform.cpp">
-      <Filter>Source\Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Source\GameObject.cpp">
-      <Filter>Source\Modules</Filter>
-    </ClCompile>
     <ClCompile Include="Game\Source\ModuleImport.cpp">
       <Filter>Source\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Source\ComponentMesh.cpp">
+      <Filter>Source\Modules\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Source\ComponentTexture.cpp">
+      <Filter>Source\Modules\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Source\ComponentTransform.cpp">
+      <Filter>Source\Modules\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Source\GameObject.cpp">
+      <Filter>Source\Modules\GameObjects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

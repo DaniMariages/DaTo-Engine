@@ -24,7 +24,10 @@ void ComponentTexture::DrawInspector() {
 
 	if (ImGui::CollapsingHeader("Component Texture"))
 	{
-		ImGui::Text("Id: %d", texture->textID);
+		ImGui::Text("Id: %d.", texture->textID);
+		ImGui::Text("Height: %d.", texture->height);
+		ImGui::Text("Width: %d.", texture->width);
+		ImGui::Text("Path: %s.", texture->path);
 	}
 }
 

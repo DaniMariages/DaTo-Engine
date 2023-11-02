@@ -47,7 +47,7 @@ public:
 	bool show_config_window = true;
 	bool show_hierarchy_window = true;
 	bool show_inspector_window = false;
-	bool show_console = false;
+	bool show_console = true;
 
 	bool drawAll = true;
 	bool drawAllFaces = false;
@@ -62,9 +62,10 @@ public:
 	bool shader = true;
 	bool cullface = true;
 
-	bool drawSelected = false;
+	bool drawSelected = true;
 	bool drawSelectedVertex = false;
 	bool drawSelectedFaces = false;
+	bool drawSelectedTexture = true;
 
 	//Public variable to know which model is selected
 	int selected = -1;

@@ -3,6 +3,7 @@
 #include "ModuleWindow.h"
 #include "ModuleRenderer3D.h"
 #include "ModuleInput.h"
+#include "Component.h"
 
 #include "../External/ImGui/imgui.h"
 #include "../External/ImGui/backends/imgui_impl_opengl3.h"
@@ -320,14 +321,15 @@ void ModuleEditor::HierarchyWindow()
 				if (ImGui::MenuItem("Delete"))
 				{
 					if (selected >= 0 && selected < App->renderer3D->gameObjects.size())
+					{
 						App->renderer3D->gameObjects.erase(App->renderer3D->gameObjects.begin() + selected);
+						show_inspector_window = false;
+					}
 				}
 				ImGui::EndPopup();
 			}
-			//ImGui::SetItemTooltip("Right-click to open popup");
-			ImGui::Text("%d", i);
+			ImGui::SetItemTooltip("Right-click to fast options");
 		}
-
 		ImGui::End();
 	}
 }
@@ -339,15 +341,41 @@ void ModuleEditor::GameObjectsTree()
 		ImGui::Begin("Inspector", &show_inspector_window);
 		if (ImGui::TreeNode("Draw options"))
 		{
+			if (ImGui::Checkbox("Draw", &drawSelected)) 
+			{
+				App->renderer3D->gameObjects[selected]->active = !App->renderer3D->gameObjects[selected]->active;
+			}
+			if (ImGui::Checkbox("Normals", &drawSelectedFaces))
+			{
+				
+			}
+			if (ImGui::Checkbox("Vertex", &drawSelectedVertex));		//NOT WORKING YET
+			if (ImGui::Checkbox("Textures", &drawSelectedTexture));
 
 			ImGui::TreePop();
 		}
 		if (ImGui::TreeNode("Information"))
 		{
 			ImGui::Text("Name: %s", App->renderer3D->gameObjects[selected]->Name.c_str());
+
+			for (uint i = 0; i < App->renderer3D->gameObjects[selected]->components.size(); ++i)
+			{
+				if (App->renderer3D->gameObjects[selected])
+				{
+					App->renderer3D->gameObjects[selected]->components[i]->DrawInspector();
+				}
+			}
 			ImGui::TreePop();
 		}
 
+		if (ImGui::Button("Delete"))
+		{
+			if (selected >= 0 && selected < App->renderer3D->gameObjects.size())
+			{
+				App->renderer3D->gameObjects.erase(App->renderer3D->gameObjects.begin() + selected);
+				show_inspector_window = false;
+			}
+		}
 	}
 	ImGui::End();
 }
