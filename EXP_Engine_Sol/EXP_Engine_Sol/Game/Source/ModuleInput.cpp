@@ -114,6 +114,7 @@ update_status ModuleInput::PreUpdate(float dt)
 				if (e.drop.file != ERROR) 
 				{
 					filePath = e.drop.file;
+					App->importer->ReadFile(e.drop.file);
 					App->renderer3D->BindVBO();
 					SDL_free(e.drop.file);
 					LOG("Path loaded: %s.", filePath);

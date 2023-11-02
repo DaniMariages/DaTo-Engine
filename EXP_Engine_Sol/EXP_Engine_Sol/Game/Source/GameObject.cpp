@@ -5,7 +5,7 @@
 #include "ComponentMesh.h"
 #include <vector>
 
-GameObject::GameObject(std::string name) : Name(Name), active(true)
+GameObject::GameObject(std::string name) : Name(name), active(true)
 {
 	//AddComponent(new ComponentTransform(this));
 }
@@ -62,6 +62,7 @@ Component* GameObject::AddComponent(Component* component)
 		break;
 	case(typeComponent::Mesh):
 		ret = new ComponentMesh(this);
+		LOG("Component mesh added to %s", component->parent->Name);
 		break;
 
 	}

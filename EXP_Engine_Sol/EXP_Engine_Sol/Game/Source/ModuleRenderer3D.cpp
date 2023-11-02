@@ -166,8 +166,34 @@ bool ModuleRenderer3D::Init()
 	Grid.axis = true;
 
 	ilInit();
+
+	for (int i = 0; i < CHECKERS_WIDTH; i++) {
+		for (int j = 0; j < CHECKERS_HEIGHT; j++) {
+			int c = ((((i & 0x8) == 0) ^ (((j & 0x8)) == 0))) * 255;
+			checkerImage[i][j][0] = (GLubyte)c;
+			checkerImage[i][j][1] = (GLubyte)c;
+			checkerImage[i][j][2] = (GLubyte)c;
+			checkerImage[i][j][3] = (GLubyte)255;
+		}
+	}
+
+	glEnable(GL_TEXTURE_2D);
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	glGenTextures(1, &checkersTexture);
+	glBindTexture(GL_TEXTURE_2D, checkersTexture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERS_WIDTH, CHECKERS_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, checkerImage);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glDisable(GL_TEXTURE_2D);
+	BindVBO();
+
 	App->importer->ReadFile("../Assets/Models/BakerHouse.fbx");
 	App->importer->ReadFile("../Assets/Textures/BakerHouse.png");
+	
+	BindVBO();
 
 	return ret;
 }
@@ -206,6 +232,33 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	}
 	else {
 		lights[0].Active(true);
+	}
+
+	for (int i = 0; i < App->importer->meshes.size(); i++) {
+		glEnable(GL_TEXTURE_2D);
+		glEnable(GL_TEXTURE_COORD_ARRAY);
+		//Bind Mesh
+		glBindBuffer(GL_ARRAY_BUFFER, App->importer->meshes[i].VBO);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, App->importer->meshes[i].EBO);
+		glEnableClientState(GL_VERTEX_ARRAY);
+		glVertexPointer(3, GL_FLOAT, sizeof(Vertex), (void*)0);
+
+
+		//Bind Textures
+		ComponentTexture* componentTex = (ComponentTexture*)App->renderer3D->selectedGameObject->GetComponent(typeComponent::Material);
+		glBindTexture(GL_TEXTURE_2D, componentTex->GetTexture()->textID);
+		glNormalPointer(GL_FLOAT, sizeof(Vertex), (void*)offsetof(Vertex, Normal));
+		glTexCoordPointer(2, GL_FLOAT, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords));
+
+		glDrawElements(GL_TRIANGLES, App->importer->meshes[i].indices.size(), GL_UNSIGNED_INT, NULL);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+		glDisable(GL_TEXTURE_2D);
+		glDisableClientState(GL_VERTEX_ARRAY);
+		glBindTexture(GL_TEXTURE_2D, 0);
+		glDisable(GL_TEXTURE_COORD_ARRAY);
+
 	}
 
 	IterateDrawMesh();
@@ -291,15 +344,27 @@ void ModuleRenderer3D::BindVBO()
 	}
 }
 
+void ModuleRenderer3D::SetUpBuffers(mesh* mesh)
+{
+	glGenBuffers(1, &mesh->VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, mesh->VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * mesh->vertices.size(), &mesh->vertices[0], GL_STATIC_DRAW);
+
+	glGenBuffers(1, &mesh->EBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * mesh->indices.size(), &mesh->indices[0], GL_STATIC_DRAW);
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+}
+
 void ModuleRenderer3D::IterateDrawMesh()
 {
 	for (uint i = 0; i < App->renderer3D->gameObjects.size(); i++)
 	{
 		if (App->renderer3D->gameObjects[i]->GetComponent(typeComponent::Mesh) != nullptr)
 		{
-
 			std::vector<Component*> meshComponents = App->renderer3D->gameObjects[i]->GetComponents(typeComponent::Mesh);
-
 			std::vector<Component*>::iterator item = meshComponents.begin();
 			for (; item != meshComponents.end(); ++item) {
 
@@ -323,41 +388,28 @@ void ModuleRenderer3D::IterateDrawMesh()
 void ModuleRenderer3D::DrawMesh(mesh* mesh, uint id)
 {
 	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, id);
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);		
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	
-	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, checkerID);
-	
+	glEnable(GL_TEXTURE_COORD_ARRAY);
+	//Bind Mesh
+	glBindBuffer(GL_ARRAY_BUFFER, mesh->VBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->EBO);
 	glEnableClientState(GL_VERTEX_ARRAY);
-	glEnableClientState(GL_NORMAL_ARRAY);
-	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	glVertexPointer(3, GL_FLOAT, sizeof(Vertex), (void*)0);
 
-	glBindBuffer(GL_ARRAY_BUFFER, 1);
-	glVertexPointer(3, GL_FLOAT, 0, NULL);
+	//Bind Textures
+	ComponentTexture* componentTex = (ComponentTexture*)App->renderer3D->selectedGameObject->GetComponent(typeComponent::Material);
+	glBindTexture(GL_TEXTURE_2D, id);
+	glNormalPointer(GL_FLOAT, sizeof(Vertex), (void*)offsetof(Vertex, Normal));
+	glTexCoordPointer(2, GL_FLOAT, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords));
 
-	glBindBuffer(GL_ARRAY_BUFFER, 2);
-	glNormalPointer(GL_FLOAT, 0, NULL);
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-	glBindBuffer(GL_ARRAY_BUFFER, 3);
-	glTexCoordPointer(2, GL_FLOAT, 0, NULL);
-
-	glDrawElements(GL_TRIANGLES, 0, GL_UNSIGNED_INT, NULL);
-
+	glDrawElements(GL_TRIANGLES, mesh->indices.size(), GL_UNSIGNED_INT, NULL);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-	glBindBuffer(GL_NORMAL_ARRAY, 0);
 
-	glDisableClientState(GL_NORMAL_ARRAY);
-	glDisableClientState(GL_VERTEX_ARRAY);
-	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	glDisable(GL_TEXTURE_2D);
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glDisable(GL_TEXTURE_COORD_ARRAY);
+
 }
 
 void ModuleRenderer3D::DrawNormals(mesh* mesh)

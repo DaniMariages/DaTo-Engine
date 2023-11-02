@@ -40,7 +40,7 @@ void ModuleImport::ReadFile(const char* file_path)
 
 	case typeFile::TEXTURE:
 		LOG("START LOADING TEXTURE");
-		//LoadTexture(file_path);
+		LoadTexture(file_path);
 		ComponentTexture* tempCompTex = new ComponentTexture(App->renderer3D->selectedGameObject);
 		tempCompTex->SetTexture(LoadTexture(file_path));
 		App->renderer3D->selectedGameObject->AddComponent(tempCompTex);
@@ -161,7 +161,7 @@ void ModuleImport::LoadMesh(const char* file_path)
 			compMesh->SetMesh(&Mesh);
 
 			gObject->AddComponent(compMesh);
-			App->renderer3D->BindVBO();
+			App->renderer3D->SetUpBuffers(&Mesh);
 			meshes.push_back(Mesh);
 		}
 

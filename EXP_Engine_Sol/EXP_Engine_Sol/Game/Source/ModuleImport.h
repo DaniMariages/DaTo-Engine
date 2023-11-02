@@ -51,18 +51,8 @@ struct mesh
 {
 	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indices;
-	unsigned int VBO = 0, EBO = 0;
-
-	enum  Buffers
-	{
-		index,
-		vertex,
-		normal,
-		texture,
-		NONE
-	};
-	uint ID[NONE];
-	uint size[NONE];
+	unsigned int VBO = 0;
+	unsigned int EBO = 0;
 };
 
 
