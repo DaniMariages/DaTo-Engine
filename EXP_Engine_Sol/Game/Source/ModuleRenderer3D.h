@@ -36,8 +36,10 @@ public:
 	void SetUpBuffers(mesh* mesh);
 
 	void IterateDrawMesh();
+	void DrawMeshSinceImporter();
 	void DrawMesh(mesh* mesh, uint id = 0);
-	void DrawNormals(mesh* mesh);
+	void DrawFaceNormals();
+	void DrawVertexNormals();
 	
 	float3 CalculateFaceNormal(const float3& vertex1, const float3& vertex2, const float3& vertex3);
 

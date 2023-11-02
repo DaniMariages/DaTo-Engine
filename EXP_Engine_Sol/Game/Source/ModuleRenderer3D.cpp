@@ -228,39 +228,12 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	//Render Editor
 	Grid.Render();
 
-	if (App->editor->drawAll == true) {
-		for (int i = 0; i < App->importer->meshes.size(); i++) {
-			glEnable(GL_TEXTURE_2D);
-			glEnable(GL_TEXTURE_COORD_ARRAY);
-			////Bind Mesh
-			glBindBuffer(GL_ARRAY_BUFFER, App->importer->meshes[i].VBO);
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, App->importer->meshes[i].EBO);
-			glEnableClientState(GL_VERTEX_ARRAY);
-			glVertexPointer(3, GL_FLOAT, sizeof(Vertex), (void*)0);
+	//IterateDrawMesh();
 
-
-			////Bind Textures
-			if (App->editor->drawTextures == true) {
-				ComponentTexture* componentTex = (ComponentTexture*)App->renderer3D->selectedGameObject->GetComponent(typeComponent::Material);
-				glBindTexture(GL_TEXTURE_2D, componentTex->GetTexture()->textID);
-				glNormalPointer(GL_FLOAT, sizeof(Vertex), (void*)offsetof(Vertex, Normal));
-				glTexCoordPointer(2, GL_FLOAT, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords));
-			}
-
-			glDrawElements(GL_TRIANGLES, App->importer->meshes[i].indices.size(), GL_UNSIGNED_INT, NULL);
-			glBindBuffer(GL_ARRAY_BUFFER, 0);
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-			glDisable(GL_TEXTURE_2D);
-			glDisableClientState(GL_VERTEX_ARRAY);
-			glBindTexture(GL_TEXTURE_2D, 0);
-			glDisable(GL_TEXTURE_COORD_ARRAY);
-
-		}
-	}
-
-	IterateDrawMesh();
-
+	DrawMeshSinceImporter();
+	if (App->editor->drawAllFaces) DrawFaceNormals();
+	if (App->editor->drawAllVertex) DrawVertexNormals();
+	
 	glEnd();
 	glLineWidth(1.0f);
 
@@ -336,7 +309,6 @@ void ModuleRenderer3D::BindVBO()
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, App->importer->meshes[i].EBO);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * App->importer->meshes[i].indices.size(), &App->importer->meshes[i].indices[0], GL_STATIC_DRAW);
 
-
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	}
@@ -411,34 +383,74 @@ void ModuleRenderer3D::DrawMesh(mesh* mesh, uint id)
 
 }
 
-void ModuleRenderer3D::DrawNormals(mesh* mesh)
+void ModuleRenderer3D::DrawMeshSinceImporter()
 {
-	
-	for (unsigned int j = 0; j < mesh->indices.size(); j += 3)
+	if (App->editor->drawAll == true) {
+		for (int i = 0; i < App->importer->meshes.size(); i++) 
+		{
+			glEnable(GL_TEXTURE_2D);
+			glEnable(GL_TEXTURE_COORD_ARRAY);
+
+			//Bind Mesh
+			glBindBuffer(GL_ARRAY_BUFFER, App->importer->meshes[i].VBO);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, App->importer->meshes[i].EBO);
+			glEnableClientState(GL_VERTEX_ARRAY);
+			glVertexPointer(3, GL_FLOAT, sizeof(Vertex), (void*)0);
+
+			//Bind Textures
+			if (App->editor->drawTextures == true)
+			{
+				if (selectedGameObject->GetComponent(typeComponent::Material))
+				{
+					ComponentTexture* componentTex = (ComponentTexture*)App->renderer3D->selectedGameObject->GetComponent(typeComponent::Material);
+					glBindTexture(GL_TEXTURE_2D, componentTex->GetTexture()->textID);
+					glNormalPointer(GL_FLOAT, sizeof(Vertex), (void*)offsetof(Vertex, Normal));
+					glTexCoordPointer(2, GL_FLOAT, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords));
+				}
+			}
+
+			//Draw
+			glDrawElements(GL_TRIANGLES, App->importer->meshes[i].indices.size(), GL_UNSIGNED_INT, NULL);
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+			glDisable(GL_TEXTURE_2D);
+			glDisableClientState(GL_VERTEX_ARRAY);
+			glBindTexture(GL_TEXTURE_2D, 0);
+			glDisable(GL_TEXTURE_COORD_ARRAY);
+
+		}
+	}
+}
+
+void ModuleRenderer3D::DrawFaceNormals()
+{
+	for (unsigned int i = 0; i < App->importer->meshes.size(); ++i)
 	{
-		// Obtén los índices de los vértices que forman una cara
-		unsigned int vertexIndex1 = mesh->indices[j];
-		unsigned int vertexIndex2 = mesh->indices[j + 1];
-		unsigned int vertexIndex3 = mesh->indices[j + 2];
+		mesh Mesh = App->importer->meshes[i];
+		for (unsigned int j = 0; j < Mesh.indices.size(); j += 3)
+		{
+			const unsigned int idx1 = Mesh.indices[j];
+			const unsigned int idx2 = Mesh.indices[j + 1];
+			const unsigned int idx3 = Mesh.indices[j + 2];
 
-		// Calcula el centro de la cara
-		float3 faceCenter = (
-			mesh->vertices[vertexIndex1].Position +
-			mesh->vertices[vertexIndex2].Position +
-			mesh->vertices[vertexIndex3].Position) /
-			3.0f;
+			const float3 vertex1 = Mesh.vertices[idx1].Position;
+			const float3 vertex2 = Mesh.vertices[idx2].Position;
+			const float3 vertex3 = Mesh.vertices[idx3].Position;
 
-		// Obten las normales de la cara
-		float3 faceNormal = CalculateFaceNormal(
-			mesh->vertices[vertexIndex1].Position,
-			mesh->vertices[vertexIndex2].Position,
-			mesh->vertices[vertexIndex3].Position);
+			// Calculate the face normal
+			float3 faceNormal = CalculateFaceNormal(vertex1, vertex2, vertex3);
 
-		// Dibuja una línea desde el centro de la cara en la dirección de la normal de la cara
-		glBegin(GL_LINES);
-		glVertex3f(faceCenter.x, faceCenter.y, faceCenter.z);
-		glVertex3f(faceCenter.x + faceNormal.x, faceCenter.y + faceNormal.y, faceCenter.z + faceNormal.z);
-		glEnd();
+			// Calculate the face centroid
+			float3 centroid = (vertex1 + vertex2 + vertex3) / 3.0f;
+
+			// Draw the face normal line
+			glColor3f(0.0f, 0.0f, 1.0f);
+			glBegin(GL_LINES);
+			glVertex3f(centroid.x, centroid.y, centroid.z);
+			glVertex3f(centroid.x + 1.0f * faceNormal.x, centroid.y + 1.0f * faceNormal.y, centroid.z + 1.0f * faceNormal.z);
+			glEnd();
+		}
 	}
 }
 
@@ -447,6 +459,26 @@ float3 ModuleRenderer3D::CalculateFaceNormal(const float3& vertex1, const float3
 	float3 edge1 = vertex2 - vertex1;
 	float3 edge2 = vertex3 - vertex1;
 	return Cross(edge1, edge2).Normalized();
+}
+
+void ModuleRenderer3D::DrawVertexNormals()
+{
+	for (int i = 0; i < App->importer->meshes.size(); ++i)
+	{
+		mesh Mesh = App->importer->meshes[i];
+		for (unsigned int j = 0; j < Mesh.vertices.size(); ++j)
+		{
+			const float3 vertex = Mesh.vertices[j].Position;
+			const float3 normal = Mesh.vertices[j].Normal;
+
+			// Draw the vertex normal line
+			glColor3f(1.0f, 0.0f, 0.0f);
+			glBegin(GL_LINES);
+			glVertex3f(vertex.x, vertex.y, vertex.z);
+			glVertex3f(vertex.x + 1.0f * normal.x, vertex.y + 1.0f * normal.y, vertex.z + 1.0f * normal.z);
+			glEnd();
+		}
+	}
 }
 
 void ModuleRenderer3D::AddGameObject(GameObject* object)
