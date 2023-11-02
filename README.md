@@ -24,7 +24,8 @@ This engine is developed by:
 - Scroll up --> Zoom in
 - Scroll down --> Zoom out
 ### Additional functionalities
--Top, side and front view.
+- Top, side and front view.
+- Quick options when you right click on the Game Objects displayed in the Hierarchy
 
 ## Features
 - Loading models and textures with Assimp and DevIL
