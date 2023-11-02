@@ -156,7 +156,7 @@ void ModuleEditor::MainMenuBar() {
 		{
 			ImGui::Text("DaTo Engine by Dani Mariages & Toni Romanos");
 			sprintf(label, "Github Repository");
-			if (ImGui::Selectable(label, true))	RequestBrowser("https://github.com/DaniMariages/Motors");
+			if (ImGui::Selectable(label, true))	RequestBrowser("https://github.com/DaniMariages/DaTo-Engine");
 			ImGui::EndMenu();
 		}
 
