@@ -3,12 +3,11 @@
 #include "Globals.h"
 #include "Light.h"
 #include "ModuleEditor.h"
+#include "GameObject.h"
 #include "../External/MathGeoLib/include/MathGeoLib.h"
 #include "../External/MathGeoLib/include/Math/float4x4.h"
 #include "Primitive.h"
 #include "../External/Glew/include/glew.h"
-#include "Model.h"
-#include "ModuleTexture.h"
 
 //todo: REMOVE this before 1st delivery!!
 #include "glmath.h"
@@ -29,9 +28,7 @@ public:
 	bool CleanUp();
 
 	void OnResize(int width, int height);
-	void DrawNormals(std::vector<Mesh> meshes);
 	void BindVBO();
-	float3 CalculateFaceNormal(const float3& vertex1, const float3& vertex2, const float3& vertex3);
 
 public:
 
@@ -39,12 +36,12 @@ public:
 	SDL_GLContext context;
 	CPlane Grid;
 
-	std::vector<Model> Models;
+	GameObject* gameObject = nullptr;
+	GameObject* selectedGameObject = nullptr;
+	std::vector<GameObject*> gameObjects;
+
 	bool modelLoaded = false;
 	const char* myModelPath;
-
-	Texture* tex;
-	Mesh* bakerhouse;
 
 	GLuint checkersTexture;
 	GLuint checkerID;

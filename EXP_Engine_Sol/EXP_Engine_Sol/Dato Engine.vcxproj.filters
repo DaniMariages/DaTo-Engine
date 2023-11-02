@@ -429,12 +429,6 @@
     <ClInclude Include="Game\Source\Light.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Source\Model.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Source\Mesh.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Source\Primitive.h">
       <Filter>Source</Filter>
     </ClInclude>
@@ -696,10 +690,22 @@
     <ClInclude Include="Game\Source\ModuleWindow.h">
       <Filter>Source\Modules</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Source\ModuleTexture.h">
+    <ClInclude Include="Game\Source\Component.h">
       <Filter>Source\Modules</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Source\ModuleMesh.h">
+    <ClInclude Include="Game\Source\ComponentMesh.h">
+      <Filter>Source\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Source\ComponentTexture.h">
+      <Filter>Source\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Source\ComponentTransform.h">
+      <Filter>Source\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Source\GameObject.h">
+      <Filter>Source\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Source\ModuleImport.h">
       <Filter>Source\Modules</Filter>
     </ClInclude>
   </ItemGroup>
@@ -863,10 +869,19 @@
     <ClCompile Include="Game\Source\ModuleWindow.cpp">
       <Filter>Source\Modules</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Source\ModuleTexture.cpp">
+    <ClCompile Include="Game\Source\ComponentMesh.cpp">
       <Filter>Source\Modules</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Source\ModuleMesh.cpp">
+    <ClCompile Include="Game\Source\ComponentTexture.cpp">
+      <Filter>Source\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Source\ComponentTransform.cpp">
+      <Filter>Source\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Source\GameObject.cpp">
+      <Filter>Source\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Source\ModuleImport.cpp">
       <Filter>Source\Modules</Filter>
     </ClCompile>
   </ItemGroup>

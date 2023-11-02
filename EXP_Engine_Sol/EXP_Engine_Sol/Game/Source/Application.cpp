@@ -5,8 +5,8 @@
 #include "ModuleRenderer3D.h"
 #include "ModuleCamera3D.h"
 #include "ModuleEditor.h"
-#include "ModuleTexture.h"
-#include "ModuleMesh.h"
+#include "ModuleImport.h"
+
 
 Application::Application()
 {
@@ -15,8 +15,8 @@ Application::Application()
 	renderer3D = new ModuleRenderer3D(this);
 	camera = new ModuleCamera3D(this);
 	editor = new ModuleEditor(this);
-	mesh = new ModuleMesh(this);
-	texture = new ModuleTexture(this);
+	importer = new ModuleImport(this);
+
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
 	// They will CleanUp() in reverse order
@@ -26,8 +26,7 @@ Application::Application()
 	AddModule(camera);
 	AddModule(editor);
 	AddModule(input);
-	AddModule(mesh);
-	AddModule(texture);
+	AddModule(importer);
 	
 	// Renderer last!
 	AddModule(renderer3D);

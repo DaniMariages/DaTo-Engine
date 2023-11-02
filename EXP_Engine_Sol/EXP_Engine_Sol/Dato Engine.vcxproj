@@ -273,20 +273,22 @@
     <ClInclude Include="Game\External\SDL\include\SDL_vulkan.h" />
     <ClInclude Include="Game\Source\Application.h" />
     <ClInclude Include="Game\Source\Color.h" />
+    <ClInclude Include="Game\Source\Component.h" />
+    <ClInclude Include="Game\Source\ComponentMesh.h" />
+    <ClInclude Include="Game\Source\ComponentTexture.h" />
+    <ClInclude Include="Game\Source\ComponentTransform.h" />
+    <ClInclude Include="Game\Source\GameObject.h" />
     <ClInclude Include="Game\Source\glmath.h" />
     <ClInclude Include="Game\Source\Globals.h" />
     <ClInclude Include="Game\Source\Light.h" />
-    <ClInclude Include="Game\Source\Model.h" />
-    <ClInclude Include="Game\Source\Mesh.h" />
     <ClInclude Include="Game\Source\Module.h" />
     <ClInclude Include="Game\Source\ModuleCamera3D.h" />
     <ClInclude Include="Game\Source\ModuleEditor.h" />
+    <ClInclude Include="Game\Source\ModuleImport.h" />
     <ClInclude Include="Game\Source\ModuleInput.h" />
-    <ClInclude Include="Game\Source\ModuleMesh.h" />
     <ClInclude Include="Game\Source\ModuleRenderer3D.h" />
     <ClInclude Include="Game\Source\ModuleWindow.h" />
     <ClInclude Include="Game\Source\Primitive.h" />
-    <ClInclude Include="Game\Source\ModuleTexture.h" />
     <ClInclude Include="Game\Source\Timer.h" />
   </ItemGroup>
   <ItemGroup>
@@ -332,18 +334,21 @@
     <ClCompile Include="Game\External\MathGeoLib\include\Time\Clock.cpp" />
     <ClCompile Include="Game\Source\Application.cpp" />
     <ClCompile Include="Game\Source\Color.cpp" />
+    <ClCompile Include="Game\Source\ComponentMesh.cpp" />
+    <ClCompile Include="Game\Source\ComponentTexture.cpp" />
+    <ClCompile Include="Game\Source\ComponentTransform.cpp" />
+    <ClCompile Include="Game\Source\GameObject.cpp" />
     <ClCompile Include="Game\Source\glmath.cpp" />
     <ClCompile Include="Game\Source\Light.cpp" />
     <ClCompile Include="Game\Source\log.cpp" />
     <ClCompile Include="Game\Source\Main.cpp" />
     <ClCompile Include="Game\Source\ModuleCamera3D.cpp" />
     <ClCompile Include="Game\Source\ModuleEditor.cpp" />
+    <ClCompile Include="Game\Source\ModuleImport.cpp" />
     <ClCompile Include="Game\Source\ModuleInput.cpp" />
-    <ClCompile Include="Game\Source\ModuleMesh.cpp" />
     <ClCompile Include="Game\Source\ModuleRenderer3D.cpp" />
     <ClCompile Include="Game\Source\ModuleWindow.cpp" />
     <ClCompile Include="Game\Source\Primitive.cpp" />
-    <ClCompile Include="Game\Source\ModuleTexture.cpp" />
     <ClCompile Include="Game\Source\Timer.cpp" />
   </ItemGroup>
   <ItemGroup>

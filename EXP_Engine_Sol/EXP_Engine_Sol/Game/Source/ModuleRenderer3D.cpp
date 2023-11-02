@@ -6,11 +6,9 @@
 #include "ModuleInput.h"
 #include "../External/SDL/include/SDL_opengl.h"
 #include "ModuleEditor.h"
+#include "ModuleImport.h"
 #include <gl/GL.h>
 #include <gl/GLU.h>
-#include "ModuleMesh.h"
-#include "Model.h"
-#include "ModuleTexture.h"
 
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */	
 #pragma comment (lib, "glu32.lib") /* link Microsoft OpenGL lib   */
@@ -183,30 +181,13 @@ bool ModuleRenderer3D::Init()
 	BindVBO();
 
 	Grid.axis = true;
-	ilInit();
-	tex = App->texture->LoadTexture("../Assets/Textures/BakerHouse.png");
-	if (tex) LOG("TEXTURA CARGADA CORRECTAMENTE")
-	else LOG("TEXTURA NO CARGADA");
 
 	return ret;
 }
 
 void ModuleRenderer3D::BindVBO()
 {
-	for (int i = 0; i < App->mesh->meshes.size(); i++) {
 
-			glGenBuffers(1, &App->mesh->meshes[i].VBO);
-			glBindBuffer(GL_ARRAY_BUFFER, App->mesh->meshes[i].VBO);
-			glBufferData(GL_ARRAY_BUFFER, sizeof(ModuleMesh::Vertex) * App->mesh->meshes[i].vertices.size(), &App->mesh->meshes[i].vertices[0], GL_STATIC_DRAW);
-
-			glGenBuffers(1, &App->mesh->meshes[i].EBO);
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, App->mesh->meshes[i].EBO);
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * App->mesh->meshes[i].indices.size(), &App->mesh->meshes[i].indices[0], GL_STATIC_DRAW);
-
-
-			glBindBuffer(GL_ARRAY_BUFFER, 0);
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-	}
 }
 
 
@@ -239,33 +220,10 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	lights[0].Active(true);
 
 	if (App->editor->drawAll == true) {
-		for (int i = 0; i < App->mesh->meshes.size(); i++) {
-			glEnable(GL_TEXTURE_2D);
-			glEnable(GL_TEXTURE_COORD_ARRAY);
-			//Bind Mesh
-			glBindBuffer(GL_ARRAY_BUFFER, App->mesh->meshes[i].VBO);
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, App->mesh->meshes[i].EBO);
-			glEnableClientState(GL_VERTEX_ARRAY);
-			glVertexPointer(3, GL_FLOAT, sizeof(ModuleMesh::Vertex), (void*)0);
+		
 
-			//Bind Textures
-			if (App->editor->drawTextures == true) {
-				glBindTexture(GL_TEXTURE_2D, tex->textID);
-				glNormalPointer(GL_FLOAT, sizeof(ModuleMesh::Vertex), (void*)offsetof(ModuleMesh::Vertex, Normal));
-				glTexCoordPointer(2, GL_FLOAT, sizeof(ModuleMesh::Vertex), (void*)offsetof(ModuleMesh::Vertex, TexCoords));
-			}
-
-			glDrawElements(GL_TRIANGLES, App->mesh->meshes[i].indices.size(), GL_UNSIGNED_INT, NULL);
-			glBindBuffer(GL_ARRAY_BUFFER, 0);
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-			glDisable(GL_TEXTURE_2D);
-			glDisableClientState(GL_VERTEX_ARRAY);
-			glBindTexture(GL_TEXTURE_2D, 0);
-			glDisable(GL_TEXTURE_COORD_ARRAY);
-
-		}
 	}
+	
 
 	if (App->editor->drawAllVertex == true) {
 		
