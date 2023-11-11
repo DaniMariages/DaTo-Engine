@@ -43,7 +43,6 @@ void ModuleImport::ReadFile(const char* file_path)
 
 	case typeFile::TEXTURE:
 		LOG("START LOADING TEXTURE");
-		LoadTexture(file_path);
 		ComponentTexture* tempCompTex = new ComponentTexture(BakerHouse);
 		tempCompTex->SetTexture(LoadTexture(file_path));
 		LOG("TEXTURE LOADED");
@@ -186,9 +185,13 @@ Texture* ModuleImport::LoadTexture(const char* file_path)
 
 	if (ilLoadImage(file_path))
 	{
+		ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
+
 		ILinfo ImageInfo;
 		GLuint texture_id;
 
+		glEnable(GL_TEXTURE_2D);
+		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 		iluGetImageInfo(&ImageInfo);
 		glGenTextures(1, &texture_id);
 		glBindTexture(GL_TEXTURE_2D, texture_id);
@@ -202,7 +205,7 @@ Texture* ModuleImport::LoadTexture(const char* file_path)
 			iluFlipImage();
 		}
 
-		glTexImage2D(GL_TEXTURE_2D, 0, ilGetInteger(IL_IMAGE_BPP), ImageInfo.Width, ImageInfo.Height, 0, ilGetInteger(IL_IMAGE_FORMAT), GL_UNSIGNED_BYTE, ilGetData()); 
+		glTexImage2D(GL_TEXTURE_2D, 0, ilGetInteger(IL_IMAGE_BPP), ImageInfo.Width, ImageInfo.Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, ilGetData()); 
 		glBindTexture(GL_TEXTURE_2D, 0);
 		glDisable(GL_TEXTURE_2D);
 		ilDeleteImages(1, &image);
