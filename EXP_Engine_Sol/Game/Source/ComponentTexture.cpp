@@ -39,14 +39,6 @@ void ComponentTexture::SetTexture(Texture* texture)
 	this->texture->path = texture->path;
 }
 
-void ComponentTexture::SetTexture(uint id, const char* path)
-{
-	this->texture->textID = texture->textID;
-	this->texture->height = texture->height;
-	this->texture->width = texture->width;
-	this->texture->path = texture->path;
-}
-
 Texture* ComponentTexture::GetTexture()
 {
 	if (this != nullptr) {

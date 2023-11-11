@@ -21,8 +21,6 @@ public:
 	void DrawInspector() override;
 
 	Texture* GetTexture();
-
 	void SetTexture(Texture* texture);
-	void SetTexture(uint id, const char* path);
 
 };

@@ -177,7 +177,7 @@ void ModuleImport::LoadMesh(const char* file_path)
 
 Texture* ModuleImport::LoadTexture(const char* file_path)
 {
-	ILuint image;
+	ILenum image;
 	GLboolean imageLoaded;
 
 	ilGenImages(1, &image);
@@ -205,7 +205,7 @@ Texture* ModuleImport::LoadTexture(const char* file_path)
 			iluFlipImage();
 		}
 
-		glTexImage2D(GL_TEXTURE_2D, 0, ilGetInteger(IL_IMAGE_BPP), ImageInfo.Width, ImageInfo.Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, ilGetData()); 
+		glTexImage2D(GL_TEXTURE_2D, 0, ilGetInteger(IL_IMAGE_BPP), ImageInfo.Width, ImageInfo.Height, 0, ilGetInteger(IL_IMAGE_FORMAT), GL_UNSIGNED_BYTE, ilGetData()); 
 		glBindTexture(GL_TEXTURE_2D, 0);
 		glDisable(GL_TEXTURE_2D);
 		ilDeleteImages(1, &image);
