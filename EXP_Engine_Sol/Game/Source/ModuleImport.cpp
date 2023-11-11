@@ -103,7 +103,7 @@ typeFile ModuleImport::ReadExtension(std::string name)
 
 void ModuleImport::LoadMesh(const char* file_path)
 {
-	const aiScene* scene = aiImportFile(file_path, aiProcessPreset_TargetRealtime_MaxQuality);
+	const aiScene* scene = aiImportFile(file_path, aiProcess_Triangulate | aiProcess_FlipUVs);
 
 	if (scene != nullptr && scene->HasMeshes())
 	{
