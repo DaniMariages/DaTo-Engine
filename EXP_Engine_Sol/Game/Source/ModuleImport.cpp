@@ -194,6 +194,8 @@ Texture* ModuleImport::LoadTexture(const char* file_path)
 		glBindTexture(GL_TEXTURE_2D, texture_id);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
 		if (ImageInfo.Origin == IL_ORIGIN_LOWER_LEFT)
 		{
@@ -201,10 +203,18 @@ Texture* ModuleImport::LoadTexture(const char* file_path)
 		}
 
 		glTexImage2D(GL_TEXTURE_2D, 0, ilGetInteger(IL_IMAGE_BPP), ImageInfo.Width, ImageInfo.Height, 0, ilGetInteger(IL_IMAGE_FORMAT), GL_UNSIGNED_BYTE, ilGetData()); 
+		glBindTexture(GL_TEXTURE_2D, 0);
+		glDisable(GL_TEXTURE_2D);
 		ilDeleteImages(1, &image);
 
+		Texture* newTexture = new Texture();
+		newTexture->height = ImageInfo.Height;
+		newTexture->width = ImageInfo.Width;
+		newTexture->textID = texture_id;
+		newTexture->path = file_path;
+
 		LOG("Texture loaded correctly");
-		return new Texture(texture_id, ImageInfo.Width, ImageInfo.Height, file_path);
+		return newTexture;
 	}
 	else
 	{

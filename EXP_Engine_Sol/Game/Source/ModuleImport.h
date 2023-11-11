@@ -29,15 +29,6 @@ struct Texture
 	uint width;
 	uint height;
 	const char* path;
-
-	Texture(GLuint id, uint _width, uint _height, const char* _path)
-	{
-		textID = id;
-		width = _width;
-		height = _height;
-		path = _path;
-	}
-	Texture() {};
 };
 
 struct Vertex
