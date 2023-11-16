@@ -5,9 +5,10 @@
 #include "ComponentMesh.h"
 #include <vector>
 
-GameObject::GameObject(std::string name) : Name(name), active(true)
+GameObject::GameObject(std::string name, GameObject* parent)
 {
-	//AddComponent(new ComponentTransform(this));
+	Name = name;
+	Parent = parent;
 }
 
 GameObject::~GameObject() {}
@@ -39,7 +40,7 @@ void GameObject::Update()
 
 void GameObject::SetParent(GameObject* parent)
 {
-	this->parent = parent;
+	Parent = parent;
 }
 
 Component* GameObject::AddComponent(Component* component)

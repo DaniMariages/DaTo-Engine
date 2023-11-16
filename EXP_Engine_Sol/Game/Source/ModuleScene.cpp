@@ -1,9 +1,9 @@
 #include "Globals.h"
-#include "Application.h"
 #include "ModuleScene.h"
 
 ModuleScene::ModuleScene(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
+	rootGameObject = CreateGameObject("Scene", nullptr);
 }
 
 // Destructor
@@ -40,3 +40,13 @@ bool ModuleScene::CleanUp()
 	return true;
 }
 
+GameObject* ModuleScene::CreateGameObject(std::string Name, GameObject* parent)
+{
+	GameObject* newGameObject = new GameObject(Name, parent);
+
+	if (parent != nullptr) parent->AddChildren(newGameObject);
+
+	gameObjects.push_back(newGameObject);
+
+	return newGameObject;
+}

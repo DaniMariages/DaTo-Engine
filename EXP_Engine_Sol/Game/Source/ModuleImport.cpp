@@ -1,6 +1,7 @@
 #include "Application.h"
 #include "ModuleRenderer3D.h"
 #include "ModuleImport.h"
+#include "ModuleScene.h"
 
 #include "../External/Assimp/include/cimport.h"
 #include "../External/Assimp/include/scene.h"
@@ -35,10 +36,11 @@ void ModuleImport::ReadFile(const char* file_path)
 	switch (extension) {
 	case typeFile::MODEL:
 		LOG("START LOADING MODEL");
-		BakerHouse = new GameObject(name);
+		BakerHouse = new GameObject(name, App->scene->rootGameObject);
 		LoadMesh(file_path);
 		LOG("MODEL LOADED");
 		App->renderer3D->gameObjects.push_back(BakerHouse);
+		App->scene->rootGameObject->children.push_back(BakerHouse);
 		break;
 
 	case typeFile::TEXTURE:

@@ -4,6 +4,7 @@
 #include "ModuleRenderer3D.h"
 #include "ModuleInput.h"
 #include "Component.h"
+#include "ModuleScene.h"
 
 #include "../External/ImGui/imgui.h"
 #include "../External/ImGui/backends/imgui_impl_opengl3.h"
@@ -301,9 +302,9 @@ void ModuleEditor::HierarchyWindow()
 	{
 		ImGui::Begin("Hierarchy", &show_hierarchy_window);
 
-		for (int i = 0; i < App->renderer3D->gameObjects.size(); i++)
+		for (int i = 0; i < App->scene->gameObjects.size(); i++)
 		{
-			if (ImGui::Selectable(App->renderer3D->gameObjects[i]->Name.c_str(), selected == i))
+			if (ImGui::Selectable(App->scene->gameObjects[i]->Name.c_str(), selected == i))
 			{
 				selected = i;
 				show_inspector_window = !show_inspector_window;
@@ -313,16 +314,36 @@ void ModuleEditor::HierarchyWindow()
 			{
 				selected = i;
 
-				ImGui::MenuItem(App->renderer3D->gameObjects[i]->Name.c_str(), NULL, false, false);
+				ImGui::MenuItem(App->scene->gameObjects[i]->children[i]->Name.c_str(), NULL, false, false);
 				if (ImGui::MenuItem("Hide"))
 				{
-					App->renderer3D->gameObjects[selected]->active = !App->renderer3D->gameObjects[selected]->active;
+					App->scene->gameObjects[selected]->active = !App->scene->gameObjects[selected]->active;
 				}
 				if (ImGui::MenuItem("Delete"))
 				{
-					if (selected >= 0 && selected < App->renderer3D->gameObjects.size())
+					if (selected >= 0 && selected < App->scene->gameObjects.size())
 					{
-						App->renderer3D->gameObjects.erase(App->renderer3D->gameObjects.begin() + selected);
+						App->scene->gameObjects.erase(App->scene->gameObjects.begin() + selected);
+						show_inspector_window = false;
+					}
+				}
+				ImGui::EndPopup();
+			}
+
+			if (ImGui::BeginPopupContextItem())
+			{
+				selected = i;
+
+				ImGui::MenuItem(App->scene->gameObjects[i]->Name.c_str(), NULL, false, false);
+				if (ImGui::MenuItem("Hide"))
+				{
+					App->scene->gameObjects[selected]->active = !App->scene->gameObjects[selected]->active;
+				}
+				if (ImGui::MenuItem("Delete"))
+				{
+					if (selected >= 0 && selected < App->scene->gameObjects.size())
+					{
+						App->scene->gameObjects.erase(App->scene->gameObjects.begin() + selected);
 						show_inspector_window = false;
 					}
 				}
