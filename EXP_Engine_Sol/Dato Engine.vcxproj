@@ -287,6 +287,7 @@
     <ClInclude Include="Game\Source\ModuleImport.h" />
     <ClInclude Include="Game\Source\ModuleInput.h" />
     <ClInclude Include="Game\Source\ModuleRenderer3D.h" />
+    <ClInclude Include="Game\Source\ModuleScene.h" />
     <ClInclude Include="Game\Source\ModuleWindow.h" />
     <ClInclude Include="Game\Source\Primitive.h" />
     <ClInclude Include="Game\Source\Timer.h" />
@@ -348,6 +349,7 @@
     <ClCompile Include="Game\Source\ModuleImport.cpp" />
     <ClCompile Include="Game\Source\ModuleInput.cpp" />
     <ClCompile Include="Game\Source\ModuleRenderer3D.cpp" />
+    <ClCompile Include="Game\Source\ModuleScene.cpp" />
     <ClCompile Include="Game\Source\ModuleWindow.cpp" />
     <ClCompile Include="Game\Source\Primitive.cpp" />
     <ClCompile Include="Game\Source\Timer.cpp" />

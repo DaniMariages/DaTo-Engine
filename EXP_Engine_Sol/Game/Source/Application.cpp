@@ -6,6 +6,7 @@
 #include "ModuleCamera3D.h"
 #include "ModuleEditor.h"
 #include "ModuleImport.h"
+#include "ModuleScene.h"
 
 extern  Application* App_ = nullptr;
 
@@ -19,6 +20,7 @@ Application::Application()
 	camera = new ModuleCamera3D(this);
 	editor = new ModuleEditor(this);
 	importer = new ModuleImport(this);
+	scene = new ModuleScene(this);
 
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
@@ -30,6 +32,7 @@ Application::Application()
 	AddModule(editor);
 	AddModule(input);
 	AddModule(importer);
+	AddModule(scene);
 	
 	// Renderer last!
 	AddModule(renderer3D);

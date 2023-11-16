@@ -14,6 +14,7 @@ class ModuleRenderer3D;
 class ModuleEditor;
 class ModuleCamera3D;
 class ModuleImport;
+class ModuleScene;
 
 class Application
 {
@@ -24,6 +25,7 @@ public:
 	ModuleCamera3D* camera;
 	ModuleEditor* editor;
 	ModuleImport* importer;
+	ModuleScene* scene;
 
 private:
 
