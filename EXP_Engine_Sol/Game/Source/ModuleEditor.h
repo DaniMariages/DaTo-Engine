@@ -9,6 +9,7 @@
 #include <vector>
 
 #define YELLOW ImVec4(1.0f, 1.0f, 0.0f, 1.0f)
+class GameObject;
 
 class ModuleEditor : public Module
 {
@@ -25,8 +26,10 @@ public:
 	void MainMenuBar();
 	void DemoWindow();
 
-	void HierarchyWindow();
-	void GameObjectsTree();
+	void HierarchyWindow(GameObject* gameObject);
+	void Inspector();
+	void DrawHierarchy();
+
 
 	void RequestBrowser(const char* path);
 

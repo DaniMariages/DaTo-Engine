@@ -5,6 +5,7 @@
 #include "ModuleInput.h"
 #include "Component.h"
 #include "ModuleScene.h"
+#include "GameObject.h"
 
 #include "../External/ImGui/imgui.h"
 #include "../External/ImGui/backends/imgui_impl_opengl3.h"
@@ -25,7 +26,7 @@ ModuleEditor::ModuleEditor(Application* app, bool start_enabled) : Module(app, s
 }
 
 // Destructor
-ModuleEditor::~ModuleEditor ()
+ModuleEditor::~ModuleEditor()
 {
 }
 
@@ -53,7 +54,7 @@ bool ModuleEditor::Init()
 	return ret;
 }
 
-void ModuleEditor :: DrawEditor()
+void ModuleEditor::DrawEditor()
 {
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplSDL2_NewFrame();
@@ -75,8 +76,8 @@ void ModuleEditor :: DrawEditor()
 		ImGui::ShowMetricsWindow(&show_metrics_window);
 	}
 
-	if (show_hierarchy_window) HierarchyWindow();
-	if (show_inspector_window) GameObjectsTree();
+	if (show_hierarchy_window) DrawHierarchy();
+	if (show_inspector_window) Inspector();
 
 	Config();
 	Console();
@@ -147,7 +148,7 @@ void ModuleEditor::MainMenuBar() {
 				ImGui::EndMenu();
 			}
 			if (ImGui::MenuItem("Quit")) {
-				
+
 				App->input->quit = true;
 			}
 			ImGui::EndMenu();
@@ -193,7 +194,7 @@ void ModuleEditor::RequestBrowser(const char* path)
 }
 
 void ModuleEditor::Config() {
-	
+
 	ImGuiStyle& style = ImGui::GetStyle();
 
 	if (show_config_window)
@@ -243,10 +244,10 @@ void ModuleEditor::Config() {
 			if (ImGui::Checkbox("Normals", &drawAllFaces)) {
 			}
 			if (ImGui::Checkbox("Vertex", &drawAllVertex)) {
-			}			
+			}
 			if (ImGui::Checkbox("Textures", &drawTextures)) {
 			}
-			
+
 		}
 		if (ImGui::CollapsingHeader("View"))
 		{
@@ -259,11 +260,11 @@ void ModuleEditor::Config() {
 			if (ImGui::Checkbox("Right side", &side_2)) {
 			}
 		}
-		if(ImGui::CollapsingHeader("Renderer")) {
+		if (ImGui::CollapsingHeader("Renderer")) {
 			if (ImGui::Checkbox("Shader", &shader)) {
 				if (shader) {
 					glEnable(GL_LIGHTING);
-				}				
+				}
 				else {
 					glDisable(GL_LIGHTING);
 				}
@@ -296,107 +297,131 @@ void ModuleEditor::Console()
 	}
 }
 
-void ModuleEditor::HierarchyWindow()
+void ModuleEditor::DrawHierarchy()
 {
-	if (show_hierarchy_window)
+	if (ImGui::Begin("Hierarchy", &show_hierarchy_window), true)
 	{
-		ImGui::Begin("Hierarchy", &show_hierarchy_window);
-
-		for (int i = 0; i < App->scene->gameObjects.size(); i++)
-		{
-			if (ImGui::Selectable(App->scene->gameObjects[i]->Name.c_str(), selected == i))
-			{
-				selected = i;
-				show_inspector_window = !show_inspector_window;
-			}
-
-			if (ImGui::BeginPopupContextItem())
-			{
-				selected = i;
-
-				ImGui::MenuItem(App->scene->gameObjects[i]->children[i]->Name.c_str(), NULL, false, false);
-				if (ImGui::MenuItem("Hide"))
-				{
-					App->scene->gameObjects[selected]->active = !App->scene->gameObjects[selected]->active;
-				}
-				if (ImGui::MenuItem("Delete"))
-				{
-					if (selected >= 0 && selected < App->scene->gameObjects.size())
-					{
-						App->scene->gameObjects.erase(App->scene->gameObjects.begin() + selected);
-						show_inspector_window = false;
-					}
-				}
-				ImGui::EndPopup();
-			}
-
-			if (ImGui::BeginPopupContextItem())
-			{
-				selected = i;
-
-				ImGui::MenuItem(App->scene->gameObjects[i]->Name.c_str(), NULL, false, false);
-				if (ImGui::MenuItem("Hide"))
-				{
-					App->scene->gameObjects[selected]->active = !App->scene->gameObjects[selected]->active;
-				}
-				if (ImGui::MenuItem("Delete"))
-				{
-					if (selected >= 0 && selected < App->scene->gameObjects.size())
-					{
-						App->scene->gameObjects.erase(App->scene->gameObjects.begin() + selected);
-						show_inspector_window = false;
-					}
-				}
-				ImGui::EndPopup();
-			}
-			ImGui::SetItemTooltip("Right-click to fast options");
-		}
+		HierarchyWindow(App->scene->rootGameObject);
 		ImGui::End();
 	}
 }
 
-void ModuleEditor::GameObjectsTree()
+void ModuleEditor::HierarchyWindow(GameObject* gameObject)
 {
-	if (show_inspector_window) 
+	// Set flags to open the tree nodes
+	ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_DefaultOpen | (gameObject->selected ? ImGuiTreeNodeFlags_Selected : 0);
+
+	if (gameObject != nullptr) 
 	{
-		ImGui::Begin("Inspector", &show_inspector_window);
-		if (ImGui::TreeNode("Draw options"))
-		{
-			if (ImGui::Checkbox("Draw", &drawSelected)) 
-			{
-				App->renderer3D->gameObjects[selected]->active = !App->renderer3D->gameObjects[selected]->active;
-			}
-			if (ImGui::Checkbox("Normals", &drawSelectedFaces))
-			{
-				
-			}
-			if (ImGui::Checkbox("Vertex", &drawSelectedVertex));		//NOT WORKING YET
-			if (ImGui::Checkbox("Textures", &drawSelectedTexture));
+		bool isNodeOpen = ImGui::TreeNodeEx(gameObject->Name.c_str(), flags);
 
-			ImGui::TreePop();
-		}
-		if (ImGui::TreeNode("Information"))
-		{
-			ImGui::Text("Name: %s", App->renderer3D->gameObjects[selected]->Name.c_str());
 
-			for (uint i = 0; i < App->renderer3D->gameObjects[selected]->components.size(); ++i)
+		if (isNodeOpen)
+		{
+			if (gameObject != nullptr) 
 			{
-				if (App->renderer3D->gameObjects[selected])
+				if (gameObject->children.size())
 				{
-					App->renderer3D->gameObjects[selected]->components[i]->DrawInspector();
+					for (uint i = 0; i < gameObject->children.size(); i++)
+					{
+						show_inspector_window = !show_inspector_window;
+						HierarchyWindow(gameObject->children[i]);
+					}
 				}
+
 			}
+
+			// Close the TreeNode when you're done with its children
 			ImGui::TreePop();
 		}
+	}
+	//ESTO DEMUESTRA QUE SCENE CARGA SUS HIJOS Y SE LES ASIGNA CORRECTAMENTE
+	/*if (ImGui::BeginPopupContextItem())
+	{
+		selected = i;
 
-		if (ImGui::Button("Delete"))
+		ImGui::MenuItem(App->scene->gameObjects[i]->children[i]->Name.c_str(), NULL, false, false);
+		if (ImGui::MenuItem("Hide"))
 		{
-			if (selected >= 0 && selected < App->renderer3D->gameObjects.size())
+			App->scene->gameObjects[selected]->active = !App->scene->gameObjects[selected]->active;
+		}
+		if (ImGui::MenuItem("Delete"))
+		{
+			if (selected >= 0 && selected < App->scene->gameObjects.size())
 			{
-				App->renderer3D->gameObjects.erase(App->renderer3D->gameObjects.begin() + selected);
+				App->scene->gameObjects.erase(App->scene->gameObjects.begin() + selected);
 				show_inspector_window = false;
 			}
 		}
+		ImGui::EndPopup();
+	}*/
+
+	/*if (ImGui::BeginPopupContextItem())
+	{
+		selected = i;
+
+		ImGui::MenuItem(App->scene->gameObjects[i]->Name.c_str(), NULL, false, false);
+		if (ImGui::MenuItem("Hide"))
+		{
+			App->scene->gameObjects[selected]->active = !App->scene->gameObjects[selected]->active;
+		}
+		if (ImGui::MenuItem("Delete"))
+		{
+			if (selected >= 0 && selected < App->scene->gameObjects.size())
+			{
+				App->scene->gameObjects.erase(App->scene->gameObjects.begin() + selected);
+				show_inspector_window = false;
+			}
+		}
+		ImGui::EndPopup();
 	}
-	ImGui::End();
+	ImGui::SetItemTooltip("Right-click to fast options");*/
 }
+
+
+void ModuleEditor::Inspector()
+{
+	//if (show_inspector_window)
+	//{
+	//	ImGui::Begin("Inspector", &show_inspector_window);
+	//	if (ImGui::TreeNode("Draw options"))
+	//	{
+	//		if (ImGui::Checkbox("Draw", &drawSelected))
+	//		{
+	//			App->renderer3D->gameObjects[selected]->active = !App->renderer3D->gameObjects[selected]->active;
+	//		}
+	//		if (ImGui::Checkbox("Normals", &drawSelectedFaces))
+	//		{
+
+	//		}
+	//		if (ImGui::Checkbox("Vertex", &drawSelectedVertex));		//NOT WORKING YET
+	//		if (ImGui::Checkbox("Textures", &drawSelectedTexture));
+
+	//		ImGui::TreePop();
+	//	}
+	//	if (ImGui::TreeNode("Information"))
+	//	{
+	//		ImGui::Text("Name: %s", App->renderer3D->gameObjects[selected]->Name.c_str());
+
+	//		for (uint i = 0; i < App->renderer3D->gameObjects[selected]->components.size(); ++i)
+	//		{
+	//			if (App->renderer3D->gameObjects[selected])
+	//			{
+	//				App->renderer3D->gameObjects[selected]->components[i]->DrawInspector();
+	//			}
+	//		}
+	//		ImGui::TreePop();
+	//	}
+
+	//	if (ImGui::Button("Delete"))
+	//	{
+	//		if (selected >= 0 && selected < App->renderer3D->gameObjects.size())
+	//		{
+	//			App->renderer3D->gameObjects.erase(App->renderer3D->gameObjects.begin() + selected);
+	//			show_inspector_window = false;
+	//		}
+	//	}
+	//}
+	//ImGui::End();
+}
+
