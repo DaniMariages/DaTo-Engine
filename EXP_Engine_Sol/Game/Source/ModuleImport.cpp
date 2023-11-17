@@ -40,6 +40,7 @@ void ModuleImport::ReadFile(const char* file_path)
 		LoadMesh(file_path);
 		LOG("MODEL LOADED");
 		App->renderer3D->gameObjects.push_back(BakerHouse);
+		App->scene->gameObjects.push_back(BakerHouse);
 		App->scene->rootGameObject->children.push_back(BakerHouse);
 		break;
 

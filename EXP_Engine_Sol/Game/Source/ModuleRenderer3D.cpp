@@ -308,7 +308,7 @@ void ModuleRenderer3D::IterateDrawMesh()
 
 				if (App->editor->drawSelectedFaces)
 				{
-					std::vector<Component*> meshComp = gameObjects[App->editor->selected]->GetComponents(typeComponent::Mesh);
+					std::vector<Component*> meshComp = gameObjects[App->editor->posOfSelected]->GetComponents(typeComponent::Mesh);
 					std::vector<Component*>::iterator it = meshComp.begin();
 					for (; it != meshComp.end(); ++it)
 					{
@@ -318,7 +318,7 @@ void ModuleRenderer3D::IterateDrawMesh()
 				}
 				if (App->editor->drawSelectedVertex)
 				{
-					std::vector<Component*> meshComp = gameObjects[App->editor->selected]->GetComponents(typeComponent::Mesh);
+					std::vector<Component*> meshComp = gameObjects[App->editor->posOfSelected]->GetComponents(typeComponent::Mesh);
 					std::vector<Component*>::iterator it = meshComp.begin();
 					for (; it != meshComp.end(); ++it)
 					{

@@ -26,10 +26,10 @@ public:
 	void MainMenuBar();
 	void DemoWindow();
 
-	void HierarchyWindow(GameObject* gameObject);
-	void Inspector();
+	void DrawInspector();
 	void DrawHierarchy();
-
+	void Inspector();
+	void HierarchyWindow(GameObject* gameObject);
 
 	void RequestBrowser(const char* path);
 
@@ -49,7 +49,7 @@ public:
 	bool show_metrics_window = false;
 	bool show_config_window = true;
 	bool show_hierarchy_window = true;
-	bool show_inspector_window = false;
+	bool show_inspector_window = true;
 	bool show_console = true;
 
 	bool drawAll = true;
@@ -71,7 +71,9 @@ public:
 	bool drawSelectedTexture = true;
 
 	//Public variable to know which model is selected
-	int selected = -1;
+	int posOfSelected = -1;
+
+	bool openTreeNode = false;
 
 	bool Wireframe = false;
 	bool lights = true;
