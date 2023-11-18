@@ -4,9 +4,11 @@
 #include "Light.h"
 #include "ModuleEditor.h"
 #include "GameObject.h"
+#include "Primitive.h"
+#include "ModuleScene.h"
+
 #include "../External/MathGeoLib/include/MathGeoLib.h"
 #include "../External/MathGeoLib/include/Math/float4x4.h"
-#include "Primitive.h"
 #include "../External/Glew/include/glew.h"
 
 //todo: REMOVE this before 1st delivery!!
@@ -55,12 +57,6 @@ public:
 	Light lights[MAX_LIGHTS];
 	SDL_GLContext context;
 	CPlane Grid;
-
-	GameObject* gOselected = nullptr;
-	std::vector<GameObject*> gameObjects;
-
-	bool modelLoaded = false;
-	const char* myModelPath;
 
 	GLuint checkersTexture;
 	GLuint checkerID;

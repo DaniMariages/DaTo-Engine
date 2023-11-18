@@ -326,6 +326,7 @@ void ModuleEditor::HierarchyWindow(GameObject* gameObject)
 		if (ImGui::IsItemClicked()) 
 		{
 			gameObject->selected = true;
+			App->scene->gameObjectSelected = gameObject; //Assign the game object selected
 
 			for (std::vector<GameObject*>::iterator it = App->scene->gameObjects.begin(); it != App->scene->gameObjects.end(); ++it) 
 			{

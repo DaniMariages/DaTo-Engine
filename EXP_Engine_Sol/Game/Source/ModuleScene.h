@@ -24,6 +24,7 @@ public:
 
 	GameObject* rootGameObject = nullptr;
 	std::vector<GameObject*> gameObjects;
+	GameObject* gameObjectSelected = nullptr;
 
 	
 };

@@ -3,10 +3,6 @@
 #include "ModuleImport.h"
 #include "ModuleScene.h"
 
-#include "../External/Assimp/include/cimport.h"
-#include "../External/Assimp/include/scene.h"
-#include "../External/Assimp/include/postprocess.h"
-
 #pragma comment(lib, "Game/External/DevIL/libx86/DevIL.lib")
 #pragma comment(lib, "Game/External/DevIL/libx86/ILU.lib")
 #pragma comment(lib, "Game/External/DevIL/libx86/ILUT.lib")
@@ -25,8 +21,8 @@ bool ModuleImport::CleanUp() { return true; }
 
 update_status ModuleImport::Update(float dt) { return UPDATE_CONTINUE; }
 
-void ModuleImport::ReadFile(const char* file_path) 
-{ 
+void ModuleImport::ReadFile(const char* file_path)
+{
 	LOG("Reading file, path: %s.", file_path);
 
 	name = GetName(file_path);
@@ -36,20 +32,46 @@ void ModuleImport::ReadFile(const char* file_path)
 	switch (extension) {
 	case typeFile::MODEL:
 		LOG("START LOADING MODEL");
-		BakerHouse = new GameObject(name, App->scene->rootGameObject);
-		LoadMesh(file_path);
-		LOG("MODEL LOADED");
-		App->renderer3D->gameObjects.push_back(BakerHouse);
-		App->scene->gameObjects.push_back(BakerHouse);
-		App->scene->rootGameObject->children.push_back(BakerHouse);
+
+		//The new game object is children of some game object
+		if (App->scene->gameObjectSelected != nullptr && App->scene->gameObjectSelected != App->scene->rootGameObject)
+		{
+			GO = typeOfGO::CHILD_OF_OBJECT;
+			LoadMesh(file_path);
+			LOG("MODEL LOADED");
+		}
+
+		//The new game object is no child, so is child of scene
+		else
+		{
+			GO = typeOfGO::CHILD_OF_SCENE;
+			LoadMesh(file_path);
+			LOG("MODEL LOADED");
+		}
+
 		break;
 
 	case typeFile::TEXTURE:
 		LOG("START LOADING TEXTURE");
-		ComponentTexture* tempCompTex = new ComponentTexture(BakerHouse);
-		tempCompTex->SetTexture(LoadTexture(file_path));
-		LOG("TEXTURE LOADED");
-		BakerHouse->AddComponent(tempCompTex);
+
+		if (newGameObject->children.size() > 0)
+		{
+			for (unsigned int i = 0; i < newGameObject->children.size(); i++)
+			{
+				ComponentTexture* tempCompTex = new ComponentTexture(newGameObject->children[i]);
+				tempCompTex->SetTexture(LoadTexture(file_path));
+				LOG("Texture of: %s is loaded", newGameObject->children[i]->Name.c_str());
+				newGameObject->children[i]->AddComponent(tempCompTex);
+			}
+		}
+		else
+		{
+			ComponentTexture* tempCompTex = new ComponentTexture(newGameObject);
+			tempCompTex->SetTexture(LoadTexture(file_path));
+			LOG("Texture of: %s is loaded", newGameObject->Name.c_str());
+			newGameObject->AddComponent(tempCompTex);
+		}
+		
 		break;
 	}
 }
@@ -72,7 +94,7 @@ std::string ModuleImport::GetName(const char* file_path)
 	return name;
 }
 
-typeFile ModuleImport::ReadExtension(std::string name) 
+typeFile ModuleImport::ReadExtension(std::string name)
 {
 	size_t lastSeparator = name.find_last_of(".");
 
@@ -110,73 +132,108 @@ void ModuleImport::LoadMesh(const char* file_path)
 
 	if (scene != nullptr && scene->HasMeshes())
 	{
-		for (int i = 0; i < scene->mNumMeshes; i++)
-		{
-			mesh* Mesh = new mesh();
- 			ComponentMesh* compMesh = new ComponentMesh(BakerHouse);
+		if (GO == typeOfGO::CHILD_OF_SCENE) 
+			GetSceneInfo(scene->mRootNode, scene, file_path, nullptr);
 
-			for (unsigned int j = 0; j < scene->mMeshes[i]->mNumVertices; j++)
-			{
-				Vertex vertex;
-				float3 vector;
-				vector.x = scene->mMeshes[i]->mVertices[j].x;
-				vector.y = scene->mMeshes[i]->mVertices[j].y;
-				vector.z = scene->mMeshes[i]->mVertices[j].z;
-				vertex.Position = vector;
+		if (GO == typeOfGO::CHILD_OF_OBJECT) 
+			GetSceneInfo(scene->mRootNode, scene, file_path, App->scene->gameObjectSelected);
 
-				if (scene->mMeshes[i]->HasNormals())
-				{
-					vertex.Normal.x = scene->mMeshes[i]->mNormals[j].x;
-					vertex.Normal.y = scene->mMeshes[i]->mNormals[j].y;
-					vertex.Normal.z = scene->mMeshes[i]->mNormals[j].z;
-					
-				}
-				if (scene->mMeshes[i]->HasTextureCoords(0))
-				{
-					vertex.TexCoords.x = scene->mMeshes[i]->mTextureCoords[0][j].x;
-					vertex.TexCoords.y = scene->mMeshes[i]->mTextureCoords[0][j].y;
-				}
-				else
-				{
-					vertex.TexCoords.x = 0.0f;
-					vertex.TexCoords.y = 0.0f;
-				}
-				
-				Mesh->vertices.push_back(vertex);
-			}
-
-			if (scene->mMeshes[i]->HasFaces())
-			{
-				Mesh->indices.resize(scene->mMeshes[i]->mNumFaces * 3);	//assume each face is a triangle
-
-				for (uint y = 0; y < scene->mMeshes[i]->mNumFaces; y++)
-				{
-					if (scene->mMeshes[i]->mFaces[y].mNumIndices != 3)
-					{
-						LOG("WARNING, geometry face with != 3 indices!");
-					}
-					else
-					{
-						memcpy(&Mesh->indices[y * 3], scene->mMeshes[i]->mFaces[y].mIndices, 3 * sizeof(unsigned int));
-					}
-				}
-			}
-			compMesh->SetPath(std::string(file_path));
-			compMesh->SetMesh(Mesh);
-
-			BakerHouse->AddComponent(compMesh);
-			App->renderer3D->SetUpBuffers(Mesh);
-			meshes.push_back(*Mesh);
-		}
-
-		ComponentTransform* compTrans = new ComponentTransform(BakerHouse);
-		BakerHouse->AddComponent(compTrans);
+		ComponentTransform* compTrans = new ComponentTransform(newGameObject);	//PROVISIONAL
+		newGameObject->AddComponent(compTrans);
 
 		LOG("Scene loaded correctly");
 		aiReleaseImport(scene);
 	}
 	else LOG("Error loading scene % s", file_path);
 }
+
+void ModuleImport::GetSceneInfo(aiNode* node, const aiScene* scene, const char* file_path, GameObject* gameObject)
+{
+	GameObject* tempObject{}; //Needed to know where add mesh
+
+	if (gameObject == nullptr)
+	{
+		tempObject = App->scene->CreateGameObject(name, App->scene->rootGameObject);
+		newGameObject = tempObject;
+	}
+	else if (gameObject != nullptr) 
+		tempObject = App->scene->CreateGameObject(node->mName.C_Str(), gameObject);
+	else if (gameObject == App->scene->gameObjectSelected && GO == typeOfGO::CHILD_OF_OBJECT)
+		tempObject = App->scene->CreateGameObject(name, gameObject);
+	
+	for (unsigned int i = 0; i < node->mNumMeshes; i++)
+	{
+		ProcessMesh(scene->mMeshes[node->mMeshes[i]], file_path, tempObject);
+	}
+
+	for (unsigned int i = 0; i < node->mNumChildren; i++)
+	{
+		LOG("I FOUND THIS: %s", node->mChildren[i]->mName.C_Str());
+		GetSceneInfo(node->mChildren[i], scene, file_path, tempObject);
+	}
+}
+
+mesh ModuleImport::ProcessMesh(aiMesh* Mesh, const char* file_path, GameObject* gameObject)
+{
+	mesh* myMesh = new mesh();
+	ComponentMesh* compMesh = new ComponentMesh(gameObject);
+
+	for (unsigned int j = 0; j < Mesh->mNumVertices; j++)
+	{
+		Vertex vertex;
+		float3 vector;
+		vector.x = Mesh->mVertices[j].x;
+		vector.y = Mesh->mVertices[j].y;
+		vector.z = Mesh->mVertices[j].z;
+		vertex.Position = vector;
+
+		if (Mesh->HasNormals())
+		{
+			vertex.Normal.x = Mesh->mNormals[j].x;
+			vertex.Normal.y = Mesh->mNormals[j].y;
+			vertex.Normal.z = Mesh->mNormals[j].z;
+
+		}
+		if (Mesh->HasTextureCoords(0))
+		{
+			vertex.TexCoords.x = Mesh->mTextureCoords[0][j].x;
+			vertex.TexCoords.y = Mesh->mTextureCoords[0][j].y;
+		}
+		else
+		{
+			vertex.TexCoords.x = 0.0f;
+			vertex.TexCoords.y = 0.0f;
+		}
+
+		myMesh->vertices.push_back(vertex);
+	}
+
+	if (Mesh->HasFaces())
+	{
+		myMesh->indices.resize(Mesh->mNumFaces * 3);	//assume each face is a triangle
+
+		for (uint y = 0; y < Mesh->mNumFaces; y++)
+		{
+			if (Mesh->mFaces[y].mNumIndices != 3)
+			{
+				LOG("WARNING, geometry face with != 3 indices!");
+			}
+			else
+			{
+				memcpy(&myMesh->indices[y * 3], Mesh->mFaces[y].mIndices, 3 * sizeof(unsigned int));
+			}
+		}
+	}
+	compMesh->SetPath(std::string(file_path));
+	compMesh->SetMesh(myMesh);
+
+	gameObject->AddComponent(compMesh);
+	App->renderer3D->SetUpBuffers(myMesh);
+	meshes.push_back(*myMesh);
+
+	return *myMesh;
+}
+
 
 Texture* ModuleImport::LoadTexture(const char* file_path)
 {
@@ -208,7 +265,7 @@ Texture* ModuleImport::LoadTexture(const char* file_path)
 			iluFlipImage();
 		}
 
-		glTexImage2D(GL_TEXTURE_2D, 0, ilGetInteger(IL_IMAGE_BPP), ImageInfo.Width, ImageInfo.Height, 0, ilGetInteger(IL_IMAGE_FORMAT), GL_UNSIGNED_BYTE, ilGetData()); 
+		glTexImage2D(GL_TEXTURE_2D, 0, ilGetInteger(IL_IMAGE_BPP), ImageInfo.Width, ImageInfo.Height, 0, ilGetInteger(IL_IMAGE_FORMAT), GL_UNSIGNED_BYTE, ilGetData());
 		glBindTexture(GL_TEXTURE_2D, 0);
 		glDisable(GL_TEXTURE_2D);
 		ilDeleteImages(1, &image);

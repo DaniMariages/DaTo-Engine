@@ -35,25 +35,6 @@ ModuleRenderer3D::~ModuleRenderer3D()
 {}
 
 // Called before render is available
-static const GLfloat CubeVertices[] = {
-	-1, -1, -1,
-	1, -1, -1,
-	1, 1, -1,
-	-1, 1, -1,
-	-1, -1, 1,
-	1, -1, 1,
-	1, 1, 1,
-	-1, 1, 1
-};
-static const GLuint CubeIndices[] = {
-	0, 1, 3, 3, 1, 2,
-	1, 5, 2, 2, 5, 6,
-	5, 4, 6, 6, 4, 7,
-	4, 0, 7, 7, 0, 3,
-	3, 2, 7, 7, 2, 6,
-	4, 5, 0, 0, 5, 1
-};
-// Called before render is available
 bool ModuleRenderer3D::Init()
 {
 	LOG("Creating 3D Renderer context");
@@ -165,8 +146,6 @@ bool ModuleRenderer3D::Init()
 	App->importer->ReadFile("Assets/Models/BakerHouse.fbx");
 	App->importer->ReadFile("Assets/Textures/BakerHouse.png");
 
-	gOselected = gameObjects[0];
-
 	return ret;
 }
 
@@ -182,14 +161,10 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 	// light 0 on cam pos
 	lights[0].SetPos(App->camera->Position.x, App->camera->Position.y, App->camera->Position.z);
 
-	for (uint i = 0; i < MAX_LIGHTS; ++i)
-			lights[i].Render();
+	for (uint i = 0; i < MAX_LIGHTS; ++i) lights[i].Render();
 
-	for (uint n = 0; n < gameObjects.size(); n++)
-	{
-		gameObjects[n]->Update();
-	}
-
+	for (uint n = 0; n < App->scene->gameObjects.size(); n++)
+		App->scene->gameObjects[n]->Update();
 
 	return UPDATE_CONTINUE;
 }
@@ -283,23 +258,23 @@ void ModuleRenderer3D::SetUpBuffers(mesh* mesh)
 
 void ModuleRenderer3D::IterateDrawMesh()
 {
-	for (unsigned int i = 0; i < gameObjects.size(); i++)
+	for (unsigned int i = 0; i < App->scene->gameObjects.size(); i++)
 	{
-		if (gameObjects[i]->GetComponent(typeComponent::Mesh) != nullptr)
+		if (App->scene->gameObjects[i]->GetComponent(typeComponent::Mesh) != nullptr)
 		{
-			std::vector<Component*> meshComponents = gameObjects[i]->GetComponents(typeComponent::Mesh);
+			std::vector<Component*> meshComponents = App->scene->gameObjects[i]->GetComponents(typeComponent::Mesh);
 			std::vector<Component*>::iterator item = meshComponents.begin();
 			for (; item != meshComponents.end(); ++item) 
 			{
-				ComponentTexture* componentTex = (ComponentTexture*)gameObjects[i]->GetComponent(typeComponent::Material);
+				ComponentTexture* componentTex = (ComponentTexture*)App->scene->gameObjects[i]->GetComponent(typeComponent::Material);
 				ComponentMesh* tempComponentMesh = (ComponentMesh*)(*item);
-				if (componentTex != nullptr && gameObjects[i]->active && App->editor->drawAll)
+				if (componentTex != nullptr && App->scene->gameObjects[i]->active && App->editor->drawAll)
 				{
 					DrawMesh(tempComponentMesh->GetMesh(), componentTex->GetTexture()->textID);
 					if (App->editor->drawAllFaces == true) DrawFaceNormals(tempComponentMesh->GetMesh());
 					if (App->editor->drawAllVertex == true) DrawVertexNormals(tempComponentMesh->GetMesh());
 				}
-				else if (gameObjects[i]->active && App->editor->drawAll)
+				else if (App->scene->gameObjects[i]->active && App->editor->drawAll)
 				{
 					DrawMesh(tempComponentMesh->GetMesh());
 					if (App->editor->drawAllFaces == true) DrawFaceNormals(tempComponentMesh->GetMesh());
@@ -308,7 +283,7 @@ void ModuleRenderer3D::IterateDrawMesh()
 
 				if (App->editor->drawSelectedFaces)
 				{
-					std::vector<Component*> meshComp = gameObjects[App->editor->posOfSelected]->GetComponents(typeComponent::Mesh);
+					std::vector<Component*> meshComp = App->scene->gameObjects[App->editor->posOfSelected]->GetComponents(typeComponent::Mesh);
 					std::vector<Component*>::iterator it = meshComp.begin();
 					for (; it != meshComp.end(); ++it)
 					{
@@ -318,7 +293,7 @@ void ModuleRenderer3D::IterateDrawMesh()
 				}
 				if (App->editor->drawSelectedVertex)
 				{
-					std::vector<Component*> meshComp = gameObjects[App->editor->posOfSelected]->GetComponents(typeComponent::Mesh);
+					std::vector<Component*> meshComp = App->scene->gameObjects[App->editor->posOfSelected]->GetComponents(typeComponent::Mesh);
 					std::vector<Component*>::iterator it = meshComp.begin();
 					for (; it != meshComp.end(); ++it)
 					{

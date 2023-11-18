@@ -7,6 +7,10 @@
 #include "ComponentTexture.h"
 #include "ComponentTransform.h"
 
+#include "../External/Assimp/include/cimport.h"
+#include "../External/Assimp/include/scene.h"
+#include "../External/Assimp/include/postprocess.h"
+
 #include "../External/MathGeoLib/include/MathGeolib.h"
 
 #include "../External/DevIL/include/il.h"
@@ -19,6 +23,14 @@ enum class typeFile
 {
 	MODEL, 
 	TEXTURE,
+
+	UNKNOWN,
+};
+
+enum class typeOfGO
+{
+	CHILD_OF_OBJECT,
+	CHILD_OF_SCENE,
 
 	UNKNOWN,
 };
@@ -70,7 +82,11 @@ private:
 	void LoadMesh(const char* file_path);
 	Texture* LoadTexture(const char* file_path);
 
-	GameObject* BakerHouse = nullptr;
+	mesh ProcessMesh(aiMesh* Mesh, const char* file_path, GameObject* gameObject);
+	void GetSceneInfo(aiNode* node, const aiScene* scene, const char* file_path, GameObject* gameObject);
+
+	GameObject* newGameObject = nullptr;
+	typeOfGO GO = typeOfGO::UNKNOWN;
 
 	std::string path;
 	std::string name;
