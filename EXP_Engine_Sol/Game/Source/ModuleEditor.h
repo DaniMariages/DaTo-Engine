@@ -74,8 +74,6 @@ public:
 	//Public variable to know which model is selected
 	int posOfSelected = -1;
 
-	bool openTreeNode = false;
-
 	bool Wireframe = false;
 	bool lights = true;
 

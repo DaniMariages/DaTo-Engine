@@ -18,14 +18,14 @@ public:
 	GameObject(std::string Name, GameObject* parent);
 	~GameObject();
 
-	bool Enable(); //Start up + bool toggle
-	bool Disable();//Clean up + bool toggle
+	void Enable(); //Start up + bool toggle
+	void Disable();//Clean up + bool toggle
 
-	//Bool toggle of "active"
-	void ToggleActive();
+	//Enable parent Game Object, including their children
+	void EnableParent(); 
 
-	//Change the state of "active" in a GameObject and all the childrens
-	void EnableDisableParent(); 
+	//Disable parent Game Object, including their children
+	void DisableParent();
 
 	void Update();
 

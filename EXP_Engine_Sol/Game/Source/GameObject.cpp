@@ -13,39 +13,33 @@ GameObject::GameObject(std::string name, GameObject* parent)
 
 GameObject::~GameObject() {}
 
-bool GameObject::Enable() //Start up + bool toggle
+void GameObject::Enable() //Start up + bool toggle
 {
-	if (!active) {
-		active = true;
-		return true;
-		//StartUp here...
-	}
-	return false;
+	this->active = true;
 }
 
-bool GameObject::Disable()
+void GameObject::Disable()
 {
-	if (active) {
-		active = false;
-		return true;
-	}
-	return false;
+	this->active = false;
 }
 
-void GameObject::ToggleActive()
+void GameObject::EnableParent()
 {
-	this->active = !this->active;
-}
-
-void GameObject::EnableDisableParent()
-{
-	this->active = !this->active;
+	this->active = true;
 	for (unsigned int i = 0; i < this->children.size(); i++)
 	{
-		children[i]->EnableDisableParent();
+		children[i]->EnableParent();
 	}
 }
 
+void GameObject::DisableParent()
+{
+	this->active = false;
+	for (unsigned int i = 0; i < this->children.size(); i++)
+	{
+		children[i]->DisableParent();
+	}
+}
 
 void GameObject::Update() 
 {

@@ -321,8 +321,12 @@ void ModuleEditor::HierarchyWindow(GameObject* gameObject)
 	{
 		ImGuiTreeNodeFlags tree_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_DefaultOpen | (gameObject->selected ? ImGuiTreeNodeFlags_Selected : 0);
 
-		openTreeNode = ImGui::TreeNodeEx(gameObject->Name.c_str(), tree_flags);
-		
+		if (!gameObject->active) ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 1.0f, 1.0f, 0.4f));
+
+		bool openTreeNode = ImGui::TreeNodeEx(gameObject->Name.c_str(), tree_flags);
+
+		if (!gameObject->active) ImGui::PopStyleColor();
+
 		if (ImGui::IsItemClicked()) 
 		{
 			gameObject->selected = true;
@@ -338,9 +342,16 @@ void ModuleEditor::HierarchyWindow(GameObject* gameObject)
 		{
 			if (ImGui::MenuItem("Hide"))
 			{
-				if (!gameObject->children.empty()) gameObject->EnableDisableParent();
-				else gameObject->ToggleActive();
+				if (gameObject->active) gameObject->Disable();
+				else gameObject->Enable();
+
+				if (!gameObject->children.empty())
+				{
+					if (!gameObject->active) gameObject->DisableParent();
+					else gameObject->EnableParent();
+				}
 			}
+
 			if (ImGui::MenuItem("Delete"))
 			{
 				if (posOfSelected >= 0 && posOfSelected < App->scene->gameObjects.size())
