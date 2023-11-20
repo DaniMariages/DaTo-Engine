@@ -77,6 +77,9 @@ public:
 
 private:
 	std::string GetName(const char* file_path);
+	void GetUniqueName(std::string Name, std::vector<GameObject*>& listObjects);
+	void ReName(std::string Name, int counter);
+
 	typeFile ReadExtension(std::string file_path);
 
 	void LoadMesh(const char* file_path);

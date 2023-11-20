@@ -29,6 +29,9 @@ void ModuleImport::ReadFile(const char* file_path)
 	path = file_path;
 	typeFile extension = ReadExtension(name);
 
+	//Assign a unique Name to the new game Object
+	GetUniqueName(name, App->scene->gameObjects);
+
 	switch (extension) {
 	case typeFile::MODEL:
 		LOG("START LOADING MODEL");
@@ -54,7 +57,7 @@ void ModuleImport::ReadFile(const char* file_path)
 	case typeFile::TEXTURE:
 		LOG("START LOADING TEXTURE");
 
-		if (newGameObject->children.size() > 0)
+		if (newGameObject->children.size() > 0) //If game Object has childrens, add the textures to them too
 		{
 			for (unsigned int i = 0; i < newGameObject->children.size(); i++)
 			{
@@ -92,6 +95,43 @@ std::string ModuleImport::GetName(const char* file_path)
 
 	LOG("The file name is: %s", name.c_str());
 	return name;
+}
+
+void ModuleImport::GetUniqueName(std::string Name, std::vector<GameObject*>& listObjects)
+{
+	//Check if a Game Object with same name exists
+	int counter = 0;
+	bool exists = false;
+	if (App->scene->gameObjects.size() > 0)
+	{
+		for (int i = 0; i < App->scene->gameObjects.size(); i++)
+		{
+			if (name == App->scene->gameObjects[i]->Name)	//If the name exists, add 1 to counter
+			{
+				exists = true;
+				++counter;
+			}
+		}
+	}
+
+	if (exists) ReName(name, counter);	//If name exists, rename the object
+}
+
+void ModuleImport::ReName(std::string Name, int counter)
+{
+	//Rename the game object
+	std::string uniqueName = name + " (" + std::to_string(counter) + ")";
+	std::string newName;
+
+	size_t first = uniqueName.find_first_of("(");
+
+	if (first > 0)
+	{
+		newName = uniqueName.erase(first - 1);
+		newName = uniqueName + " (" + std::to_string(counter) + ")";
+	}
+
+	name = newName;
 }
 
 typeFile ModuleImport::ReadExtension(std::string name)
