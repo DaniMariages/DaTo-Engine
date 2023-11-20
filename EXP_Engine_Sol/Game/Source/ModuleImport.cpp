@@ -30,7 +30,7 @@ void ModuleImport::ReadFile(const char* file_path)
 	typeFile extension = ReadExtension(name);
 
 	//Assign a unique Name to the new game Object
-	GetUniqueName(name);
+	name = GetUniqueName(name);
 
 	switch (extension) {
 	case typeFile::MODEL:
@@ -97,7 +97,7 @@ std::string ModuleImport::GetName(const char* file_path)
 	return name;
 }
 
-void ModuleImport::GetUniqueName(std::string Name)
+std::string ModuleImport::GetUniqueName(std::string Name)
 {
 	//Check if a Game Object with same name exists
 	bool exists = false;
@@ -105,7 +105,7 @@ void ModuleImport::GetUniqueName(std::string Name)
 	{
 		for (int i = 0; i < App->scene->gameObjects.size(); i++)
 		{
-			if (name == App->scene->gameObjects[i]->Name)	//If the name exists, add 1 to counter
+			if (Name == App->scene->gameObjects[i]->Name)	//If the name exists, add 1 to counter
 			{
 				exists = true;
 				counter++;
@@ -113,11 +113,12 @@ void ModuleImport::GetUniqueName(std::string Name)
 		}
 	}
 
-	if (exists) name = Name + " (" + std::to_string(counter) + ")";	//If name exists, rename the object
-}
-
-void ModuleImport::ReName(std::string Name, int counter)
-{
+	if (exists) //If name exists, rename the object
+	{
+		Name = Name + " (" + std::to_string(counter) + ")";
+		return Name;
+	}
+	else return Name;
 }
 
 typeFile ModuleImport::ReadExtension(std::string name)
@@ -176,16 +177,17 @@ void ModuleImport::LoadMesh(const char* file_path)
 void ModuleImport::GetSceneInfo(aiNode* node, const aiScene* scene, const char* file_path, GameObject* gameObject)
 {
 	GameObject* tempObject{}; //Needed to know where add mesh
-
+	
 	if (gameObject == nullptr)
 	{
 		tempObject = App->scene->CreateGameObject(name, App->scene->rootGameObject);
 		newGameObject = tempObject;
 	}
-	else if (gameObject != nullptr) 
+	else if (gameObject != nullptr)
+	{
 		tempObject = App->scene->CreateGameObject(node->mName.C_Str(), gameObject);
-	else if (gameObject == App->scene->gameObjectSelected && GO == typeOfGO::CHILD_OF_OBJECT)
-		tempObject = App->scene->CreateGameObject(name, gameObject);
+	}
+
 	
 	for (unsigned int i = 0; i < node->mNumMeshes; i++)
 	{

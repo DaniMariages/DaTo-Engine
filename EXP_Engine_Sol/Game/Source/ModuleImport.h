@@ -77,8 +77,7 @@ public:
 
 private:
 	std::string GetName(const char* file_path);
-	void GetUniqueName(std::string Name);
-	void ReName(std::string Name, int counter);
+	std::string GetUniqueName(std::string Name);
 
 	typeFile ReadExtension(std::string file_path);
 
