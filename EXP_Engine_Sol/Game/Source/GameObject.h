@@ -12,10 +12,10 @@ public:
 	std::vector<Component*> components;
 	bool active;
 
-	GameObject* parent;
+	GameObject* Parent;
 	std::vector<GameObject*> children;
 
-	GameObject(std::string Name);
+	GameObject(std::string Name, GameObject* parent);
 	~GameObject();
 
 	bool Enable(); //Start up + bool toggle
@@ -30,5 +30,5 @@ public:
 	std::vector<Component*> GetComponents(typeComponent type);
 	GameObject* AddChildren(GameObject* children);
 
-	bool selected;
+	bool selected = false;
 };
