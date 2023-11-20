@@ -21,6 +21,12 @@ public:
 	bool Enable(); //Start up + bool toggle
 	bool Disable();//Clean up + bool toggle
 
+	//Bool toggle of "active"
+	void ToggleActive();
+
+	//Change the state of "active" in a GameObject and all the childrens
+	void EnableDisableParent(); 
+
 	void Update();
 
 	void SetParent(GameObject* parent);

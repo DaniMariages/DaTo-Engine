@@ -123,12 +123,8 @@ std::string ModuleImport::ReName(std::string Name, int counter)
 
 	size_t first = uniqueName.find_first_of("(");
 
-	if (first > 0)
-	{
-		newName = uniqueName.erase(first - 1);
-		newName = uniqueName + " (" + std::to_string(counter) + ")";
-	}
-	else newName = uniqueName;
+	newName = uniqueName.erase(first - 1);
+	newName = uniqueName + " (" + std::to_string(counter) + ")";
 	
 	return newName;
 }

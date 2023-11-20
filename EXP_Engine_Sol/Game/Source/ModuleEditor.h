@@ -30,6 +30,7 @@ public:
 	void DrawHierarchy();
 	void Inspector();
 	void HierarchyWindow(GameObject* gameObject);
+	void HideChildren();
 
 	void RequestBrowser(const char* path);
 

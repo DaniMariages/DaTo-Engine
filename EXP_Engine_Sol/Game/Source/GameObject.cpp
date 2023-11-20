@@ -32,6 +32,21 @@ bool GameObject::Disable()
 	return false;
 }
 
+void GameObject::ToggleActive()
+{
+	this->active = !this->active;
+}
+
+void GameObject::EnableDisableParent()
+{
+	this->active = !this->active;
+	for (unsigned int i = 0; i < this->children.size(); i++)
+	{
+		children[i]->EnableDisableParent();
+	}
+}
+
+
 void GameObject::Update() 
 {
 	std::vector<Component*>::iterator item = components.begin();
