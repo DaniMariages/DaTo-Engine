@@ -339,6 +339,14 @@ void ModuleEditor::HierarchyWindow(GameObject* gameObject)
 			if (ImGui::MenuItem("Hide"))
 			{
 				gameObject->active = !gameObject->active;
+
+				if (!gameObject->children.empty())	//Hide parent = hide all childrens
+				{
+					for (unsigned int i = 0; i < gameObject->children.size(); ++i)
+					{
+						gameObject->children[i]->active = !gameObject->children[i]->active;
+					}
+				}
 			}
 			if (ImGui::MenuItem("Delete"))
 			{
