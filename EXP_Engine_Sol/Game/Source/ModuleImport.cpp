@@ -101,24 +101,36 @@ std::string ModuleImport::GetUniqueName(std::string Name)
 {
 	//Check if a Game Object with same name exists
 	bool exists = false;
+	int counter = 0;
 	if (App->scene->gameObjects.size() > 0)
 	{
 		for (int i = 0; i < App->scene->gameObjects.size(); i++)
 		{
 			if (Name == App->scene->gameObjects[i]->Name)	//If the name exists, add 1 to counter
 			{
-				exists = true;
 				counter++;
+				Name = ReName(Name, counter);
 			}
 		}
 	}
+	return Name;
+}
 
-	if (exists) //If name exists, rename the object
+std::string ModuleImport::ReName(std::string Name, int counter)
+{
+	std::string uniqueName = Name + " (" + std::to_string(counter) + ")";
+	std::string newName;
+
+	size_t first = uniqueName.find_first_of("(");
+
+	if (first > 0)
 	{
-		Name = Name + " (" + std::to_string(counter) + ")";
-		return Name;
+		newName = uniqueName.erase(first - 1);
+		newName = uniqueName + " (" + std::to_string(counter) + ")";
 	}
-	else return Name;
+	else newName = uniqueName;
+	
+	return newName;
 }
 
 typeFile ModuleImport::ReadExtension(std::string name)
@@ -149,7 +161,7 @@ typeFile ModuleImport::ReadExtension(std::string name)
 		LOG("File dropped is: Texture");
 	}
 
-	LOG("La extension del modelo es: %s", extension.c_str());
+	LOG("The file extension is: %s", extension.c_str());
 	return typeExtension;
 }
 
@@ -162,9 +174,12 @@ void ModuleImport::LoadMesh(const char* file_path)
 		if (GO == typeOfGO::CHILD_OF_SCENE) 
 			GetSceneInfo(scene->mRootNode, scene, file_path, nullptr);
 
-		if (GO == typeOfGO::CHILD_OF_OBJECT) 
+		if (GO == typeOfGO::CHILD_OF_OBJECT)
+		{
+			scene->mRootNode->mName = name; //change the root name to the game object name
 			GetSceneInfo(scene->mRootNode, scene, file_path, App->scene->gameObjectSelected);
-
+		}
+			
 		ComponentTransform* compTrans = new ComponentTransform(newGameObject);	//PROVISIONAL
 		newGameObject->AddComponent(compTrans);
 
@@ -183,7 +198,7 @@ void ModuleImport::GetSceneInfo(aiNode* node, const aiScene* scene, const char* 
 		tempObject = App->scene->CreateGameObject(name, App->scene->rootGameObject);
 		newGameObject = tempObject;
 	}
-	else if (gameObject != nullptr)
+	else
 	{
 		tempObject = App->scene->CreateGameObject(node->mName.C_Str(), gameObject);
 	}
