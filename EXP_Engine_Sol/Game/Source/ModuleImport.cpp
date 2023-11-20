@@ -30,7 +30,7 @@ void ModuleImport::ReadFile(const char* file_path)
 	typeFile extension = ReadExtension(name);
 
 	//Assign a unique Name to the new game Object
-	GetUniqueName(name, App->scene->gameObjects);
+	GetUniqueName(name);
 
 	switch (extension) {
 	case typeFile::MODEL:
@@ -97,10 +97,9 @@ std::string ModuleImport::GetName(const char* file_path)
 	return name;
 }
 
-void ModuleImport::GetUniqueName(std::string Name, std::vector<GameObject*>& listObjects)
+void ModuleImport::GetUniqueName(std::string Name)
 {
 	//Check if a Game Object with same name exists
-	int counter = 0;
 	bool exists = false;
 	if (App->scene->gameObjects.size() > 0)
 	{
@@ -109,29 +108,16 @@ void ModuleImport::GetUniqueName(std::string Name, std::vector<GameObject*>& lis
 			if (name == App->scene->gameObjects[i]->Name)	//If the name exists, add 1 to counter
 			{
 				exists = true;
-				++counter;
+				counter++;
 			}
 		}
 	}
 
-	if (exists) ReName(name, counter);	//If name exists, rename the object
+	if (exists) name = Name + " (" + std::to_string(counter) + ")";	//If name exists, rename the object
 }
 
 void ModuleImport::ReName(std::string Name, int counter)
 {
-	//Rename the game object
-	std::string uniqueName = name + " (" + std::to_string(counter) + ")";
-	std::string newName;
-
-	size_t first = uniqueName.find_first_of("(");
-
-	if (first > 0)
-	{
-		newName = uniqueName.erase(first - 1);
-		newName = uniqueName + " (" + std::to_string(counter) + ")";
-	}
-
-	name = newName;
 }
 
 typeFile ModuleImport::ReadExtension(std::string name)
