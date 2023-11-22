@@ -34,6 +34,10 @@ public:
 	
 	void SetUpBuffers(mesh* mesh);
 
+	void LoadBuffer();
+	void RenderBuffer(bool toggle);
+	void DeleteBuffer();
+
 	void IterateDrawMesh();
 	void DrawMesh(mesh* mesh, uint id = 0);
 	void DrawFaceNormals(mesh* Mesh);
@@ -61,4 +65,7 @@ public:
 	GLuint texWidth, texHeight;
 	GLubyte checkerImage[CHECKERS_HEIGHT][CHECKERS_WIDTH][4];
 
+	GLuint FBO; // Frame Buffer Object
+	GLuint TCB; // Texture Color Buffer
+	GLuint RBO; // Render Buffer Object
 };

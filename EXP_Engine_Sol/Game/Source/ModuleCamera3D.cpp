@@ -110,6 +110,7 @@ update_status ModuleCamera3D::Update(float dt)
 		editorCamera->LookAt(newPos);
 	}
 
+	editorCamera->UpdatePos(newPos);
 
 	return UPDATE_CONTINUE;
 }
