@@ -118,3 +118,15 @@ std::vector<Component*> GameObject::GetComponents(typeComponent type)
 
 	return ret;
 }
+//
+//void GameObject::DeleteChildren(std::vector<GameObject*> mChildren)
+//{
+//	//If children have more children
+//	if (!mChildren.empty())
+//	{
+//		for (unsigned int i = 0; i < mChildren.size(); i++)
+//		{
+//			DeleteChildren(mChildren[i]); 
+//		}
+//	}
+//}
