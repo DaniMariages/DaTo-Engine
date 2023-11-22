@@ -31,8 +31,8 @@ ComponentCamera::ComponentCamera(GameObject* _parent) : active_camera(false), Co
 	frustum.horizontalFov = 2.0f * atanf(tanf(frustum.verticalFov / 2.0f) * 1.3f);
 
 	draw_boundingboxes = true;
-	frustum_culling = false;
-	active_camera = false;
+	frustum_culling = true;
+	active_camera = true;
 }
 
 ComponentCamera::~ComponentCamera() {}
@@ -41,7 +41,17 @@ void ComponentCamera::Enable() {}
 
 void ComponentCamera::Disable() {}
 
-void ComponentCamera::Update() {}
+void ComponentCamera::Update() 
+{
+	glLoadIdentity();
+	glMatrixMode(GL_PROJECTION);
+	glLoadMatrixf((GLfloat*)GetProjectionMatrix().v);
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadMatrixf((GLfloat*)GetViewMatrix().v);
+
+	DrawFrustumBox();
+}
 
 void ComponentCamera::DrawInspector()
 {
@@ -50,20 +60,20 @@ void ComponentCamera::DrawInspector()
 	if (ImGui::CollapsingHeader("Camera"), flags)
 	{
 		ImGui::Indent();
-		float horizontalFOV = GetHorizontalFOV();
-		float verticalFOV = GetVerticalFOV();
-		float FOV = GetHorizontalFOV();
 
+		float horizontalFOV = GetHorizontalFOV();
 		if (ImGui::SliderFloat("Horizontal FOV", &horizontalFOV, 30, 120, "%0.2f", ImGuiSliderFlags_None))
 		{
 			SetHorizontalFOV(horizontalFOV);
 		}
 
+		float verticalFOV = GetVerticalFOV();
 		if (ImGui::SliderFloat("Vertical FOV", &verticalFOV, 30, 120, "%0.2f", ImGuiSliderFlags_None))
 		{
 			SetVerticalFOV(verticalFOV);
 		}
 
+		float FOV = GetHorizontalFOV();
 		if (ImGui::SliderFloat("Both FOV", &FOV, 30, 120, "%0.2f", ImGuiSliderFlags_None))
 		{
 			SetFOV(FOV);
