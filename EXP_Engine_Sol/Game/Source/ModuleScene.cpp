@@ -60,23 +60,43 @@ void ModuleScene::DeleteGameObject(GameObject* gameObject)
 		{
 			for (unsigned int j = 0; j < gameObject->children.size(); ++j)
 			{
+				//Delete the childrens from game objects list
 				if (gameObjects[i] == gameObject->children[j])
-				{
-					gameObject->children.erase(gameObject->children.begin() + j);
-				}
+					gameObjects.erase(gameObjects.begin() + i);
 			}
 		}
 
-		//TODO: Delete child GO of gameObjects list
+		//Delete all the children
+		do
+		{
+			int i = 0;
+			gameObject->children.erase(gameObject->children.begin() + i);
+			i++;
+
+		} while (!gameObject->children.empty());
+	}
+	else
+	{
+		//If child doesn't has childrens, then delete the reference of him parent
+		for (unsigned int i = 0; i < gameObject->Parent->children.size(); ++i)
+		{
+			if (gameObject == gameObject->Parent->children[i])
+				gameObject->Parent->children.erase(gameObject->Parent->children.begin() + i);
+		}
 	}
 
-	//When children delete, then delete the GameObject
+	//Delete of children scene list
+	for (unsigned int i = 0; i < rootGameObject->children.size(); ++i)
+	{
+		if (gameObject == rootGameObject->children[i])
+			rootGameObject->children.erase(rootGameObject->children.begin() + i);
+	}
+	
+	//When references deleted, delete the game Object
 	for (unsigned int i = 0; i < gameObjects.size(); i++)
 	{
-		if (gameObject == gameObjects[i])
-		{
+		if (gameObject == gameObjects[i]) 
 			gameObjects.erase(gameObjects.begin() + i);
-		}
 	}
 
 	//Set the gameObjects null
