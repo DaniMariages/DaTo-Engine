@@ -331,7 +331,14 @@ void ModuleEditor::HierarchyWindow(GameObject* gameObject)
 
 		if (ImGui::IsItemClicked() || ImGui::IsItemClicked(1)) //Selectable with left and right mouse button
 		{
+			gameObject->selected = true; //Draw the gameObject as selected
+
 			App->scene->gameObjectSelected = gameObject; //Assign the game object selected
+
+			for (std::vector<GameObject*>::iterator it = App->scene->gameObjects.begin(); it != App->scene->gameObjects.end(); ++it)
+			{
+				if ((*it) != gameObject) (*it)->selected = false;
+			}
 		}
 
 		if (ImGui::BeginPopupContextItem())
@@ -402,7 +409,14 @@ void ModuleEditor::Inspector(GameObject* gameObject)
 		{
 			if (ImGui::Checkbox("Draw", &drawSelected))
 			{
-				gameObject->active = !gameObject->active;
+				if (gameObject->active) gameObject->Disable();
+				else gameObject->Enable();
+
+				if (!gameObject->children.empty())
+				{
+					if (!gameObject->active) gameObject->DisableParent();
+					else gameObject->EnableParent();
+				}
 			}
 			if (ImGui::Checkbox("Normals", &drawSelectedFaces));
 			if (ImGui::Checkbox("Vertex", &drawSelectedVertex));

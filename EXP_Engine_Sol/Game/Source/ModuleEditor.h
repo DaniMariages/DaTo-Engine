@@ -70,7 +70,7 @@ public:
 	bool drawSelected = true;
 	bool drawSelectedVertex = false;
 	bool drawSelectedFaces = false;
-	bool drawSelectedTexture = true;
+	bool drawSelectedTexture = false;
 
 	//Public variable to know which model is selected
 	int posOfSelected = -1;
