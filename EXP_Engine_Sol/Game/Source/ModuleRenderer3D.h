@@ -11,9 +11,6 @@
 #include "../External/MathGeoLib/include/Math/float4x4.h"
 #include "../External/Glew/include/glew.h"
 
-//todo: REMOVE this before 1st delivery!!
-#include "glmath.h"
-
 #define MAX_LIGHTS 8
 #define CHECKERS_WIDTH 64
 #define CHECKERS_HEIGHT 64
@@ -51,6 +48,7 @@ public:
 	void ImportTorus();
 
 	float3 CalculateFaceNormal(const float3& vertex1, const float3& vertex2, const float3& vertex3);
+	void DrawBox(float3* vertices, float3 color);
 
 public:
 
@@ -63,9 +61,4 @@ public:
 	GLuint texWidth, texHeight;
 	GLubyte checkerImage[CHECKERS_HEIGHT][CHECKERS_WIDTH][4];
 
-	//You won't need this after using Frustum
-	mat4x4 ProjectionMatrix;
-	uint VBO;
-	uint EBO;
-	uint VAO;
 };

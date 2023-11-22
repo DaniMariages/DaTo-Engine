@@ -1,24 +1,25 @@
 #include "Globals.h"
 #include "Application.h"
+
 #include "ModuleCamera3D.h"
-#include "../External/MathGeoLib/include/Math/Quat.h"
 #include "ModuleInput.h"
 #include "ModuleEditor.h"
+#include "ModuleRenderer3D.h"
+
 #include "GameObject.h"
 #include "ComponentTransform.h"
-#include "ModuleRenderer3D.h"
+#include "ComponentCamera.h"
+
+#include "../External/MathGeoLib/include/Math/Quat.h"
+
 
 ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
-	X = float3(1.0f, 0.0f, 0.0f);
-	Y = float3(0.0f, 1.0f, 0.0f);
-	Z = float3(0.0f, 0.0f, 1.0f);
+	editorCamera = new ComponentCamera(nullptr);
 
-	Position = float3(0.0f, 3.0f, 10.0f);
-	Reference = float3(0.0f, 0.0f, 0.0f);
-	ViewMatrix = IdentityMatrix;
-
-	CalculateViewMatrix();
+	editorCamera->SetPos(0.0f, 2.0f, 8.0f);
+	editorCamera->LookAt(float3(0.0f, 0.0f, 0.0f));
+	editorCamera->SetAspectRatio(SCREEN_WIDTH / SCREEN_HEIGHT);
 }
 
 ModuleCamera3D::~ModuleCamera3D()
@@ -49,6 +50,7 @@ update_status ModuleCamera3D::Update(float dt)
 
 	float3 newPos(0,0,0);
 	float speed = 3.0f * dt;
+
 	if(App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
 		speed = 8.0f * dt;
 
@@ -56,247 +58,59 @@ update_status ModuleCamera3D::Update(float dt)
 	if(App->input->GetKey(SDL_SCANCODE_R) == KEY_REPEAT) newPos.y += speed;
 	if(App->input->GetKey(SDL_SCANCODE_F) == KEY_REPEAT) newPos.y -= speed;
 
-	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) {
-		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) 
-			newPos -= Z * (speed*2);
-			if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) 
-				newPos += Z * (speed * 2);
-
-			if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) 
-				newPos -= X * (speed * 2);
-				if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) 
-					newPos += X * (speed * 2);
-
-	}
-	else {
-		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
-			newPos -= Z * speed ;
-		if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
-			newPos += Z * speed;
-
-		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
-			newPos -= X * speed;
-		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
-			newPos += X * speed;
-	}
-
-	Position += newPos;
-	Reference += newPos;
+	editorCamera->Zoom(newPos, speed);
 
 	// Mouse motion ----------------
 
 	//Focus camera
-	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_REPEAT) {
-		Reference = float3(0.0f, 0.0f, 0.0f);
-
-		LookAt(Reference);
+	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_REPEAT) 
+	{
+		editorCamera->LookAt(newPos);
 	}
-	else {
-		Reference = Position;
-	}
-
-	//Zoom
-	if (App->input->GetMouseZ() != 0) {
-		float3 newPos(0, 0, 0);
-		float speed = 17.0f * dt;
-		
-		if (App->input->GetMouseZ() > 0 ) newPos -= Z * speed;
-		if (App->input->GetMouseZ() < 0) newPos += Z * speed;
-
-		Position += newPos;
-
-	}
-
+	
 	if(App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
 	{
-		int dx = -App->input->GetMouseXMotion();
-		int dy = -App->input->GetMouseYMotion();
-
-		float Sensitivity = 0.35f * dt;
-
-		Position -= Reference;
-
-		if(dx != 0)
-		{
-			float DeltaX = (float)dx * Sensitivity;
-
-			float3 rotationAxis(0.0f, 1.0f, 0.0f);
-			Quat rotationQuat = Quat::RotateAxisAngle(rotationAxis, DeltaX);
-
-			X = rotationQuat * X;
-			Y = rotationQuat * Y;
-			Z = rotationQuat * Z;
-		}
-
-		if(dy != 0)
-		{
-			float DeltaY = (float)dy * Sensitivity;
-
-			Quat rotationQuat = Quat::RotateAxisAngle(X, DeltaY);
-
-			Y = rotationQuat * Y;
-			Z = rotationQuat * Z;
-
-			if(Y.y < 0.0f)
-			{
-				Z = float3(0.0f, Z.y > 0.0f ? 1.0f : -1.0f, 0.0f);
-				Y = Z.Cross(X);
-			}
-
-		}
-
-		Position = Reference + Z * Position.Length();
+		editorCamera->Move(newPos, speed);
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT )
 	{
-		Reference = float3(0.0f, 0.0f, 0.0f);
-
-		LookAt(Reference);
+		editorCamera->LookAt(newPos);
 
 		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT)
 		{
-			int dx = -App->input->GetMouseXMotion();
-			int dy = -App->input->GetMouseYMotion();
-
-			float Sensitivity = 0.35f * dt;
-
-			Position -= Reference;
-
-			if (dx != 0)
-			{
-				float DeltaX = (float)dx * Sensitivity;
-
-				float3 rotationAxis(0.0f, 1.0f, 0.0f);
-				Quat rotationQuat = Quat::RotateAxisAngle(rotationAxis, DeltaX);
-
-				X = rotationQuat * X;
-				Y = rotationQuat * Y;
-				Z = rotationQuat * Z;
-			}
-
-			if (dy != 0)
-			{
-				float DeltaY = (float)dy * Sensitivity;
-
-				Quat rotationQuat = Quat::RotateAxisAngle(X, DeltaY);
-
-				Y = rotationQuat * Y;
-				Z = rotationQuat * Z;
-
-				if (Y.y < 0.0f)
-				{
-					Z = float3(0.0f, Z.y > 0.0f ? 1.0f : -1.0f, 0.0f);
-					Y = Z.Cross(X);
-				}
-
-			}
-
-			Position = Reference + Z * Position.Length();
+			editorCamera->Rotate(speed, dt);
 		}
 	}
-	else {
-		Reference = Position;
-	}
+
 	//Top view
-	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT || App->editor->top == true) {
-		Reference = float3(0.0f, 0.0f, 0.0f);
-
-		Position.Set(0.0f, 10.0f, 0.0f);
-
-		LookAt(Reference);
-	}
-	else {
+	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT || App->editor->top == true) 
+	{
+		newPos = float3(0.0f, 10.0f, 0.0f);
+		editorCamera->LookAt(newPos);
 	}
 
 	//Front view
-	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT || App->editor->front == true) {
-		Reference = float3(0.0f, 0.0f, 0.0f);
-
-		Position.Set(0.0f, 0.0f, 10.0f);
-
-		LookAt(Reference);
-	}
-	else {
+	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT || App->editor->front == true) 
+	{
+		newPos = float3(0.0f, 0.0f, 10.0f);
+		editorCamera->LookAt(newPos);
 	}
 
 	//Side view
-	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT || App->editor->side_1 == true) {
-		Reference = float3(0.0f, 0.0f, 0.0f);
-
-		Position.Set(10.0f, 00.0f, 0.0f);
-
-		LookAt(Reference);
+	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT || App->editor->side_1 == true) 
+	{
+		newPos = float3(10.0f, 00.0f, 0.0f);
+		editorCamera->LookAt(newPos);
 	}
-	else {
-	}
+	
 
-	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT || App->editor->side_2 == true) {
-		Reference = float3(0.0f, 0.0f, 0.0f);
-
-		Position.Set(-10.0f, 00.0f, 0.0f);
-
-		LookAt(Reference);
-	}
-	else {
+	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT || App->editor->side_2 == true) 
+	{
+		newPos = float3(-10.0f, 00.0f, 0.0f);
+		editorCamera->LookAt(newPos);
 	}
 
-	// Recalculate matrix -------------
-	CalculateViewMatrix();
 
 	return UPDATE_CONTINUE;
-}
-
-// -----------------------------------------------------------------
-void ModuleCamera3D::Look(const float3&Position, const float3&Reference, bool RotateAroundReference)
-{
-	this->Position = Position;
-	this->Reference = Reference;
-
-	Z = (Position - Reference).Normalized();
-	X = (float3(0.0f, 1.0f, 0.0f).Cross(Z)).Normalized();
-	Y = Z.Cross(X);
-
-	if(!RotateAroundReference)
-	{
-		this->Reference = this->Position;
-		this->Position += Z * 0.05f;
-	}
-
-	CalculateViewMatrix();
-}
-
-// -----------------------------------------------------------------
-void ModuleCamera3D::LookAt( const float3&Spot)
-{
-	Reference = Spot;
-
-	Z = (Position - Reference).Normalized();
-	X = (float3(0.0f, 1.0f, 0.0f).Cross(Z)).Normalized();
-	Y = Z.Cross(X);
-
-	CalculateViewMatrix();
-}
-
-
-// -----------------------------------------------------------------
-void ModuleCamera3D::Move(const float3&Movement)
-{
-	Position += Movement;
-	Reference += Movement;
-
-	CalculateViewMatrix();
-}
-
-// -----------------------------------------------------------------
-float* ModuleCamera3D::GetViewMatrix()
-{
-	return ViewMatrix.M;
-}
-
-// -----------------------------------------------------------------
-void ModuleCamera3D::CalculateViewMatrix()
-{
-	//todo: USE MATHGEOLIB here BEFORE 1st delivery! (TIP: Use MathGeoLib/Geometry/Frustum.h, view and projection matrices are managed internally.)
-	ViewMatrix = mat4x4(X.x, Y.x, Z.x, 0.0f, X.y, Y.y, Z.y, 0.0f, X.z, Y.z, Z.z, 0.0f, -(X.Dot(Position)), -(Y.Dot(Position)), -(Z.Dot(Position)), 1.0f);
 }

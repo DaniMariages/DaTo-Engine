@@ -1,6 +1,4 @@
 #pragma once
-#include <string>
-
 class GameObject;
 
 enum class typeComponent {
@@ -8,10 +6,10 @@ enum class typeComponent {
 	Transform,
 	Mesh,
 	Material,
+	Camera,
 };
 
 class Component {
-	//Properties
 public:
 	typeComponent type;
 	bool active;

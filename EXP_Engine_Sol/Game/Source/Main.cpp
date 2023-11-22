@@ -91,7 +91,7 @@ int main(int argc, char ** argv)
 		}
 	}
 	
-	App_ = nullptr;
+	App = nullptr;
 
 	delete App;
 	return main_return;

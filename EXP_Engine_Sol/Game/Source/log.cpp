@@ -16,7 +16,7 @@ void log(const char file[], int line, const char* format, ...)
 	sprintf_s(tmp_string2, 4096, "\n%s(%d) : %s", file, line, tmp_string);
 	OutputDebugString(tmp_string2);
 
-	if (App_ != nullptr) {
-		App_->editor->log_history.push_back(tmp_string);
+	if (ExternalApp != nullptr && ExternalApp->editor != nullptr) {
+		ExternalApp->editor->log_history.push_back(tmp_string);
 	}
 }
