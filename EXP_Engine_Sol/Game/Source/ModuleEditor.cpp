@@ -78,6 +78,7 @@ void ModuleEditor::DrawEditor()
 
 	if (show_hierarchy_window) DrawHierarchy();
 	if (show_inspector_window) DrawInspector();
+	if (show_delete_scene_modal) DrawSceneAlert();
 
 	Config();
 	Console();
@@ -327,12 +328,12 @@ void ModuleEditor::HierarchyWindow(GameObject* gameObject)
 
 		if (!gameObject->active) ImGui::PopStyleColor();
 
-		if (ImGui::IsItemClicked()) 
+		if (ImGui::IsItemClicked())
 		{
 			gameObject->selected = true;
 			App->scene->gameObjectSelected = gameObject; //Assign the game object selected
 
-			for (std::vector<GameObject*>::iterator it = App->scene->gameObjects.begin(); it != App->scene->gameObjects.end(); ++it) 
+			for (std::vector<GameObject*>::iterator it = App->scene->gameObjects.begin(); it != App->scene->gameObjects.end(); ++it)
 			{
 				if ((*it) != gameObject) (*it)->selected = false;
 			}
@@ -354,11 +355,20 @@ void ModuleEditor::HierarchyWindow(GameObject* gameObject)
 
 			if (ImGui::MenuItem("Delete"))
 			{
-				App->scene->DeleteGameObject(App->scene->gameObjectSelected);
+				if (App->scene->gameObjectSelected != App->scene->rootGameObject)
+					App->scene->DeleteGameObject(App->scene->gameObjectSelected);
+				else
+				{
+					show_delete_scene_modal = true;
+					DrawSceneAlert();
+				}
 			}
+
 			ImGui::EndPopup();
 		}
 		ImGui::SetItemTooltip("Right-click to fast options");
+
+
 
 		if (openTreeNode)
 		{
@@ -383,7 +393,7 @@ void ModuleEditor::Inspector()
 	{
 		if ((*it) != nullptr)
 		{
-			if ((*it)->selected) 
+			if ((*it)->selected)
 			{
 				GameObject* gameObject = (*it);
 
@@ -415,13 +425,30 @@ void ModuleEditor::Inspector()
 
 				if (ImGui::Button("Delete"))
 				{
-					if (posOfSelected >= 0 && posOfSelected < App->scene->gameObjects.size())
-					{
-						App->scene->gameObjects.erase(App->scene->gameObjects.begin() + posOfSelected);
-						show_inspector_window = false;
-					}
+					show_delete_scene_modal = true;
+					DrawSceneAlert();
 				}
+				
 			}
 		}
 	}
+}
+
+void ModuleEditor::DrawSceneAlert()
+{
+	ImGui::OpenPopup("Action not allowed");
+	if (ImGui::BeginPopupModal("Action not allowed", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+	{
+		ImGui::Text("Scene can't be deleted");
+		ImGui::Separator();
+
+		if (ImGui::Button("OK", ImVec2(120, 0)))
+		{
+			show_delete_scene_modal = false;
+			ImGui::CloseCurrentPopup();
+		}
+
+		ImGui::EndPopup();
+	}
+
 }

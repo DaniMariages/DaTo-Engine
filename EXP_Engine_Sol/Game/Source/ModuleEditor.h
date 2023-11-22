@@ -30,7 +30,7 @@ public:
 	void DrawHierarchy();
 	void Inspector();
 	void HierarchyWindow(GameObject* gameObject);
-	void HideChildren();
+	void DrawSceneAlert();
 
 	void RequestBrowser(const char* path);
 
@@ -52,6 +52,7 @@ public:
 	bool show_hierarchy_window = true;
 	bool show_inspector_window = true;
 	bool show_console = true;
+	bool show_delete_scene_modal = false;
 
 	bool drawAll = true;
 	bool drawAllFaces = false;

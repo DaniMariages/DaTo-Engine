@@ -53,6 +53,8 @@ GameObject* ModuleScene::CreateGameObject(std::string Name, GameObject* parent)
 
 void ModuleScene::DeleteGameObject(GameObject* gameObject)
 {
+	LOG("Deleting Game Object: %s.", gameObject->Name.c_str());
+
 	//If the game object has children delete them first
 	if (!gameObject->children.empty())
 	{
