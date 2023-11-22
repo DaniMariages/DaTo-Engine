@@ -63,10 +63,11 @@ void ModuleScene::DeleteGameObject(GameObject* gameObject)
 				if (gameObjects[i] == gameObject->children[j])
 				{
 					gameObject->children.erase(gameObject->children.begin() + j);
-					gameObjects.erase(gameObjects.begin() + i);
 				}
 			}
 		}
+
+		//TODO: Delete child GO of gameObjects list
 	}
 
 	//When children delete, then delete the GameObject
