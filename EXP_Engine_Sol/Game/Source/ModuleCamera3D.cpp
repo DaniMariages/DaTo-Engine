@@ -17,8 +17,7 @@ ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(ap
 {
 	editorCamera = new ComponentCamera(nullptr);
 
-	editorCamera->SetPos(0.0f, 2.0f, 8.0f);
-	editorCamera->LookAt(float3(0.0f, 0.0f, 0.0f));
+	editorCamera->SetPos(8.0f, 2.0f, 8.0f);
 	editorCamera->SetAspectRatio(SCREEN_WIDTH / SCREEN_HEIGHT);
 }
 
@@ -29,6 +28,8 @@ ModuleCamera3D::~ModuleCamera3D()
 bool ModuleCamera3D::Start()
 {
 	LOG("Setting up the camera");
+	editorCamera->LookAt(float3(0.0f, 0.0f, 0.0f));
+
 	bool ret = true;
 
 	return ret;
@@ -59,8 +60,6 @@ update_status ModuleCamera3D::Update(float dt)
 	if(App->input->GetKey(SDL_SCANCODE_F) == KEY_REPEAT) newPos.y -= speed;
 
 	editorCamera->Zoom(newPos, speed);
-
-	// Mouse motion ----------------
 
 	//Focus camera
 	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_REPEAT) 
