@@ -18,6 +18,7 @@ public:
 	bool CleanUp();
 
 	GameObject* CreateGameObject(std::string Name, GameObject* parent);
+	void DeleteGameObject(GameObject* gameObject);
 	
 
 public: 

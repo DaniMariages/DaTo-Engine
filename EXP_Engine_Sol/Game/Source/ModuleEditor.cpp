@@ -354,10 +354,7 @@ void ModuleEditor::HierarchyWindow(GameObject* gameObject)
 
 			if (ImGui::MenuItem("Delete"))
 			{
-				if (posOfSelected >= 0 && posOfSelected < App->scene->gameObjects.size())
-				{
-					App->scene->gameObjects.erase(App->scene->gameObjects.begin() + posOfSelected);
-				}
+				App->scene->DeleteGameObject(App->scene->gameObjectSelected);
 			}
 			ImGui::EndPopup();
 		}
