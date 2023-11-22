@@ -6,6 +6,7 @@
 #include "Component.h"
 #include "ModuleScene.h"
 #include "GameObject.h"
+#include "ModuleImport.h"
 
 #include "../External/ImGui/imgui.h"
 #include "../External/ImGui/backends/imgui_impl_opengl3.h"
@@ -311,7 +312,7 @@ void ModuleEditor::DrawInspector()
 {
 	if (ImGui::Begin("Inspector", &show_inspector_window), true)
 	{
-		Inspector();
+		Inspector(App->scene->gameObjectSelected);
 		ImGui::End();
 	}
 }
@@ -328,15 +329,9 @@ void ModuleEditor::HierarchyWindow(GameObject* gameObject)
 
 		if (!gameObject->active) ImGui::PopStyleColor();
 
-		if (ImGui::IsItemClicked())
+		if (ImGui::IsItemClicked() || ImGui::IsItemClicked(1)) //Selectable with left and right mouse button
 		{
-			gameObject->selected = true;
 			App->scene->gameObjectSelected = gameObject; //Assign the game object selected
-
-			for (std::vector<GameObject*>::iterator it = App->scene->gameObjects.begin(); it != App->scene->gameObjects.end(); ++it)
-			{
-				if ((*it) != gameObject) (*it)->selected = false;
-			}
 		}
 
 		if (ImGui::BeginPopupContextItem())
@@ -387,58 +382,56 @@ void ModuleEditor::HierarchyWindow(GameObject* gameObject)
 	}
 }
 
-void ModuleEditor::Inspector()
+void ModuleEditor::Inspector(GameObject* gameObject)
 {
-	for (std::vector<GameObject*>::iterator it = App->scene->gameObjects.begin(); it != App->scene->gameObjects.end(); ++it)
+	if (gameObject != nullptr)
 	{
-		if ((*it) != nullptr)
+		ImGui::SetNextItemWidth(ImGui::GetWindowWidth() * 0.50f);
+		char newName[64];
+		std::string uniqueName;
+
+		strcpy_s(newName, gameObject->Name.c_str());
+		if (ImGui::InputText("Name", (char*)gameObject->Name.c_str(), 64, ImGuiInputTextFlags_EnterReturnsTrue))
 		{
-			if ((*it)->selected)
+			uniqueName = App->importer->GetUniqueName(newName);
+			gameObject->ChangeName(uniqueName.c_str());
+		}
+		ImGui::Separator();
+
+		if (ImGui::TreeNode("Draw options"))
+		{
+			if (ImGui::Checkbox("Draw", &drawSelected))
 			{
-				GameObject* gameObject = (*it);
-
-				ImGui::SetNextItemWidth(ImGui::GetWindowWidth() * 0.33f);
-				char newName[64];
-				strcpy_s(newName, App->scene->gameObjectSelected->Name.c_str());
-				if (ImGui::InputText("Name", (char*)App->scene->gameObjectSelected->Name.c_str(), 64, ImGuiInputTextFlags_EnterReturnsTrue))
-				{
-					App->scene->gameObjectSelected->ChangeName(newName);
-				}
-				ImGui::Separator();
-
-				if (ImGui::TreeNode("Draw options"))
-				{
-					if (ImGui::Checkbox("Draw", &drawSelected))
-					{
-						gameObject->active = !gameObject->active;
-					}
-					if (ImGui::Checkbox("Normals", &drawSelectedFaces));
-					if (ImGui::Checkbox("Vertex", &drawSelectedVertex));
-					if (ImGui::Checkbox("Textures", &drawSelectedTexture));
-
-					ImGui::TreePop();
-				}
-				if (ImGui::TreeNode("Information"))
-				{
-					ImGui::Text("Name: %s", gameObject->Name.c_str());
-
-					for (uint i = 0; i < gameObject->components.size(); ++i)
-					{
-						if (gameObject != nullptr)
-						{
-							gameObject->components[i]->DrawInspector();
-						}
-					}
-					ImGui::TreePop();
-				}
-
-				if (ImGui::Button("Delete"))
-				{
-					show_delete_scene_modal = true;
-					DrawSceneAlert();
-				}
-				
+				gameObject->active = !gameObject->active;
 			}
+			if (ImGui::Checkbox("Normals", &drawSelectedFaces));
+			if (ImGui::Checkbox("Vertex", &drawSelectedVertex));
+			if (ImGui::Checkbox("Textures", &drawSelectedTexture));
+
+			ImGui::TreePop();
+		}
+		if (ImGui::TreeNode("Information"))
+		{
+			ImGui::Text("Name: %s", gameObject->Name.c_str());
+
+			for (uint i = 0; i < gameObject->components.size(); ++i)
+			{
+				if (gameObject != nullptr)
+				{
+					gameObject->components[i]->DrawInspector();
+				}
+			}
+			ImGui::TreePop();
+		}
+
+		if (ImGui::Button("Delete"))
+		{
+			if (gameObject == App->scene->rootGameObject)
+			{
+				show_delete_scene_modal = true;
+				DrawSceneAlert();
+			}
+			else App->scene->DeleteGameObject(gameObject);
 		}
 	}
 }

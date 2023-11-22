@@ -145,16 +145,16 @@ typeFile ModuleImport::ReadExtension(std::string name)
 	if (extension == "fbx" || extension == "FBX")
 	{
 		typeExtension = typeFile::MODEL;
-		LOG("File dropped is: Model");
+		LOG("The file dropped is a: Model");
 	}
 	else if (extension == "png")
 	{
 		typeExtension = typeFile::TEXTURE;
-		LOG("File dropped is: Texture");
+		LOG("The file dropped is a: Texture");
 	}
 	else if (extension == "dds") {
 		typeExtension = typeFile::TEXTURE;
-		LOG("File dropped is: Texture");
+		LOG("The file dropped is a: Texture");
 	}
 
 	LOG("The file extension is: %s", extension.c_str());
@@ -194,10 +194,7 @@ void ModuleImport::GetSceneInfo(aiNode* node, const aiScene* scene, const char* 
 		tempObject = App->scene->CreateGameObject(name, App->scene->rootGameObject);
 		newGameObject = tempObject;
 	}
-	else
-	{
-		tempObject = App->scene->CreateGameObject(node->mName.C_Str(), gameObject);
-	}
+	else tempObject = App->scene->CreateGameObject(node->mName.C_Str(), gameObject);
 
 	
 	for (unsigned int i = 0; i < node->mNumMeshes; i++)
@@ -207,7 +204,6 @@ void ModuleImport::GetSceneInfo(aiNode* node, const aiScene* scene, const char* 
 
 	for (unsigned int i = 0; i < node->mNumChildren; i++)
 	{
-		LOG("I FOUND THIS: %s", node->mChildren[i]->mName.C_Str());
 		GetSceneInfo(node->mChildren[i], scene, file_path, tempObject);
 	}
 }

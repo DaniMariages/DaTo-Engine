@@ -28,7 +28,7 @@ public:
 
 	void DrawInspector();
 	void DrawHierarchy();
-	void Inspector();
+	void Inspector(GameObject* gameObject);
 	void HierarchyWindow(GameObject* gameObject);
 	void DrawSceneAlert();
 

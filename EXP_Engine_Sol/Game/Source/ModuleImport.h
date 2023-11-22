@@ -75,9 +75,15 @@ public:
 
 	void ReadFile(const char* file_path);
 
-private:
-	std::string GetName(const char* file_path);
+	//Function that check if the name exists in game objects, if exists, call ReName.
 	std::string GetUniqueName(std::string Name);
+
+private:
+	
+	//Get the name of game object from the file path.
+	std::string GetName(const char* file_path);
+
+	//Rename the game object if its necessary (called from GetUniqueName).
 	std::string ReName(std::string Name, int counter);
 
 	typeFile ReadExtension(std::string file_path);
