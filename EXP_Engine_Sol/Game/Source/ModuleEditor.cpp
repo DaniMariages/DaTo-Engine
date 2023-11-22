@@ -397,6 +397,15 @@ void ModuleEditor::Inspector()
 			{
 				GameObject* gameObject = (*it);
 
+				ImGui::SetNextItemWidth(ImGui::GetWindowWidth() * 0.33f);
+				char newName[64];
+				strcpy_s(newName, App->scene->gameObjectSelected->Name.c_str());
+				if (ImGui::InputText("Name", (char*)App->scene->gameObjectSelected->Name.c_str(), 64, ImGuiInputTextFlags_EnterReturnsTrue))
+				{
+					App->scene->gameObjectSelected->ChangeName(newName);
+				}
+				ImGui::Separator();
+
 				if (ImGui::TreeNode("Draw options"))
 				{
 					if (ImGui::Checkbox("Draw", &drawSelected))

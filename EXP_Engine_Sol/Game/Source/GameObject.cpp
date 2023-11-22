@@ -41,6 +41,11 @@ void GameObject::DisableParent()
 	}
 }
 
+void GameObject::ChangeName(const char* name) 
+{
+	Name = name;
+}
+
 void GameObject::Update() 
 {
 	std::vector<Component*>::iterator item = components.begin();

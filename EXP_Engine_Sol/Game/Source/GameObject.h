@@ -27,6 +27,8 @@ public:
 	//Disable parent Game Object, including their children
 	void DisableParent();
 
+	void ChangeName(const char* name);
+
 	void Update();
 
 	void SetParent(GameObject* parent);
