@@ -19,7 +19,4 @@ public:
 public:
 	
 	ComponentCamera* editorCamera;
-
-private:
-	float3 cameraMovement;
 };

@@ -134,8 +134,6 @@ bool ModuleRenderer3D::Init()
 	App->importer->ReadFile("Assets/Models/BakerHouse.fbx");
 	App->importer->ReadFile("Assets/Textures/BakerHouse.png");
 
-	//LoadBuffer();
-
 	return ret;
 }
 
@@ -146,7 +144,7 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 	glLoadIdentity();
 
 	glMatrixMode(GL_MODELVIEW);
-	glLoadMatrixf(App->camera->editorCamera->GetViewMatrix().ptr());
+	glLoadMatrixf(App->camera->editorCamera->GetRawViewMatrix());
 
 	// light 0 on cam pos
 	lights[0].SetPos(App->camera->editorCamera->GetPos().x, App->camera->editorCamera->GetPos().y, App->camera->editorCamera->GetPos().z);
@@ -162,6 +160,8 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 // PostUpdate present buffer to screen
 update_status ModuleRenderer3D::PostUpdate(float dt)
 {
+	//RenderBuffer(true);
+
 	//Render Editor
 	Grid.Render();
 
@@ -170,6 +170,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	glEnd();
 	glLineWidth(1.0f);
 
+	UpdateProjectionMatrix();
 	App->editor->DrawEditor();
 	SDL_GL_SwapWindow(App->window->window);
 	return UPDATE_CONTINUE;
@@ -186,10 +187,24 @@ bool ModuleRenderer3D::CleanUp()
 	return true;
 }
 
-
 void ModuleRenderer3D::OnResize(int width, int height)
 {
-	App->camera->editorCamera->SetAspectRatio(width, height);
+	App->camera->editorCamera->SetAspectRatio((float)width / (float)height);
+}
+
+void ModuleRenderer3D::UpdateProjectionMatrix()
+{
+	//Only do if cameras are up and running
+	if (App->camera->editorCamera == nullptr) return;
+
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+
+	glLoadMatrixf((GLfloat*)App->camera->editorCamera->GetProjectionMatrix());
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
 }
 
 void ModuleRenderer3D::UseCheckerTexture() {

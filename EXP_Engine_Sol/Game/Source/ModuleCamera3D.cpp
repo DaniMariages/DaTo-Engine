@@ -1,5 +1,5 @@
-#include "Globals.h"
 #include "Application.h"
+#include "Globals.h"
 
 #include "ModuleCamera3D.h"
 #include "ModuleInput.h"
@@ -56,34 +56,22 @@ update_status ModuleCamera3D::Update(float dt)
 
 	editorCamera->Zoom(newPos, speed);
 
-	if (App->input->GetMouseButton(SDL_BUTTON_MIDDLE) == KEY_REPEAT) {
-
-		// Mouse wheel pressed while dragging movement handling
-
+	if (App->input->GetMouseButton(SDL_BUTTON_MIDDLE) == KEY_REPEAT) 
+	{
 		editorCamera->Pan(newPos, speed, dt);
-
 	}
 
-	if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT && App->input->GetMouseButton(SDL_BUTTON_MIDDLE) == KEY_IDLE) {
-
-		// WASD Camera Movement Handling
-
+	if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT && App->input->GetMouseButton(SDL_BUTTON_MIDDLE) == KEY_IDLE) 
+	{
 		editorCamera->Move(newPos, speed);
-
-		// Camera Rotation Handling
-
 		editorCamera->Rotate(speed, dt);
-
 	}
 
 	editorCamera->UpdatePos(newPos);
 
-	if ((App->input->GetKey(SDL_SCANCODE_F) == KEY_REPEAT || App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT) && App->input->GetMouseButton(SDL_BUTTON_MIDDLE) == KEY_IDLE) {
-
-		// Center camera to 0,0,0 when pressing Left Alt
-
+	if ((App->input->GetKey(SDL_SCANCODE_F) == KEY_REPEAT || App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT) && App->input->GetMouseButton(SDL_BUTTON_MIDDLE) == KEY_IDLE) 
+	{
 		editorCamera->LookAt(float3(0.0f, 0.0f, 0.0f));
-
 	}
 
 	return UPDATE_CONTINUE;

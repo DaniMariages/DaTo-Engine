@@ -1,25 +1,16 @@
+#pragma once
 #include "ComponentCamera.h"
-
-#include "Globals.h"
-#include "ModuleInput.h"
-#include "GameObject.h"
-#include "Application.h"
 
 #include "../External/ImGui/imgui.h"
 #include "../External/ImGui/backends/imgui_impl_sdl2.h"
 #include "../External/ImGui/backends/imgui_impl_opengl3.h"
 
-#include "../External/MathGeoLib/include/Math/float3.h"
-#include "../External/MathGeoLib/include/Math/float3x3.h"
-#include "../External/MathGeoLib/include/Math/Quat.h"
-
-
-ComponentCamera::ComponentCamera(GameObject* _parent) : active_camera(false), Component(_parent)
+ComponentCamera::ComponentCamera(GameObject* parent) : Component(parent)
 {
-	this->parent = _parent;
-	
-	frustum.type = FrustumType::PerspectiveFrustum;
+	this->parent = parent;
+	type = typeComponent::Camera;
 
+	frustum.type = FrustumType::PerspectiveFrustum;
 	frustum.pos = float3::zero;
 	frustum.front = float3::unitZ;
 	frustum.up = float3::unitY;
@@ -30,90 +21,82 @@ ComponentCamera::ComponentCamera(GameObject* _parent) : active_camera(false), Co
 	frustum.verticalFov = 60.0f * DEGTORAD;
 	frustum.horizontalFov = 2.0f * atanf(tanf(frustum.verticalFov / 2.0f) * 1.3f);
 
-	draw_boundingboxes = true;
-	frustum_culling = true;
-	active_camera = true;
+	drawBoundingBoxes = true;
+	frustumCulling = true;
+	activeCamera = true;
 }
-
-ComponentCamera::~ComponentCamera() {}
 
 void ComponentCamera::Enable() {}
 
 void ComponentCamera::Disable() {}
 
-void ComponentCamera::Update() 
-{
-	glLoadIdentity();
-	glMatrixMode(GL_PROJECTION);
-	glLoadMatrixf((GLfloat*)GetProjectionMatrix().v);
+void ComponentCamera::Update() {}
 
-	glMatrixMode(GL_MODELVIEW);
-	glLoadMatrixf((GLfloat*)GetViewMatrix().v);
-
-	DrawFrustumBox();
-}
-
-void ComponentCamera::DrawInspector()
-{
-	ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_DefaultOpen;
-	
-	if (ImGui::CollapsingHeader("Camera"), flags)
-	{
-		ImGui::Indent();
-
-		float horizontalFOV = GetHorizontalFOV();
-		if (ImGui::SliderFloat("Horizontal FOV", &horizontalFOV, 30, 120, "%0.2f", ImGuiSliderFlags_None))
-		{
-			SetHorizontalFOV(horizontalFOV);
-		}
-
-		float verticalFOV = GetVerticalFOV();
-		if (ImGui::SliderFloat("Vertical FOV", &verticalFOV, 30, 120, "%0.2f", ImGuiSliderFlags_None))
-		{
-			SetVerticalFOV(verticalFOV);
-		}
-
-		float FOV = GetHorizontalFOV();
-		if (ImGui::SliderFloat("Both FOV", &FOV, 30, 120, "%0.2f", ImGuiSliderFlags_None))
-		{
-			SetFOV(FOV);
-		}
-
-		ImGui::Unindent();
-	}
-}
-
-
-void ComponentCamera::UpdatePos(float3 newPos)
-{
-	frustum.pos += newPos;
-}
-
-
-void ComponentCamera::DrawFrustumBox() const
-{
-	float3 vertices[8];
-	frustum.GetCornerPoints(vertices);
-	ExternalApp->renderer3D->DrawBox(vertices, float3(0, 255, 0));
-}
-
-// GETTERS -------------------------------
-float ComponentCamera::GetHorizontalFOV() const
-{
-	return frustum.horizontalFov * RADTODEG;
-}
-
-float ComponentCamera::GetVerticalFOV() const
+float ComponentCamera::GetFOV() const
 {
 	return frustum.verticalFov * RADTODEG;
 }
 
-float3 ComponentCamera::GetPos() const
+float ComponentCamera::GetAspectRatio() const
 {
-	return frustum.pos;
+	return frustum.AspectRatio();
 }
 
-float3 ComponentCamera::GetFront() 
+void ComponentCamera::SetFOV(float fov)
+{
+	frustum.horizontalFov = fov * DEGTORAD;
+	frustum.verticalFov = fov * DEGTORAD;
+}
+
+void ComponentCamera::SetAspectRatio(float aspectRatio) {
+
+	frustum.horizontalFov = 2.f * atanf(tanf(frustum.verticalFov * 0.5f) * aspectRatio);
+}
+
+float ComponentCamera::GetNearPlane() const
+{
+	return frustum.nearPlaneDistance;
+}
+
+float ComponentCamera::GetFarPlane() const
+{
+	return frustum.farPlaneDistance;
+}
+
+void ComponentCamera::DrawFrustumCube() const
+{
+	float3 frustumCorners[8];
+	frustum.GetCornerPoints(frustumCorners);
+	ExternalApp->renderer3D->DrawBox(frustumCorners, float3(0, 255, 0));
+}
+
+float* ComponentCamera::GetRawViewMatrix()
+{
+	static float4x4 m;
+
+	m = frustum.ViewMatrix();
+	m.Transpose();
+
+	return (float*)m.v;
+}
+
+float4x4 ComponentCamera::GetViewMatrix()
+{
+	float4x4 tempMat4x4 = frustum.ViewMatrix();
+	return tempMat4x4.Transposed();
+}
+
+float* ComponentCamera::GetProjectionMatrix()
+{
+	static float4x4 m;
+
+	m = frustum.ProjectionMatrix();
+	m.Transpose();
+
+	return (float*)m.v;
+}
+
+float3 ComponentCamera::GetFront()
 {
 	return frustum.front;
 }
@@ -128,48 +111,26 @@ float3 ComponentCamera::GetRight()
 	return frustum.WorldRight();
 }
 
-float ComponentCamera::GetAspectRatio() const
+void ComponentCamera::SetPos(float3 xyz)
 {
-	return frustum.AspectRatio();
-}
-
-float4x4 ComponentCamera::GetProjectionMatrix() const
-{
-	return frustum.ProjectionMatrix().Transposed();
-}
-
-float4x4 ComponentCamera::GetViewMatrix() const
-{
-	float4x4 matrix = frustum.ViewMatrix();
-	return matrix;
-}
-
-// SETTERS -------------------------------
-void ComponentCamera::SetHorizontalFOV(float horizontalfov) 
-{
-	frustum.horizontalFov = horizontalfov * RADTODEG;
-}
-
-void ComponentCamera::SetVerticalFOV(float verticalfov)
-{
-	frustum.verticalFov = verticalfov * RADTODEG;
-}
-
-void ComponentCamera::SetFOV(float FOV)
-{
-	frustum.horizontalFov = FOV * DEGTORAD;
-	frustum.verticalFov = FOV * DEGTORAD;
-}
-
-void ComponentCamera::SetPos(float3 pos)
-{
-	frustum.pos = pos;
+	frustum.pos = xyz;
 }
 
 void ComponentCamera::SetPos(float x, float y, float z)
 {
 	frustum.pos = float3(x, y, z);
 }
+
+void ComponentCamera::UpdatePos(float3 newPos)
+{
+	frustum.pos += newPos;
+}
+
+float3 ComponentCamera::GetPos() const
+{
+	return frustum.pos;
+}
+
 
 void ComponentCamera::SetFront(float3 front)
 {
@@ -181,19 +142,77 @@ void ComponentCamera::SetUp(float3 up)
 	frustum.up = up;
 }
 
-void ComponentCamera::SetAspectRatio(float aspectRatio)
+
+void ComponentCamera::Match(ComponentCamera* reference)
 {
-	frustum.horizontalFov = 2.f * atanf(tanf(frustum.verticalFov * 0.5f) * aspectRatio);
+	SetPos(reference->frustum.pos);
+	SetFront(reference->frustum.front);
+	SetUp(reference->frustum.up);
 }
 
-void ComponentCamera::SetAspectRatio(int width, int height)
+void ComponentCamera::Pan(float3& newPos, float speed, float dt)
 {
-	float verticalAspectRatio = (float)width / (float)height;
-	frustum.verticalFov = 2.f * atanf(tanf(frustum.horizontalFov * 0.5f) / verticalAspectRatio);
+	int dx = -ExternalApp->input->GetMouseXMotion();
+	int dy = -ExternalApp->input->GetMouseYMotion();
+
+	float Sensitivity = 1.6f * dt;
+
+	float DeltaX = (float)dx * Sensitivity;
+	float DeltaY = (float)dy * Sensitivity;
+
+	newPos -= GetUp() * speed * DeltaY;
+	newPos += GetRight() * speed * DeltaX;
 }
 
-/*----------------------------------------------*/
+//----------------- PUEDE SER UTIL CUANDO TENGAMOS TRANSFORM -----------------
+//
+//void ComponentCamera::Orbit(float motion_x, float motion_y)
+//{
+//	float3 point = looking_at;
+//
+//	if (App->scene->selected_object != nullptr)
+//	{
+//		looking_at = App->scene->selected_object->transform->GetPosition();
+//	}
+//
+//	float3 focus = frustum.Pos() - point;
+//
+//	Quat y = Quat(frustum.Up(), motion_x);
+//	Quat x = Quat(frustum.WorldRight(), motion_y);
+//
+//	focus = x.Transform(focus);
+//	focus = y.Transform(focus);
+//
+//	frustum.SetPos(focus + point);
+//
+//	Look(point);
+//}
 
+void ComponentCamera::Zoom(float3& newPos, float speed)
+{
+	if (ExternalApp->input->GetMouseZ() > 0) newPos += GetFront() * speed;
+	if (ExternalApp->input->GetMouseZ() < 0) newPos -= GetFront() * speed;
+}
+
+void ComponentCamera::LookAt(float3& Spot)
+{
+	float3 Z = (Spot - GetPos()).Normalized();
+	SetFront(Z);
+
+	float3 X = float3(0, 1, 0).Cross(GetFront()).Normalized();
+
+	float3 Y = GetFront().Cross(X);
+	SetUp(Y);
+}
+
+void ComponentCamera::Move(float3& newPos, float speed)
+{
+	if (ExternalApp->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) newPos += GetFront() * speed;
+	if (ExternalApp->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) newPos -= GetFront() * speed;
+
+	if (ExternalApp->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) newPos -= GetRight() * speed;
+	if (ExternalApp->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) newPos += GetRight() * speed;
+}
 
 void ComponentCamera::Rotate(float speed, float dt)
 {
@@ -227,47 +246,33 @@ void ComponentCamera::Rotate(float speed, float dt)
 
 			SetUp(GetFront().Cross(GetRight()));
 		}
+
 	}
 }
 
-void ComponentCamera::Move(float3& newPos, float speed)
+
+void ComponentCamera::DrawInspector()
 {
-	if (ExternalApp->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) newPos += GetFront() * speed;
-	if (ExternalApp->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) newPos -= GetFront() * speed;
 
-	if (ExternalApp->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) newPos -= GetRight() * speed;
-	if (ExternalApp->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) newPos += GetRight() * speed;
-}
+	if (ImGui::CollapsingHeader("Component Camera"), ImGuiTreeNodeFlags_DefaultOpen)
+	{
+		//if (ImGui::Checkbox("Viewport Camera", &active_camera)) {}
 
-void ComponentCamera::Zoom(float3& newPos, float speed)
-{
-	if (ExternalApp->input->GetMouseZ() > 0) 
-		newPos += GetFront() * speed;
-	if (ExternalApp->input->GetMouseZ() < 0) 
-		newPos -= GetFront() * speed;
-}
+		if (ImGui::Checkbox("Frustum Culling", &frustumCulling)) {}
 
-void ComponentCamera::Pan(float3& newPos, float speed, float dt)
-{
-	int dx = -ExternalApp->input->GetMouseXMotion();
-	int dy = -ExternalApp->input->GetMouseYMotion();
+		//Set FOV
+		float Inspector_FOV = GetFOV();
+		if (ImGui::SliderFloat("FOV", &Inspector_FOV, 30, 120, "%0.2f", ImGuiSliderFlags_None)) { SetFOV(Inspector_FOV); }
 
-	float sensitivity = 2.0f * dt;
+		//Set NearPlane
+		float NearPlane = GetNearPlane();
+		ImGui::DragFloat("Near plane", &frustum.nearPlaneDistance, 0.1f, 0.01f, frustum.nearPlaneDistance);
 
-	float deltaX = (float)dx * sensitivity;
-	float deltaY = (float)dy * sensitivity;
+		//Set FarPlane
+		float FarPlane = GetFarPlane();
+		ImGui::DragFloat("Far plane", &frustum.farPlaneDistance, 0.1f, frustum.farPlaneDistance, 10000.f);
 
-	newPos -= GetUp() * speed * deltaY;
-	newPos += GetRight() * speed * deltaX;
-}
+		//Add Toggle for frustum draw?
 
-void ComponentCamera::LookAt(float3& Spot)
-{
-	float3 Z = (Spot - GetPos()).Normalized();
-	SetFront(Z);
-
-	float3 X = float3(0, 1, 0).Cross(GetFront()).Normalized();
-
-	float3 Y = GetFront().Cross(X);
-	SetUp(Y);
+	}
 }
