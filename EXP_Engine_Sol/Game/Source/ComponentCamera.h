@@ -58,7 +58,7 @@ public:
 
 	float* GetRawViewMatrix();
 	float4x4 GetViewMatrix();
-	float* GetProjectionMatrix();
+	float4x4 GetProjectionMatrix();
 
 	float3 GetFront();
 	float3 GetUp();

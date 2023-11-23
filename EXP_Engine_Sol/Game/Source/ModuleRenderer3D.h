@@ -62,5 +62,4 @@ public:
 	GLuint checkerID;
 	GLuint texWidth, texHeight;
 	GLubyte checkerImage[CHECKERS_HEIGHT][CHECKERS_WIDTH][4];
-
 };

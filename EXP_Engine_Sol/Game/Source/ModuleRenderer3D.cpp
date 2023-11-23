@@ -143,10 +143,8 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
 
-	glMatrixMode(GL_PROJECTION);
-	glLoadMatrixf(App->camera->editorCamera->GetProjectionMatrix());
 	glMatrixMode(GL_MODELVIEW);
-	glLoadMatrixf(App->camera->editorCamera->GetRawViewMatrix());
+	glLoadMatrixf(App->camera->editorCamera->GetViewMatrix().ptr());
 
 	// light 0 on cam pos
 	lights[0].SetPos(App->camera->editorCamera->GetPos().x, App->camera->editorCamera->GetPos().y, App->camera->editorCamera->GetPos().z);
@@ -164,16 +162,31 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 {
 	//Draw Editor Camera
 	App->camera->editorCamera->RenderBuffers(true);
+	App->camera->editorCamera->Update();
 
 	//Draw Grid
 	Grid.Render();
 
+	//Draw Frustum Box
+	App->scene->gameCamera->DrawFrustumCube();
+
 	//Draw meshes
 	IterateDrawMesh();
 
-	glEnd();
-	glLineWidth(1.0f);
 	App->camera->editorCamera->RenderBuffers(false);
+
+	App->scene->gameCamera->RenderBuffers(true);
+	App->scene->gameCamera->Update();
+
+	if (App->scene->gameCameraObject->active)
+	{
+		//Draw the models in Game Camera
+		IterateDrawMesh();
+	}
+
+	App->scene->gameCamera->RenderBuffers(false);
+	//glEnd();
+	//glLineWidth(1.0f);
 
 	//Draw Editor
 	App->editor->DrawEditor();
@@ -197,21 +210,7 @@ bool ModuleRenderer3D::CleanUp()
 void ModuleRenderer3D::OnResize(int width, int height)
 {
 	App->camera->editorCamera->LoadBuffers(width, height);
-}
-
-void ModuleRenderer3D::UpdateProjectionMatrix()
-{
-	//Only do if cameras are up and running
-	if (App->camera->editorCamera == nullptr) return;
-
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-
-	glLoadMatrixf((GLfloat*)App->camera->editorCamera->GetProjectionMatrix());
-
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-
+	App->scene->gameCamera->LoadBuffers(width, height);
 }
 
 void ModuleRenderer3D::UseCheckerTexture() {

@@ -30,7 +30,15 @@ void ComponentCamera::Enable() {}
 
 void ComponentCamera::Disable() {}
 
-void ComponentCamera::Update() {}
+void ComponentCamera::Update() 
+{
+	glLoadIdentity();
+	glMatrixMode(GL_PROJECTION);
+	glLoadMatrixf((GLfloat*)GetProjectionMatrix().v);
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadMatrixf((GLfloat*)GetViewMatrix().v);
+}
 
 float ComponentCamera::GetVerticalFOV() const
 {
@@ -97,14 +105,9 @@ float4x4 ComponentCamera::GetViewMatrix()
 	return tempMat4x4.Transposed();
 }
 
-float* ComponentCamera::GetProjectionMatrix()
+float4x4 ComponentCamera::GetProjectionMatrix()
 {
-	static float4x4 m;
-
-	m = frustum.ProjectionMatrix();
-	m.Transpose();
-
-	return (float*)m.v;
+	return frustum.ProjectionMatrix().Transposed();
 }
 
 float3 ComponentCamera::GetFront()

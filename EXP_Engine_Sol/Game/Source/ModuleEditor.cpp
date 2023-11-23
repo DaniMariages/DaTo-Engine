@@ -108,6 +108,15 @@ void ModuleEditor::DrawEditor()
 		ImGui::End();
 	}
 
+	if (ImGui::Begin("Game"), true) {
+
+		ImVec2 size = ImGui::GetContentRegionAvail();
+		App->scene->gameCamera->SetAspectRatio(size.x / size.y);
+		ImGui::Image((ImTextureID)App->scene->gameCamera->TCB, size, ImVec2(0, 1), ImVec2(1, 0));
+
+		ImGui::End();
+	}
+
 	Config();
 	Console();
 

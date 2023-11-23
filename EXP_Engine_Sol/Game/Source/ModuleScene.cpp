@@ -5,7 +5,7 @@
 ModuleScene::ModuleScene(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 	rootGameObject = CreateGameObject("Scene", nullptr);
-	editorCamera = CreateGameObject("Editor camera", rootGameObject);
+	gameCameraObject = CreateGameObject("MainCamera", rootGameObject);
 }
 
 // Destructor
@@ -18,7 +18,14 @@ bool ModuleScene::Init()
 	LOG("Creating Module Scene");
 	bool ret = true;
 
-	editorCamera->AddComponent(App->camera->editorCamera);
+	gameCamera = new ComponentCamera(gameCameraObject);
+
+	gameCamera->SetPos(0.0f, 2.0f, 20.0f);
+	gameCamera->LookAt(float3(0.f, 0.f, 0.f));
+	gameCamera->SetAspectRatio(SCREEN_WIDTH / SCREEN_HEIGHT);
+
+	gameCameraObject->AddComponent(gameCamera);
+	totalCameras.push_back(gameCamera);
 
 	return ret;
 }

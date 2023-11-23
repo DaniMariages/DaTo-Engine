@@ -6,6 +6,8 @@
 
 #include <vector>
 
+class ComponentCamera;
+
 class ModuleScene : public Module
 {
 public:
@@ -23,11 +25,11 @@ public:
 public: 
 
 	GameObject* rootGameObject = nullptr;
-	GameObject* editorCamera = nullptr;
-	GameObject* gameCamera = nullptr;
-
 	std::vector<GameObject*> gameObjects;
 	GameObject* gameObjectSelected = nullptr;
 
-	
+
+	GameObject* gameCameraObject = nullptr;
+	ComponentCamera* gameCamera = nullptr;
+	std::vector<ComponentCamera*> totalCameras;
 };
