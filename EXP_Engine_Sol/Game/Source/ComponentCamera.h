@@ -36,8 +36,11 @@ public:
 	void Disable() override;
 	void DrawInspector() override;
 
-	float GetFOV() const;
+	float GetVerticalFOV() const;
+	float GetHorizontalFOV() const;
 	void SetFOV(float fov);
+	void SetVerticalFOV(float fov);
+	void SetHorizontalFOV(float fov);
 
 	void UpdatePos(float3 newPos);
 	float3 GetPos() const;
@@ -71,13 +74,13 @@ public:
 	void Match(ComponentCamera* reference);
 
 	void Pan(float3& newPos, float speed, float dt);
-	void Orbit(float motion_x, float motion_y);
+	void Orbit(float3& point, float speed, float dt);
 	void Zoom(float3& newPos, float speed);
 	void LookAt(float3& Spot);
 	void Move(float3& newPos, float speed);
-	void Rotate(float speed, float dt);
+	void Rotate(float dt);
 
-	void OnClick(float pos_x, float pos_y);
+	void Focus(float3& center, float distance);
 
 	ComponentCamera(GameObject* parent);
 private:

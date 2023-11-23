@@ -34,10 +34,6 @@ public:
 	
 	void SetUpBuffers(mesh* mesh);
 
-	void LoadBuffer();
-	void RenderBuffer(bool toggle);
-	void DeleteBuffer();
-
 	void IterateDrawMesh();
 	void DrawMesh(mesh* mesh, uint id = 0);
 	void DrawFaceNormals(mesh* Mesh);

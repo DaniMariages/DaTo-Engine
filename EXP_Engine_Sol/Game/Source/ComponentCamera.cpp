@@ -32,14 +32,29 @@ void ComponentCamera::Disable() {}
 
 void ComponentCamera::Update() {}
 
-float ComponentCamera::GetFOV() const
+float ComponentCamera::GetVerticalFOV() const
 {
 	return frustum.verticalFov * RADTODEG;
+}
+
+float ComponentCamera::GetHorizontalFOV() const
+{
+	return frustum.horizontalFov * RADTODEG;
 }
 
 float ComponentCamera::GetAspectRatio() const
 {
 	return frustum.AspectRatio();
+}
+
+void ComponentCamera::SetVerticalFOV(float fov)
+{
+	frustum.verticalFov = fov * DEGTORAD;
+}
+
+void ComponentCamera::SetHorizontalFOV(float fov)
+{
+	frustum.horizontalFov = fov * DEGTORAD;
 }
 
 void ComponentCamera::SetFOV(float fov)
@@ -155,13 +170,11 @@ void ComponentCamera::Pan(float3& newPos, float speed, float dt)
 	int dx = -ExternalApp->input->GetMouseXMotion();
 	int dy = -ExternalApp->input->GetMouseYMotion();
 
-	float Sensitivity = 1.6f * dt;
+	float DeltaX = (float)dx * speed;
+	float DeltaY = (float)dy * speed;
 
-	float DeltaX = (float)dx * Sensitivity;
-	float DeltaY = (float)dy * Sensitivity;
-
-	newPos -= GetUp() * speed * DeltaY;
-	newPos += GetRight() * speed * DeltaX;
+	newPos -= GetUp() * DeltaY / 2;
+	newPos += GetRight() * DeltaX / 2;
 }
 
 //----------------- PUEDE SER UTIL CUANDO TENGAMOS TRANSFORM -----------------
@@ -214,7 +227,7 @@ void ComponentCamera::Move(float3& newPos, float speed)
 	if (ExternalApp->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) newPos += GetRight() * speed;
 }
 
-void ComponentCamera::Rotate(float speed, float dt)
+void ComponentCamera::Rotate(float dt)
 {
 	int dx = -ExternalApp->input->GetMouseXMotion();
 	int dy = -ExternalApp->input->GetMouseYMotion();
@@ -250,19 +263,57 @@ void ComponentCamera::Rotate(float speed, float dt)
 	}
 }
 
+void ComponentCamera::Orbit(float3& point, float speed, float dt)
+{
+	int motionX = -ExternalApp->input->GetMouseXMotion();
+	int motionY = -ExternalApp->input->GetMouseYMotion();
+
+	// MYTODO: USE WITH TRANSFORM
+	//if (ExternalApp->scene->selected_object != nullptr)
+	//{
+	//	//looking_at = App->scene->selected_object->transform->GetPosition();
+	//}
+
+	float3 focus = GetPos() - point;
+
+	Quat y = Quat(GetUp(), motionX * speed / 2);
+	Quat x = Quat(frustum.WorldRight(), motionY * speed / 2);
+
+	focus = x.Transform(focus);
+	focus = y.Transform(focus);
+
+	SetPos(focus + point);
+
+	LookAt(point);
+}
+
+//MYTODO: Rework this with transform
+void ComponentCamera::Focus(float3& center, float distance)
+{
+	float3 newPosition = center + float3(-distance, distance, distance);
+	SetPos(newPosition);
+
+	LookAt(center);
+}
 
 void ComponentCamera::DrawInspector()
 {
 
 	if (ImGui::CollapsingHeader("Component Camera"), ImGuiTreeNodeFlags_DefaultOpen)
 	{
-		//if (ImGui::Checkbox("Viewport Camera", &active_camera)) {}
+		if (ImGui::Checkbox("Frustum Culling", &frustumCulling));
 
-		if (ImGui::Checkbox("Frustum Culling", &frustumCulling)) {}
+		//Set Vertical FOV
+		float verticalFOV = GetVerticalFOV();
+		if (ImGui::SliderFloat("Vertical FOV", &verticalFOV, 30, 120, "%0.2f", ImGuiSliderFlags_None)) { SetVerticalFOV(verticalFOV); }
 
-		//Set FOV
-		float Inspector_FOV = GetFOV();
-		if (ImGui::SliderFloat("FOV", &Inspector_FOV, 30, 120, "%0.2f", ImGuiSliderFlags_None)) { SetFOV(Inspector_FOV); }
+		//Set Horizontal FOV
+		float horizontalFOV = GetHorizontalFOV();
+		if (ImGui::SliderFloat("Horizontal FOV", &horizontalFOV, 30, 120, "%0.2f", ImGuiSliderFlags_None)) { SetHorizontalFOV(horizontalFOV); }
+
+		//Set General FOV
+		float FOV = GetVerticalFOV();
+		if (ImGui::SliderFloat("FOV", &FOV, 30, 120, "%0.2f", ImGuiSliderFlags_None)) { SetFOV(FOV); }
 
 		//Set NearPlane
 		float NearPlane = GetNearPlane();
@@ -272,7 +323,17 @@ void ComponentCamera::DrawInspector()
 		float FarPlane = GetFarPlane();
 		ImGui::DragFloat("Far plane", &frustum.farPlaneDistance, 0.1f, frustum.farPlaneDistance, 10000.f);
 
-		//Add Toggle for frustum draw?
+		if (ImGui::BeginCombo("Frustrum Type", (frustum.type == FrustumType::PerspectiveFrustum) ? "Prespective" : "Orthographic"))
+		{
+			if (ImGui::Selectable("Perspective"))
+				frustum.type = FrustumType::PerspectiveFrustum;
+
+			if (ImGui::Selectable("Orthographic"))
+				frustum.type = FrustumType::OrthographicFrustum;
+
+			ImGui::EndCombo();
+		}
 
 	}
 }
+

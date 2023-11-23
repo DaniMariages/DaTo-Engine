@@ -160,8 +160,6 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 // PostUpdate present buffer to screen
 update_status ModuleRenderer3D::PostUpdate(float dt)
 {
-	//RenderBuffer(true);
-
 	//Render Editor
 	Grid.Render();
 
@@ -231,68 +229,6 @@ void ModuleRenderer3D::UseCheckerTexture() {
 	glDisable(GL_TEXTURE_2D);
 }
 
-void ModuleRenderer3D::LoadBuffer()
-{
-	// Generate a Framebuffer Object (FBO)
-
-	glGenFramebuffers(1, &FBO);
-	glBindFramebuffer(GL_FRAMEBUFFER, FBO);
-
-	// Create a Texture Attachment (Texture Color Buffer [TCB])
-
-	glGenTextures(1, &TCB);
-	glBindTexture(GL_TEXTURE_2D, TCB);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, SCREEN_WIDTH, SCREEN_HEIGHT, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, TCB, 0);
-
-	// Create a Renderbuffer Attachment
-
-	glGenRenderbuffers(1, &RBO);
-	glBindRenderbuffer(GL_RENDERBUFFER, RBO);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, SCREEN_WIDTH, SCREEN_HEIGHT);
-
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, RBO);
-
-	// Check Framebuffer Completeness
-
-	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-
-		LOG("Framebuffer is not complete");
-
-	}
-
-	// Bind the Default Framebuffer
-
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-}
-
-void ModuleRenderer3D::RenderBuffer(bool toggle)
-{
-	if (toggle) {
-
-		glBindFramebuffer(GL_FRAMEBUFFER, FBO);
-		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	}
-	else {
-
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	}
-}
-
-void ModuleRenderer3D::DeleteBuffer()
-{
-	glDeleteRenderbuffers(1, &RBO);
-	glDeleteTextures(1, &TCB);
-	glDeleteFramebuffers(1, &FBO);
-}
-
 void ModuleRenderer3D::SetUpBuffers(mesh* mesh)
 {
 	glGenBuffers(1, &mesh->VBO);
@@ -302,8 +238,6 @@ void ModuleRenderer3D::SetUpBuffers(mesh* mesh)
 	glGenBuffers(1, &mesh->EBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * mesh->indices.size(), &mesh->indices[0], GL_STATIC_DRAW);
-
-	//TexCoords?
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);

@@ -47,32 +47,88 @@ bool ModuleCamera3D::CleanUp()
 update_status ModuleCamera3D::Update(float dt)
 {
 	float3 newPos(0, 0, 0);
+	float speed = 3.0f * dt;
 
-	float speed = 20.0f * dt;
-
+	//Increase the camera speed while left shift is pressed
 	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) speed *= 2;
 
-	// Mouse wheel Zoom In and Zoom Out handling
+	//Camera Zoom (Mouse Wheel)
+	editorCamera->Zoom(newPos, speed * 20); //Speed is to low for Zoom
 
-	editorCamera->Zoom(newPos, speed);
+	//Move the camera Up (R) or Down (F)
+	if (App->input->GetKey(SDL_SCANCODE_R) == KEY_REPEAT) newPos.y += speed;
+	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_REPEAT) newPos.y -= speed;
 
+	//Focus camera without moving it (on 0,0,0)
+	if (App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT)
+	{
+		editorCamera->LookAt(newPos);
+
+		//Rotate around (0,0,0) if Left Alt and Left Click are pressed 
+		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT)
+		{
+			editorCamera->Orbit(newPos, speed, dt);
+		}
+	}
+
+	//Focus Camera moving it (to Distance)
+	if (App->input->GetKey(SDL_SCANCODE_LCTRL) == KEY_REPEAT)
+	{
+		editorCamera->Focus(newPos, 6.0f);
+	}
+
+	//Rotate the camera (Right click pressed)
+	if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
+	{
+		editorCamera->Rotate(dt);
+
+		//Move the camera with WASD if right click is pressed
+		if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
+		{
+			editorCamera->Move(newPos, speed);
+		}
+	}
+	
+	//PAN (Mouse wheel pressed)
 	if (App->input->GetMouseButton(SDL_BUTTON_MIDDLE) == KEY_REPEAT) 
 	{
 		editorCamera->Pan(newPos, speed, dt);
 	}
 
-	if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT && App->input->GetMouseButton(SDL_BUTTON_MIDDLE) == KEY_IDLE) 
+	//Top view
+	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT || App->editor->top == true)
 	{
-		editorCamera->Move(newPos, speed);
-		editorCamera->Rotate(speed, dt);
+		newPos = float3(0.0f, 10.0f, 0.0f);
+		editorCamera->SetPos(newPos);
+		editorCamera->LookAt(float3(0, 0, 0));
+	}
+
+	//Front view
+	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT || App->editor->front == true)
+	{
+		newPos = float3(0.0f, 0.0f, 10.0f);
+		editorCamera->SetPos(newPos);
+		editorCamera->LookAt(float3(0, 0, 0));
+
+	}
+
+	//Side view (left)
+	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT || App->editor->side_1 == true)
+	{
+		newPos = float3(10.0f, 00.0f, 0.0f);
+		editorCamera->SetPos(newPos);
+		editorCamera->LookAt(float3(0, 0, 0));
+	}
+
+	//Side view (right)
+	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT || App->editor->side_2 == true)
+	{
+		newPos = float3(-10.0f, 00.0f, 0.0f);
+		editorCamera->SetPos(newPos);
+		editorCamera->LookAt(float3(0, 0, 0));
 	}
 
 	editorCamera->UpdatePos(newPos);
-
-	if ((App->input->GetKey(SDL_SCANCODE_F) == KEY_REPEAT || App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT) && App->input->GetMouseButton(SDL_BUTTON_MIDDLE) == KEY_IDLE) 
-	{
-		editorCamera->LookAt(float3(0.0f, 0.0f, 0.0f));
-	}
 
 	return UPDATE_CONTINUE;
 }
