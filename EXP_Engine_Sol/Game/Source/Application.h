@@ -53,4 +53,4 @@ private:
 	void FinishUpdate();
 };
 
-extern Application* App_;
+extern Application* ExternalApp;

@@ -7,6 +7,7 @@
 #include "ModuleScene.h"
 #include "GameObject.h"
 #include "ModuleImport.h"
+#include "ModuleCamera3D.h"
 
 #include "../External/ImGui/imgui.h"
 #include "../External/ImGui/backends/imgui_impl_opengl3.h"
@@ -37,21 +38,38 @@ bool ModuleEditor::Init()
 	bool ret = true;
 	App->mFPSLog.reserve(30);
 
-	//// Setup Dear ImGui context
-	//IMGUI_CHECKVERSION();
-	//ImGui::CreateContext();
-	//ImGuiIO& io = ImGui::GetIO(); (void)io;
-	//ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-	////io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-	////io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+	// Setup Dear ImGui context
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // Enable Docking
+	io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;       // Enable Multi-Viewport / Platform Windows
+	//io.ConfigViewportsNoAutoMerge = true;
+	//io.ConfigViewportsNoTaskBarIcon = true;
 
-	//// Setup Dear ImGui style
-	//ImGui::StyleColorsDark();
-	////ImGui::StyleColorsClassic();
+	if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+	{
+		IoConfirmer = true;
+	}
 
-	//// Setup Platform/Renderer backends
-	//ImGui_ImplSDL2_InitForOpenGL(App->window->window, context);
-	//ImGui_ImplOpenGL3_Init("#version 130");
+	// Setup Dear ImGui style
+	ImGui::StyleColorsDark();
+
+	//ImGui::StyleColorsLight();
+
+	// When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
+	ImGuiStyle& style = ImGui::GetStyle();
+	if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+	{
+		style.WindowRounding = 0.0f;
+		style.Colors[ImGuiCol_WindowBg].w = 1.0f;
+	}
+
+	ImGui_ImplSDL2_InitForOpenGL(App->window->window, App->renderer3D->context);
+	ImGui_ImplOpenGL3_Init();
+
 	return ret;
 }
 
@@ -80,6 +98,15 @@ void ModuleEditor::DrawEditor()
 	if (show_hierarchy_window) DrawHierarchy();
 	if (show_inspector_window) DrawInspector();
 	if (show_delete_scene_modal) DrawSceneAlert();
+
+	if (ImGui::Begin("Scene"), true) {
+
+		ImVec2 size = ImGui::GetContentRegionAvail();
+		App->camera->editorCamera->SetAspectRatio(size.x / size.y);
+		ImGui::Image((ImTextureID)App->camera->editorCamera->TCB, size, ImVec2(0, 1), ImVec2(1, 0));
+
+		ImGui::End();
+	}
 
 	Config();
 	Console();
@@ -365,12 +392,9 @@ void ModuleEditor::HierarchyWindow(GameObject* gameObject)
 					DrawSceneAlert();
 				}
 			}
-
 			ImGui::EndPopup();
 		}
 		ImGui::SetItemTooltip("Right-click to fast options");
-
-
 
 		if (openTreeNode)
 		{
@@ -403,6 +427,27 @@ void ModuleEditor::Inspector(GameObject* gameObject)
 			uniqueName = App->importer->GetUniqueName(newName);
 			gameObject->ChangeName(uniqueName.c_str());
 		}
+
+		ImGui::Separator();
+
+		ImGui::Text("Parent: ");
+		ImGui::SameLine();
+		if (App->scene->gameObjectSelected->Parent != nullptr)
+		{
+			ImGui::TextColored(GREEN, "%s", App->scene->gameObjectSelected->Parent->Name.c_str());
+		}
+		else ImGui::Text("No Parent");
+		
+		if (ImGui::Button("Delete")) //MYTODO: Hacer una confirmacion en todos los objetos, y una opcion de "Dont show again" (con un bool showAgain)
+		{
+			if (gameObject == App->scene->rootGameObject)
+			{
+				show_delete_scene_modal = true;
+				DrawSceneAlert();
+			}
+			else App->scene->DeleteGameObject(gameObject);
+		}
+
 		ImGui::Separator();
 
 		if (ImGui::TreeNode("Draw options"))
@@ -436,16 +481,6 @@ void ModuleEditor::Inspector(GameObject* gameObject)
 				}
 			}
 			ImGui::TreePop();
-		}
-
-		if (ImGui::Button("Delete"))
-		{
-			if (gameObject == App->scene->rootGameObject)
-			{
-				show_delete_scene_modal = true;
-				DrawSceneAlert();
-			}
-			else App->scene->DeleteGameObject(gameObject);
 		}
 	}
 }

@@ -274,6 +274,7 @@
     <ClInclude Include="Game\Source\Application.h" />
     <ClInclude Include="Game\Source\Color.h" />
     <ClInclude Include="Game\Source\Component.h" />
+    <ClInclude Include="Game\Source\ComponentCamera.h" />
     <ClInclude Include="Game\Source\ComponentMesh.h" />
     <ClInclude Include="Game\Source\ComponentTexture.h" />
     <ClInclude Include="Game\Source\ComponentTransform.h" />
@@ -336,6 +337,7 @@
     <ClCompile Include="Game\External\MathGeoLib\include\Time\Clock.cpp" />
     <ClCompile Include="Game\Source\Application.cpp" />
     <ClCompile Include="Game\Source\Color.cpp" />
+    <ClCompile Include="Game\Source\ComponentCamera.cpp" />
     <ClCompile Include="Game\Source\ComponentMesh.cpp" />
     <ClCompile Include="Game\Source\ComponentTexture.cpp" />
     <ClCompile Include="Game\Source\ComponentTransform.cpp" />

@@ -1,9 +1,11 @@
-#include "Globals.h"
 #include "ModuleScene.h"
+#include "Globals.h"
+#include "ModuleCamera3D.h"
 
 ModuleScene::ModuleScene(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 	rootGameObject = CreateGameObject("Scene", nullptr);
+	editorCamera = CreateGameObject("Editor camera", rootGameObject);
 }
 
 // Destructor
@@ -15,6 +17,8 @@ bool ModuleScene::Init()
 {
 	LOG("Creating Module Scene");
 	bool ret = true;
+
+	editorCamera->AddComponent(App->camera->editorCamera);
 
 	return ret;
 }

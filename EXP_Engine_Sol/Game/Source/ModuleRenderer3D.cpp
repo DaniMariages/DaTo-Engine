@@ -4,9 +4,12 @@
 #include "ModuleWindow.h"
 #include "ModuleCamera3D.h"
 #include "ModuleInput.h"
+
 #include "../External/SDL/include/SDL_opengl.h"
+
 #include "ModuleEditor.h"
 #include "ModuleImport.h"
+
 #include <gl/GL.h>
 #include <gl/GLU.h>
 
@@ -26,7 +29,7 @@
 #pragma comment (lib, "Game/External/MathGeoLib/libx86/M_Release/MathGeoLib.lib") /* link Microsoft OpenGL lib   */
 #endif // _DEBUG
 
-ModuleRenderer3D::ModuleRenderer3D(Application* app, bool start_enabled) : Module(app, start_enabled)
+ModuleRenderer3D::ModuleRenderer3D(Application* app, bool start_enabled) : Module(app, start_enabled), context()
 {
 }
 
@@ -48,6 +51,9 @@ bool ModuleRenderer3D::Init()
 		ret = false;
 	}
 	
+	ilInit();
+	ILenum ILerror = ilGetError();
+
 	if(ret == true)
 	{
 		//Use Vsync
@@ -118,33 +124,15 @@ bool ModuleRenderer3D::Init()
 		glewInit();
 	}
 
-	// Projection matrix for
-	OnResize(SCREEN_WIDTH, SCREEN_HEIGHT);
-
-	App->editor->Init();
-	// Setup Dear ImGui context
-	IMGUI_CHECKVERSION();
-	ImGui::CreateContext();
-	ImGuiIO& io = ImGui::GetIO(); (void)io;
-	ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-	ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
-	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-
-	// Setup Dear ImGui style
-	ImGui::StyleColorsDark();
-	//ImGui::StyleColorsClassic();
-	// Setup Platform/Renderer backends
-	ImGui_ImplSDL2_InitForOpenGL(App->window->window, context);
-	ImGui_ImplOpenGL3_Init("#version 130");
-
 	UseCheckerTexture();
-	Grid.axis = true;
 
-	ilInit();
+	Grid.axis = true;
 
 	App->importer->ReadFile("Assets/Models/BakerHouse.fbx");
 	App->importer->ReadFile("Assets/Textures/BakerHouse.png");
+
+	// Projection matrix for
+	OnResize(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	return ret;
 }
@@ -155,11 +143,13 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
 
+	glMatrixMode(GL_PROJECTION);
+	glLoadMatrixf(App->camera->editorCamera->GetProjectionMatrix());
 	glMatrixMode(GL_MODELVIEW);
-	glLoadMatrixf(App->camera->GetViewMatrix());
+	glLoadMatrixf(App->camera->editorCamera->GetRawViewMatrix());
 
 	// light 0 on cam pos
-	lights[0].SetPos(App->camera->Position.x, App->camera->Position.y, App->camera->Position.z);
+	lights[0].SetPos(App->camera->editorCamera->GetPos().x, App->camera->editorCamera->GetPos().y, App->camera->editorCamera->GetPos().z);
 
 	for (uint i = 0; i < MAX_LIGHTS; ++i) lights[i].Render();
 
@@ -172,16 +162,24 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 // PostUpdate present buffer to screen
 update_status ModuleRenderer3D::PostUpdate(float dt)
 {
-	//Render Editor
+	//Draw Editor Camera
+	App->camera->editorCamera->RenderBuffers(true);
+
+	//Draw Grid
 	Grid.Render();
 
+	//Draw meshes
 	IterateDrawMesh();
 
 	glEnd();
 	glLineWidth(1.0f);
+	App->camera->editorCamera->RenderBuffers(false);
 
+	//Draw Editor
 	App->editor->DrawEditor();
+
 	SDL_GL_SwapWindow(App->window->window);
+
 	return UPDATE_CONTINUE;
 }
 
@@ -190,30 +188,30 @@ bool ModuleRenderer3D::CleanUp()
 {
 	LOG("Destroying 3D Renderer");
 
-	if (VBO != 0)
-	{
-		glDeleteBuffers(1, &VBO);
-		VBO = 0;
-	}
+	App->camera->editorCamera->UnloadBuffers();
 	SDL_GL_DeleteContext(context);
 
 	return true;
 }
 
-
 void ModuleRenderer3D::OnResize(int width, int height)
 {
-	glViewport(0, 0, width, height);
+	App->camera->editorCamera->LoadBuffers(width, height);
+}
+
+void ModuleRenderer3D::UpdateProjectionMatrix()
+{
+	//Only do if cameras are up and running
+	if (App->camera->editorCamera == nullptr) return;
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 
-	//todo: USE MATHGEOLIB here BEFORE 1st delivery! (TIP: Use MathGeoLib/Geometry/Frustum.h, view and projection matrices are managed internally.)
-	ProjectionMatrix = perspective(60.0f, (float)width / (float)height, 0.125f, 512.0f);
-	glLoadMatrixf(ProjectionMatrix.M);
+	glLoadMatrixf((GLfloat*)App->camera->editorCamera->GetProjectionMatrix());
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+
 }
 
 void ModuleRenderer3D::UseCheckerTexture() {
@@ -249,8 +247,6 @@ void ModuleRenderer3D::SetUpBuffers(mesh* mesh)
 	glGenBuffers(1, &mesh->EBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * mesh->indices.size(), &mesh->indices[0], GL_STATIC_DRAW);
-
-	//TexCoords?
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -444,6 +440,35 @@ void ModuleRenderer3D::DrawSelectedNormals(GameObject* gObject)
 			if (App->editor->drawSelectedVertex) DrawVertexNormals(tempComponentMesh->GetMesh());
 		}
 	}
+}
+
+
+void ModuleRenderer3D::DrawBox(float3* vertices, float3 color)
+{
+	uint indices[24] = {
+
+		0,2,2,
+		6,6,4,
+		4,0,0,
+		1,1,3,
+		3,2,4,
+		5,6,7,
+		5,7,3,
+		7,1,5
+
+	};
+
+	glBegin(GL_LINES);
+	glColor3fv(color.ptr());
+
+	for (size_t i = 0; i < (sizeof(indices) / sizeof(indices[0])); i++) {
+
+		glVertex3fv(vertices[indices[i]].ptr());
+
+	}
+
+	glColor3f(255.f, 255.f, 255.f);
+	glEnd();
 }
 
 void  ModuleRenderer3D::ImportCube()

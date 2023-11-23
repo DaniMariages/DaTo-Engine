@@ -8,11 +8,10 @@
 #include "ModuleImport.h"
 #include "ModuleScene.h"
 
-extern  Application* App_ = nullptr;
-
+extern Application* ExternalApp = nullptr;
 Application::Application()
 {
-	App_ = this;
+	ExternalApp = this;
 
 	window = new ModuleWindow(this);
 	input = new ModuleInput(this);
@@ -27,15 +26,16 @@ Application::Application()
 	// They will CleanUp() in reverse order
 
 	// Main Modules
+	AddModule(importer);
 	AddModule(window);
 	AddModule(camera);
-	AddModule(editor);
 	AddModule(input);
-	AddModule(importer);
+
 	AddModule(scene);
 	
 	// Renderer last!
 	AddModule(renderer3D);
+	AddModule(editor);
 }
 
 Application::~Application()
@@ -141,5 +141,3 @@ float Application::DT() {
 float Application::MS() {
 	return dt * 100;
 }
-
-Application* App = nullptr;

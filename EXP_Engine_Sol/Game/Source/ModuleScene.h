@@ -19,11 +19,13 @@ public:
 
 	GameObject* CreateGameObject(std::string Name, GameObject* parent);
 	void DeleteGameObject(GameObject* gameObject);
-	
 
 public: 
 
 	GameObject* rootGameObject = nullptr;
+	GameObject* editorCamera = nullptr;
+	GameObject* gameCamera = nullptr;
+
 	std::vector<GameObject*> gameObjects;
 	GameObject* gameObjectSelected = nullptr;
 

@@ -81,6 +81,7 @@ public:
 	bool fullscreen = false;
 	bool borderless = false;
 
+	bool IoConfirmer = false;
 };
 
 #endif //MODULE_EDITOR
