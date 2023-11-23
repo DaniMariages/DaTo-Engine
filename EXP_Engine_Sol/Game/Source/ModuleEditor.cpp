@@ -7,6 +7,7 @@
 #include "ModuleScene.h"
 #include "GameObject.h"
 #include "ModuleImport.h"
+#include "ModuleCamera3D.h"
 
 #include "../External/ImGui/imgui.h"
 #include "../External/ImGui/backends/imgui_impl_opengl3.h"
@@ -97,6 +98,15 @@ void ModuleEditor::DrawEditor()
 	if (show_hierarchy_window) DrawHierarchy();
 	if (show_inspector_window) DrawInspector();
 	if (show_delete_scene_modal) DrawSceneAlert();
+
+	if (ImGui::Begin("Scene"), true) {
+
+		ImVec2 size = ImGui::GetContentRegionAvail();
+		App->camera->editorCamera->SetAspectRatio(size.x / size.y);
+		ImGui::Image((ImTextureID)App->camera->editorCamera->TCB, size, ImVec2(0, 1), ImVec2(1, 0));
+
+		ImGui::End();
+	}
 
 	Config();
 	Console();

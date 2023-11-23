@@ -124,15 +124,15 @@ bool ModuleRenderer3D::Init()
 		glewInit();
 	}
 
-	// Projection matrix for
-	OnResize(SCREEN_WIDTH, SCREEN_HEIGHT);
-
 	UseCheckerTexture();
 
 	Grid.axis = true;
 
 	App->importer->ReadFile("Assets/Models/BakerHouse.fbx");
 	App->importer->ReadFile("Assets/Textures/BakerHouse.png");
+
+	// Projection matrix for
+	OnResize(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	return ret;
 }
@@ -143,6 +143,8 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
 
+	glMatrixMode(GL_PROJECTION);
+	glLoadMatrixf(App->camera->editorCamera->GetProjectionMatrix());
 	glMatrixMode(GL_MODELVIEW);
 	glLoadMatrixf(App->camera->editorCamera->GetRawViewMatrix());
 
@@ -160,17 +162,24 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 // PostUpdate present buffer to screen
 update_status ModuleRenderer3D::PostUpdate(float dt)
 {
-	//Render Editor
+	//Draw Editor Camera
+	App->camera->editorCamera->RenderBuffers(true);
+
+	//Draw Grid
 	Grid.Render();
 
+	//Draw meshes
 	IterateDrawMesh();
 
 	glEnd();
 	glLineWidth(1.0f);
+	App->camera->editorCamera->RenderBuffers(false);
 
-	UpdateProjectionMatrix();
+	//Draw Editor
 	App->editor->DrawEditor();
+
 	SDL_GL_SwapWindow(App->window->window);
+
 	return UPDATE_CONTINUE;
 }
 
@@ -179,7 +188,7 @@ bool ModuleRenderer3D::CleanUp()
 {
 	LOG("Destroying 3D Renderer");
 
-	//DeleteBuffer();
+	App->camera->editorCamera->UnloadBuffers();
 	SDL_GL_DeleteContext(context);
 
 	return true;
@@ -187,7 +196,7 @@ bool ModuleRenderer3D::CleanUp()
 
 void ModuleRenderer3D::OnResize(int width, int height)
 {
-	App->camera->editorCamera->SetAspectRatio((float)width / (float)height);
+	App->camera->editorCamera->LoadBuffers(width, height);
 }
 
 void ModuleRenderer3D::UpdateProjectionMatrix()

@@ -24,12 +24,6 @@ public:
 	bool frustumCulling;
 	bool drawBoundingBoxes;
 
-private:
-	bool looking;
-	float3 looking_at;
-
-	LineSegment latest_ray;
-
 public:
 	void Enable() override;
 	void Update() override;
@@ -83,6 +77,13 @@ public:
 	void Focus(float3& center, float distance);
 
 	ComponentCamera(GameObject* parent);
-private:
 
+	//RENDER
+	void LoadBuffers(int width, int height);
+	void RenderBuffers(bool active);
+	void UnloadBuffers();
+
+	GLuint FBO;
+	GLuint TCB;
+	GLuint RBO;
 };

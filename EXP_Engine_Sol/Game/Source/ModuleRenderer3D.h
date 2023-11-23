@@ -63,7 +63,4 @@ public:
 	GLuint texWidth, texHeight;
 	GLubyte checkerImage[CHECKERS_HEIGHT][CHECKERS_WIDTH][4];
 
-	GLuint FBO; // Frame Buffer Object
-	GLuint TCB; // Texture Color Buffer
-	GLuint RBO; // Render Buffer Object
 };
