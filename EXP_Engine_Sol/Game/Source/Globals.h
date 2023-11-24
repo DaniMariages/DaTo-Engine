@@ -43,5 +43,6 @@ enum update_status
 #define YELLOW ImVec4(1.0f, 1.0f, 0.0f, 1.0f)
 #define BLUE ImVec4(0.0f, 0.0f, 1.0f, 1.0f)
 #define RED ImVec4(1.0f, 0.0f, 0.0f, 1.0f)
+#define WHITE ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
 
 class Application;

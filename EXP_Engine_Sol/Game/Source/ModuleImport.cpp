@@ -197,7 +197,6 @@ void ModuleImport::GetSceneInfo(aiNode* node, const aiScene* scene, const char* 
 	}
 	else tempObject = App->scene->CreateGameObject(node->mName.C_Str(), gameObject);
 
-	
 	for (unsigned int i = 0; i < node->mNumMeshes; i++)
 	{
 		ProcessMesh(scene->mMeshes[node->mMeshes[i]], file_path, tempObject);
@@ -262,6 +261,7 @@ mesh ModuleImport::ProcessMesh(aiMesh* Mesh, const char* file_path, GameObject* 
 	}
 	compMesh->SetPath(std::string(file_path));
 	compMesh->SetMesh(myMesh);
+	compMesh->InitBoundingBoxes(myMesh);
 
 	gameObject->AddComponent(compMesh);
 	App->renderer3D->SetUpBuffers(myMesh);
@@ -269,7 +269,6 @@ mesh ModuleImport::ProcessMesh(aiMesh* Mesh, const char* file_path, GameObject* 
 
 	return *myMesh;
 }
-
 
 Texture* ModuleImport::LoadTexture(const char* file_path)
 {

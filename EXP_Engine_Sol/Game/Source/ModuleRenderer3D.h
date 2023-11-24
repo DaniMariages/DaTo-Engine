@@ -47,8 +47,14 @@ public:
 	void ImportCylinder();
 	void ImportTorus();
 
+	//To draw the face normal
 	float3 CalculateFaceNormal(const float3& vertex1, const float3& vertex2, const float3& vertex3);
+
+	//To draw a box
 	void DrawBox(float3* vertices, float3 color);
+
+	//Function to draw the bounding box of a game object
+	void RenderBB();
 
 public:
 

@@ -167,6 +167,9 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	//Draw Grid
 	Grid.Render();
 
+	//Render the Bounding Box for all meshes
+	RenderBB();
+
 	//Draw Frustum Box
 	App->scene->gameCamera->DrawFrustumCube();
 
@@ -457,6 +460,7 @@ void ModuleRenderer3D::DrawBox(float3* vertices, float3 color)
 
 	};
 
+	glLineWidth(3.0f); //Makes the lines a little thicker for visual reasons.
 	glBegin(GL_LINES);
 	glColor3fv(color.ptr());
 
@@ -467,30 +471,49 @@ void ModuleRenderer3D::DrawBox(float3* vertices, float3 color)
 	}
 
 	glColor3f(255.f, 255.f, 255.f);
+	glLineWidth(1.0f);
 	glEnd();
 }
 
-void  ModuleRenderer3D::ImportCube()
+void ModuleRenderer3D::RenderBB()
+{
+	//Get all the game objects
+	for (unsigned int i = 0; i < App->scene->gameObjects.size(); i++)
+	{
+		//Get all the components from the Game Object
+		for (unsigned int j = 0; j < App->scene->gameObjects[i]->components.size(); j++)
+		{
+			//If has a Mesh component, then draw its bounding box
+			if (App->scene->gameObjects[i]->components[j]->type == typeComponent::Mesh)
+			{
+				ComponentMesh* compMesh = (ComponentMesh*)App->scene->gameObjects[i]->GetComponent(typeComponent::Mesh);
+				compMesh->RenderBoundingBoxes();
+			}
+		}
+	}
+}
+
+void ModuleRenderer3D::ImportCube()
 {
 	App->importer->ReadFile("Assets/Models/Primitives/Cube.fbx");
 }
 
-void  ModuleRenderer3D::ImportSphere()
+void ModuleRenderer3D::ImportSphere()
 {
 	App->importer->ReadFile("Assets/Models/Primitives/Sphere.fbx");
 }
 
-void  ModuleRenderer3D::ImportCone()
+void ModuleRenderer3D::ImportCone()
 {
 	App->importer->ReadFile("Assets/Models/Primitives/Cone.fbx");
 }
 
-void  ModuleRenderer3D::ImportCylinder()
+void ModuleRenderer3D::ImportCylinder()
 {
 	App->importer->ReadFile("Assets/Models/Primitives/Cylinder.fbx");
 }
 
-void  ModuleRenderer3D::ImportTorus()
+void ModuleRenderer3D::ImportTorus()
 {
 	App->importer->ReadFile("Assets/Models/Primitives/Torus.fbx");
 }

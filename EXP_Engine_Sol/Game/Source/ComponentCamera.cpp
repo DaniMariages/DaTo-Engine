@@ -90,7 +90,7 @@ void ComponentCamera::DrawFrustumCube() const
 {
 	float3 frustumCorners[8];
 	frustum.GetCornerPoints(frustumCorners);
-	ExternalApp->renderer3D->DrawBox(frustumCorners, float3(0, 255, 0));
+	ExternalApp->renderer3D->DrawBox(frustumCorners, float3(0.0f, 1.0f, 0.0f));
 }
 
 float* ComponentCamera::GetRawViewMatrix()
@@ -301,14 +301,6 @@ void ComponentCamera::DrawInspector()
 	if (ImGui::CollapsingHeader("Component Camera"))
 	{
 		if (ImGui::Checkbox("Frustum Culling", &frustumCulling));
-
-		//Set Vertical FOV
-		float verticalFOV = GetVerticalFOV();
-		if (ImGui::SliderFloat("Vertical FOV", &verticalFOV, 30, 120, "%0.2f", ImGuiSliderFlags_None)) { SetVerticalFOV(verticalFOV); }
-
-		//Set Horizontal FOV
-		float horizontalFOV = GetHorizontalFOV();
-		if (ImGui::SliderFloat("Horizontal FOV", &horizontalFOV, 30, 120, "%0.2f", ImGuiSliderFlags_None)) { SetHorizontalFOV(horizontalFOV); }
 
 		//Set General FOV
 		float FOV = GetVerticalFOV();

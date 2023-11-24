@@ -1,7 +1,11 @@
 #pragma once
 #include "Component.h"
 #include "ModuleImport.h"
+
 #include "../External/MathGeoLib/include/MathGeoLib.h"
+#include "../External/MathGeoLib/include/Geometry/AABB.h"
+#include "../External/MathGeoLib/include/Geometry/OBB.h"
+
 
 struct mesh;
 
@@ -22,9 +26,17 @@ public:
 	void SetMesh(mesh* Mesh);
 	void SetPath(std::string path);
 
+	void InitBoundingBoxes(mesh* Mesh);
+	void UpdateBoundingBoxes();
+	void RenderBoundingBoxes();
+	void DrawBox(float3* vertices, float3 color);
+
 private:
 	
 	mesh* Mesh;
 
 	std::string path;
+
+	AABB aabb;
+	OBB obb;
 };

@@ -50,7 +50,6 @@ struct Vertex
 	float2 TexCoords;
 };
 
-
 struct mesh
 {
 	std::vector<Vertex> vertices;
