@@ -54,6 +54,12 @@ public:
 	bool show_console = true;
 	bool show_delete_scene_modal = false;
 
+	//This bool helps to dont close the PopUp just when the other bool is pressed
+	bool dontShowAgainPressed = false;
+
+	//Bool to show or not show the Atention PopUp
+	bool dontShowMeAgain = false;
+
 	bool drawAll = true;
 	bool drawAllFaces = false;
 	bool drawAllVertex = false;
@@ -71,9 +77,6 @@ public:
 	bool drawSelectedVertex = false;
 	bool drawSelectedFaces = false;
 	bool drawSelectedTexture = false;
-
-	//Public variable to know which model is selected
-	int posOfSelected = -1;
 
 	bool Wireframe = false;
 	bool lights = true;

@@ -28,6 +28,7 @@ void ComponentTexture::DrawInspector() {
 		ImGui::Text("Height: %d.", texture->height);
 		ImGui::Text("Width: %d.", texture->width);
 		ImGui::Text("Path: %s.", texture->path);
+		ImGui::Image((ImTextureID)texture->textID, ImVec2(128, 128), ImVec2(0, 1), ImVec2(1, 0));
 	}
 }
 

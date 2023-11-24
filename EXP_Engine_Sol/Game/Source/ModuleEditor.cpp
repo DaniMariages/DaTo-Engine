@@ -162,11 +162,24 @@ void ModuleEditor::UpdateFPS(const float aFPS)
 	}
 }
 
-void ModuleEditor::MainMenuBar() {
-	if (ImGui::BeginMainMenuBar()) {
+void ModuleEditor::MainMenuBar() 
+{
+
+	if (ImGui::BeginMainMenuBar()) 
+	{
 		if (ImGui::BeginMenu("File"))
 		{
-			if (ImGui::BeginMenu("Primitives")) {
+			if (ImGui::MenuItem("Quit")) {
+
+				App->input->quit = true;
+			}
+			ImGui::EndMenu();
+		}
+
+		if (ImGui::BeginMenu("Game Objects"))
+		{
+			if (ImGui::BeginMenu("Primitives")) 
+			{
 				if (ImGui::MenuItem("Cube")) {
 					App->renderer3D->ImportCube();
 				}
@@ -185,9 +198,9 @@ void ModuleEditor::MainMenuBar() {
 
 				ImGui::EndMenu();
 			}
-			if (ImGui::MenuItem("Quit")) {
-
-				App->input->quit = true;
+			if (ImGui::MenuItem("Empty Game Object")) 
+			{
+				App->scene->CreateGameObject("Empty Game Object", App->scene->rootGameObject);
 			}
 			ImGui::EndMenu();
 		}
@@ -379,6 +392,16 @@ void ModuleEditor::HierarchyWindow(GameObject* gameObject)
 
 		if (ImGui::BeginPopupContextItem())
 		{
+			//Show what Game Object is selected
+			ImGui::MenuItem(App->scene->gameObjectSelected->Name.c_str(), NULL, false, false);
+
+			//Create a empty child of Game Object selected
+			if (ImGui::MenuItem("Create Empty Child"))
+			{
+				App->scene->CreateGameObject("EmptyGameObject", App->scene->gameObjectSelected);
+			}
+
+			//Hide the selected game object MYTODO: Change enable with hide, cause is not the same
 			if (ImGui::MenuItem("Hide"))
 			{
 				if (gameObject->active) gameObject->Disable();
@@ -391,15 +414,10 @@ void ModuleEditor::HierarchyWindow(GameObject* gameObject)
 				}
 			}
 
+			//Delete the selected game object
 			if (ImGui::MenuItem("Delete"))
 			{
-				if (App->scene->gameObjectSelected != App->scene->rootGameObject)
-					App->scene->DeleteGameObject(App->scene->gameObjectSelected);
-				else
-				{
-					show_delete_scene_modal = true;
-					DrawSceneAlert();
-				}
+				show_delete_scene_modal = true;
 			}
 			ImGui::EndPopup();
 		}
@@ -449,12 +467,7 @@ void ModuleEditor::Inspector(GameObject* gameObject)
 		
 		if (ImGui::Button("Delete")) //MYTODO: Hacer una confirmacion en todos los objetos, y una opcion de "Dont show again" (con un bool showAgain)
 		{
-			if (gameObject == App->scene->rootGameObject)
-			{
-				show_delete_scene_modal = true;
-				DrawSceneAlert();
-			}
-			else App->scene->DeleteGameObject(gameObject);
+			show_delete_scene_modal = true;
 		}
 
 		ImGui::Separator();
@@ -496,19 +509,59 @@ void ModuleEditor::Inspector(GameObject* gameObject)
 
 void ModuleEditor::DrawSceneAlert()
 {
-	ImGui::OpenPopup("Action not allowed");
-	if (ImGui::BeginPopupModal("Action not allowed", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+	if (App->scene->gameObjectSelected != App->scene->rootGameObject)
 	{
-		ImGui::Text("Scene can't be deleted");
-		ImGui::Separator();
-
-		if (ImGui::Button("OK", ImVec2(120, 0)))
+		//Deletable object
+		if (!dontShowMeAgain)
 		{
-			show_delete_scene_modal = false;
-			ImGui::CloseCurrentPopup();
+			ImGui::OpenPopup("ATENTION");
+			if (ImGui::BeginPopupModal("ATENTION", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+			{
+				ImGui::Text("This action cannot be undone!\nAre you sure?");
+				if (ImGui::Checkbox("Dont show me this again", &dontShowAgainPressed));
+
+				ImGui::Separator();
+
+				if (ImGui::Button("DELETE", ImVec2(120, 0)))
+				{
+					App->scene->DeleteGameObject(App->scene->gameObjectSelected);
+					show_delete_scene_modal = false;
+					if (dontShowAgainPressed) dontShowMeAgain = true;
+					ImGui::CloseCurrentPopup();
+				}
+				ImGui::SetItemDefaultFocus();
+				ImGui::SameLine();
+				if (ImGui::Button("CANCEL", ImVec2(120, 0)))
+				{
+					show_delete_scene_modal = false;
+					ImGui::CloseCurrentPopup();
+				}
+
+				ImGui::EndPopup();
+			}
 		}
-
-		ImGui::EndPopup();
+		else
+		{
+			App->scene->DeleteGameObject(App->scene->gameObjectSelected);
+			show_delete_scene_modal = false;
+		}
 	}
+	else 
+	{
+		//Non deletable object
+		ImGui::OpenPopup("Action not allowed");
+		if (ImGui::BeginPopupModal("Action not allowed", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+		{
+			ImGui::Text("%s can't be deleted", App->scene->gameObjectSelected->Name.c_str());
+			ImGui::Separator();
 
+			if (ImGui::Button("OK", ImVec2(120, 0)))
+			{
+				show_delete_scene_modal = false;
+				ImGui::CloseCurrentPopup();
+			}
+
+			ImGui::EndPopup();
+		}
+	}
 }

@@ -176,7 +176,7 @@ void ComponentCamera::Pan(float3& newPos, float speed, float dt)
 	newPos += GetRight() * DeltaX / 2;
 }
 
-//----------------- PUEDE SER UTIL CUANDO TENGAMOS TRANSFORM -----------------
+//----------------- MYTODO: PUEDE SER UTIL CUANDO TENGAMOS TRANSFORM -----------------
 //
 //void ComponentCamera::Orbit(float motion_x, float motion_y)
 //{

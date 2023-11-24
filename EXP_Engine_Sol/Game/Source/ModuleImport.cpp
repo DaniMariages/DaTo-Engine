@@ -112,8 +112,9 @@ std::string ModuleImport::GetUniqueName(std::string Name)
 				Name = ReName(Name, counter);
 			}
 		}
+		return Name;
 	}
-	return Name;
+	else return Name;
 }
 
 std::string ModuleImport::ReName(std::string Name, int counter)

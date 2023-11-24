@@ -1,6 +1,7 @@
 #include "ModuleScene.h"
 #include "Globals.h"
 #include "ModuleCamera3D.h"
+#include "ModuleImport.h"
 
 ModuleScene::ModuleScene(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -46,17 +47,13 @@ update_status ModuleScene::PostUpdate(float dt)
 bool ModuleScene::CleanUp()
 {
 	LOG("Destroying Module Scene");
-
-
 	return true;
 }
 
 GameObject* ModuleScene::CreateGameObject(std::string Name, GameObject* parent)
 {
 	GameObject* newGameObject = new GameObject(Name, parent);
-
 	if (parent != nullptr) parent->AddChildren(newGameObject);
-
 	gameObjects.push_back(newGameObject);
 
 	return newGameObject;

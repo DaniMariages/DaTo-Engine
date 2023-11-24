@@ -50,8 +50,6 @@ public:
 	float3 CalculateFaceNormal(const float3& vertex1, const float3& vertex2, const float3& vertex3);
 	void DrawBox(float3* vertices, float3 color);
 
-	void UpdateProjectionMatrix();
-
 public:
 
 	Light lights[MAX_LIGHTS];
