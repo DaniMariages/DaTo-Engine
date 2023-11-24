@@ -2,6 +2,8 @@
 #include <string>
 #include <vector>
 
+#include "ComponentTransform.h"
+
 class Component;
 enum class typeComponent;
 
@@ -33,10 +35,13 @@ public:
 
 	void SetParent(GameObject* parent);
 	Component* AddComponent(Component* component);
+	Component* AddComponentType(typeComponent typecomponent);
 	Component* GetComponent(typeComponent type);
 
 	std::vector<Component*> GetComponents(typeComponent type);
 	GameObject* AddChildren(GameObject* children);
+
+	ComponentTransform* transform = nullptr;
 
 	bool selected = false;
 };

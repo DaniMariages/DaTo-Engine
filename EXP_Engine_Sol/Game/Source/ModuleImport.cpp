@@ -177,8 +177,8 @@ void ModuleImport::LoadMesh(const char* file_path)
 			GetSceneInfo(scene->mRootNode, scene, file_path, App->scene->gameObjectSelected);
 		}
 			
-		ComponentTransform* compTrans = new ComponentTransform(newGameObject);	//PROVISIONAL
-		newGameObject->AddComponent(compTrans);
+		//ComponentTransform* compTrans = new ComponentTransform(newGameObject);	//PROVISIONAL
+		//newGameObject->AddComponent(compTrans);
 
 		LOG("Scene loaded correctly");
 		aiReleaseImport(scene);
