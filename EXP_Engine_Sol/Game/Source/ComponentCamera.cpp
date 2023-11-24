@@ -298,7 +298,7 @@ void ComponentCamera::Focus(float3& center, float distance)
 void ComponentCamera::DrawInspector()
 {
 
-	if (ImGui::CollapsingHeader("Component Camera"), ImGuiTreeNodeFlags_DefaultOpen)
+	if (ImGui::CollapsingHeader("Component Camera"))
 	{
 		if (ImGui::Checkbox("Frustum Culling", &frustumCulling));
 
@@ -316,11 +316,11 @@ void ComponentCamera::DrawInspector()
 
 		//Set NearPlane
 		float NearPlane = GetNearPlane();
-		ImGui::DragFloat("Near plane", &frustum.nearPlaneDistance, 0.1f, 0.01f, frustum.nearPlaneDistance);
+		ImGui::DragFloat("Near plane", &frustum.nearPlaneDistance, 0.1f, 0.01f, frustum.farPlaneDistance);
 
 		//Set FarPlane
 		float FarPlane = GetFarPlane();
-		ImGui::DragFloat("Far plane", &frustum.farPlaneDistance, 0.1f, frustum.farPlaneDistance, 10000.f);
+		ImGui::DragFloat("Far plane", &frustum.farPlaneDistance, 0.1f, frustum.nearPlaneDistance, 10000.f);
 
 		if (ImGui::BeginCombo("Frustrum Type", (frustum.type == FrustumType::PerspectiveFrustum) ? "Prespective" : "Orthographic"))
 		{
@@ -332,7 +332,6 @@ void ComponentCamera::DrawInspector()
 
 			ImGui::EndCombo();
 		}
-
 	}
 }
 

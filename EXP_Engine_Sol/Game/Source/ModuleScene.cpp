@@ -90,14 +90,20 @@ void ModuleScene::DeleteGameObject(GameObject* gameObject)
 	for (unsigned int i = 0; i < gameObject->Parent->children.size(); ++i)
 	{
 		if (gameObject == gameObject->Parent->children[i])
+		{
 			gameObject->Parent->children.erase(gameObject->Parent->children.begin() + i);
+			break;
+		}
 	}
 	
 	//When references deleted, delete the game Object
 	for (unsigned int i = 0; i < gameObjects.size(); i++)
 	{
-		if (gameObject == gameObjects[i]) 
+		if (gameObject == gameObjects[i])
+		{
 			gameObjects.erase(gameObjects.begin() + i);
+			break;
+		}
 	}
 
 	//Set the gameObjects null

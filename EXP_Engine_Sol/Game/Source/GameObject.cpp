@@ -1,5 +1,6 @@
 #include "GameObject.h"
 #include "Component.h"
+#include "ComponentCamera.h"
 #include "ComponentTransform.h"
 #include "ComponentTexture.h"
 #include "ComponentMesh.h"
@@ -66,10 +67,12 @@ Component* GameObject::AddComponent(Component* component)
 	case(typeComponent::Error):
 		//LOG("Component Type Error! Something broke...");
 		break;
+
 	case(typeComponent::Transform):
 		ret = new ComponentTransform(this);
 		LOG("Component Transform added to %s", component->parent->Name.c_str());
 		break;
+
 	case(typeComponent::Material):
 		if (this->GetComponent(typeComponent::Material) != nullptr) {
 			return nullptr;
@@ -77,11 +80,16 @@ Component* GameObject::AddComponent(Component* component)
 		ret = new ComponentTexture(this);
 		LOG("Component Texture added to %s", component->parent->Name.c_str());
 		break;
+
 	case(typeComponent::Mesh):
 		ret = new ComponentMesh(this);
 		LOG("Component mesh added to %s", component->parent->Name.c_str());
 		break;
 
+	case(typeComponent::Camera):
+		ret = new ComponentCamera(this);
+		LOG("Component Camera added to %s", component->parent->Name.c_str());
+		break;
 	}
 
 	components.push_back(component);
@@ -123,15 +131,3 @@ std::vector<Component*> GameObject::GetComponents(typeComponent type)
 
 	return ret;
 }
-//
-//void GameObject::DeleteChildren(std::vector<GameObject*> mChildren)
-//{
-//	//If children have more children
-//	if (!mChildren.empty())
-//	{
-//		for (unsigned int i = 0; i < mChildren.size(); i++)
-//		{
-//			DeleteChildren(mChildren[i]); 
-//		}
-//	}
-//}

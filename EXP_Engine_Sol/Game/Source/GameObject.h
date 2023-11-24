@@ -37,7 +37,6 @@ public:
 
 	std::vector<Component*> GetComponents(typeComponent type);
 	GameObject* AddChildren(GameObject* children);
-	void DeleteChildren(std::vector<GameObject*> mChildren);
 
 	bool selected = false;
 };
