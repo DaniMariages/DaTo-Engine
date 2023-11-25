@@ -478,19 +478,24 @@ void ModuleRenderer3D::DrawBox(float3* vertices, float3 color)
 
 void ModuleRenderer3D::RenderBB()
 {
+
+	if (App->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN) {
+		if (App->editor->drawAllBoxes == true) App->editor->drawAllBoxes = false;
+		else if (App->editor->drawAllBoxes == false) App->editor->drawAllBoxes = true;
+	}
 	if (App->editor->drawAllBoxes == true) {
 
-		//Get all the game objects
+			//Get all the game objects
 		for (unsigned int i = 0; i < App->scene->gameObjects.size(); i++)
 		{
-			//Get all the components from the Game Object
+				//Get all the components from the Game Object
 			for (unsigned int j = 0; j < App->scene->gameObjects[i]->components.size(); j++)
 			{
-				//If has a Mesh component, then draw its bounding box
+					//If has a Mesh component, then draw its bounding box
 				if (App->scene->gameObjects[i]->components[j]->type == typeComponent::Mesh)
 				{
 					ComponentMesh* compMesh = (ComponentMesh*)App->scene->gameObjects[i]->GetComponent(typeComponent::Mesh);
-
+					
 					compMesh->RenderBoundingBoxes();
 
 				}
