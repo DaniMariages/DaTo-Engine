@@ -64,6 +64,7 @@ public:
 	bool drawAllFaces = false;
 	bool drawAllVertex = false;
 	bool drawTextures = true;
+	bool drawAllBoxes = true;
 
 	bool top = false;
 	bool front = false;
@@ -77,6 +78,7 @@ public:
 	bool drawSelectedVertex = false;
 	bool drawSelectedFaces = false;
 	bool drawSelectedTexture = false;
+	bool drawSelectedBoxes = true;
 
 	bool Wireframe = false;
 	bool lights = true;

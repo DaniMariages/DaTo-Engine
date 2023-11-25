@@ -447,6 +447,7 @@ void ModuleRenderer3D::DrawSelectedNormals(GameObject* gObject)
 
 void ModuleRenderer3D::DrawBox(float3* vertices, float3 color)
 {
+	
 	uint indices[24] = {
 
 		0,2,2,
@@ -477,21 +478,27 @@ void ModuleRenderer3D::DrawBox(float3* vertices, float3 color)
 
 void ModuleRenderer3D::RenderBB()
 {
-	//Get all the game objects
-	for (unsigned int i = 0; i < App->scene->gameObjects.size(); i++)
-	{
-		//Get all the components from the Game Object
-		for (unsigned int j = 0; j < App->scene->gameObjects[i]->components.size(); j++)
+	if (App->editor->drawAllBoxes == true) {
+
+		//Get all the game objects
+		for (unsigned int i = 0; i < App->scene->gameObjects.size(); i++)
 		{
-			//If has a Mesh component, then draw its bounding box
-			if (App->scene->gameObjects[i]->components[j]->type == typeComponent::Mesh)
+			//Get all the components from the Game Object
+			for (unsigned int j = 0; j < App->scene->gameObjects[i]->components.size(); j++)
 			{
-				ComponentMesh* compMesh = (ComponentMesh*)App->scene->gameObjects[i]->GetComponent(typeComponent::Mesh);
-				compMesh->RenderBoundingBoxes();
+				//If has a Mesh component, then draw its bounding box
+				if (App->scene->gameObjects[i]->components[j]->type == typeComponent::Mesh)
+				{
+					ComponentMesh* compMesh = (ComponentMesh*)App->scene->gameObjects[i]->GetComponent(typeComponent::Mesh);
+
+					compMesh->RenderBoundingBoxes();
+
+				}
 			}
 		}
 	}
 }
+
 
 void ModuleRenderer3D::ImportCube()
 {

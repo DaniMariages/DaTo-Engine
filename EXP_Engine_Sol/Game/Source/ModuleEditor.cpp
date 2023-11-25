@@ -298,6 +298,8 @@ void ModuleEditor::Config() {
 			}
 			if (ImGui::Checkbox("Textures", &drawTextures)) {
 			}
+			if (ImGui::Checkbox("Bounding Boxes", &drawAllBoxes)) {
+			}
 
 		}
 		if (ImGui::CollapsingHeader("View"))
@@ -488,6 +490,7 @@ void ModuleEditor::Inspector(GameObject* gameObject)
 			if (ImGui::Checkbox("Normals", &drawSelectedFaces));
 			if (ImGui::Checkbox("Vertex", &drawSelectedVertex));
 			if (ImGui::Checkbox("Textures", &drawSelectedTexture));
+			if (ImGui::Checkbox("Boudnig Boxes", &drawSelectedBoxes));
 
 			ImGui::TreePop();
 		}

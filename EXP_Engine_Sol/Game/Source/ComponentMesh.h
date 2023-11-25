@@ -1,4 +1,5 @@
 #pragma once
+#include "Application.h"
 #include "Component.h"
 #include "ModuleImport.h"
 
@@ -39,4 +40,5 @@ private:
 
 	AABB aabb;
 	OBB obb;
+
 };
