@@ -64,7 +64,6 @@ public:
 	float3 GetUp();
 	float3 GetRight();
 
-	void Look(float3& reference);
 	void Match(ComponentCamera* reference);
 
 	void Pan(float3& newPos, float speed, float dt);

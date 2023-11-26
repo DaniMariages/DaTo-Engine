@@ -233,7 +233,6 @@ void ComponentCamera::Rotate(float dt)
 
 			SetUp(GetFront().Cross(GetRight()));
 		}
-
 	}
 }
 
@@ -241,12 +240,6 @@ void ComponentCamera::Orbit(float3& point, float speed, float dt)
 {
 	int motionX = -ExternalApp->input->GetMouseXMotion();
 	int motionY = -ExternalApp->input->GetMouseYMotion();
-
-	// MYTODO: USE WITH TRANSFORM
-	if (ExternalApp->scene->gameObjectSelected != nullptr)
-	{
-		point = ExternalApp->scene->gameObjectSelected->transform->GetPosition();
-	}
 
 	float3 focus = GetPos() - point;
 
@@ -261,7 +254,6 @@ void ComponentCamera::Orbit(float3& point, float speed, float dt)
 	LookAt(point);
 }
 
-//MYTODO: Rework this with transform
 void ComponentCamera::Focus(float3& center, float distance)
 {
 	float3 newPosition = center + float3(-distance, distance, distance);
