@@ -36,10 +36,12 @@ public:
 
 	void IterateDrawMesh();
 	void DrawMesh(mesh* mesh, float4x4 transform, uint id = 0);
-	void DrawFaceNormals(mesh* Mesh);
-	void DrawVertexNormals(mesh* Mesh);
+	void DrawFaceNormals(mesh* Mesh, float3 position, float3 scale, Quat rotation);
+	void DrawVertexNormals(mesh* Mesh, float3 position, float3 scale, Quat rotation);
 	
-	void DrawSelectedNormals(GameObject* gObject);
+	void DrawSelectedNormals();
+	void DrawSelectedFaces();
+	void DrawSelectedVertex();
 
 	void ImportCube();
 	void ImportSphere();

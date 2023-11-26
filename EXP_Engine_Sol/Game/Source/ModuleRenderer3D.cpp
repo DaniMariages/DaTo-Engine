@@ -272,42 +272,25 @@ void ModuleRenderer3D::IterateDrawMesh()
 					DrawMesh(tempComponentMesh->GetMesh(), tempTrans->GetTransformMatrix(), componentTex->GetTexture()->textID);
 
 					if (App->editor->drawAllFaces == true) 
-						DrawFaceNormals(tempComponentMesh->GetMesh());
+						DrawFaceNormals(tempComponentMesh->GetMesh(), tempTrans->GetPosition(), tempTrans->GetScale(), tempTrans->GetRotation());
 
 					if (App->editor->drawAllVertex == true) 
-						DrawVertexNormals(tempComponentMesh->GetMesh());
+						DrawVertexNormals(tempComponentMesh->GetMesh(), tempTrans->GetPosition(), tempTrans->GetScale(), tempTrans->GetRotation());
 				}
 				else if (App->scene->gameObjects[i]->active)
 				{
 					DrawMesh(tempComponentMesh->GetMesh(), tempTrans->GetTransformMatrix());
 
 					if (App->editor->drawAllFaces == true) 
-						DrawFaceNormals(tempComponentMesh->GetMesh());
+						DrawFaceNormals(tempComponentMesh->GetMesh(), tempTrans->GetPosition(), tempTrans->GetScale(), tempTrans->GetRotation());
 
 					if (App->editor->drawAllVertex == true)
-						DrawVertexNormals(tempComponentMesh->GetMesh());
+						DrawVertexNormals(tempComponentMesh->GetMesh(), tempTrans->GetPosition(), tempTrans->GetScale(), tempTrans->GetRotation());
 				}
 
-				if (App->editor->drawSelectedFaces)
-				{
-					std::vector<Component*> meshComp = App->scene->gameObjectSelected->GetComponents(typeComponent::Mesh);
-					std::vector<Component*>::iterator it = meshComp.begin();
-					for (; it != meshComp.end(); ++it)
-					{
-						ComponentMesh* tempCompMesh = (ComponentMesh*)(*it);
-						DrawFaceNormals(tempCompMesh->GetMesh());
-					}
-				}
-				if (App->editor->drawSelectedVertex)
-				{
-					std::vector<Component*> meshComp = App->scene->gameObjectSelected->GetComponents(typeComponent::Mesh);
-					std::vector<Component*>::iterator it = meshComp.begin();
-					for (; it != meshComp.end(); ++it)
-					{
-						ComponentMesh* tempCompMesh = (ComponentMesh*)(*it);
-						DrawVertexNormals(tempCompMesh->GetMesh());
-					}
-				}
+				if (App->editor->drawSelectedFaces) DrawSelectedNormals();
+				if (App->editor->drawSelectedVertex) DrawSelectedNormals();
+
 				if (App->editor->drawSelectedTexture)
 				{
 					ComponentTexture* componentTex = (ComponentTexture*)App->scene->gameObjectSelected->GetComponent(typeComponent::Material);
@@ -372,7 +355,7 @@ void ModuleRenderer3D::DrawMesh(mesh* mesh, float4x4 transform, uint id)
 	glPopMatrix();
 }
 
-void ModuleRenderer3D::DrawFaceNormals(mesh* Mesh)
+void ModuleRenderer3D::DrawFaceNormals(mesh* Mesh, float3 position, float3 scale, Quat rotation)
 {
 	glBegin(GL_LINES);
 	glColor4f(0.0f, 0.0f, 1.0f, 0.0f);
@@ -383,9 +366,19 @@ void ModuleRenderer3D::DrawFaceNormals(mesh* Mesh)
 		const unsigned int idx2 = Mesh->indices[i + 1];
 		const unsigned int idx3 = Mesh->indices[i + 2];
 
-		const float3 vertex1 = Mesh->vertices[idx1].Position;
-		const float3 vertex2 = Mesh->vertices[idx2].Position;
-		const float3 vertex3 = Mesh->vertices[idx3].Position;
+		float3 vertex1 = Mesh->vertices[idx1].Position.Mul(scale);
+		float3 vertex2 = Mesh->vertices[idx2].Position.Mul(scale);
+		float3 vertex3 = Mesh->vertices[idx3].Position.Mul(scale);
+
+		// Apply rotation
+		vertex1 = rotation * vertex1;
+		vertex2 = rotation * vertex2;
+		vertex3 = rotation * vertex3;
+
+		// Translate to global position
+		vertex1 += position;
+		vertex2 += position;
+		vertex3 += position;
 
 		// Calculate the face normal
 		float3 faceNormal = CalculateFaceNormal(vertex1, vertex2, vertex3);
@@ -394,7 +387,7 @@ void ModuleRenderer3D::DrawFaceNormals(mesh* Mesh)
 		float3 centroid = (vertex1 + vertex2 + vertex3) / 3.0f;
 
 		// Draw the face normal line
-		float length = 0.5f; //Lines lenght
+		float length = 0.5f; // Lines length
 		glVertex3f(centroid.x, centroid.y, centroid.z);
 		glVertex3f(centroid.x + length * faceNormal.x, centroid.y + length * faceNormal.y, centroid.z + length * faceNormal.z);
 	}
@@ -410,18 +403,25 @@ float3 ModuleRenderer3D::CalculateFaceNormal(const float3& vertex1, const float3
 	return Cross(edge1, edge2).Normalized();
 }
 
-void ModuleRenderer3D::DrawVertexNormals(mesh* Mesh)
+void ModuleRenderer3D::DrawVertexNormals(mesh* Mesh, float3 position, float3 scale, Quat rotation)
 {
 	glBegin(GL_LINES);
 	glColor4f(1.0f, 0.0f, 0.0f, 0.0f);
 
 	for (unsigned int j = 0; j < Mesh->vertices.size(); ++j)
 	{
-		const float3 vertex = Mesh->vertices[j].Position;
-		const float3 normal = Mesh->vertices[j].Normal;
+		float3 vertex = Mesh->vertices[j].Position.Mul(scale);
+
+		// Apply rotation
+		vertex = rotation * vertex;
+
+		// Translate to global position
+		vertex += position;
+
+		float3 normal = Mesh->vertices[j].Normal;
 
 		// Draw the vertex normal line
-		float length = 0.5f; //Lines lenght
+		float length = 0.5f; // Lines length
 		glVertex3f(vertex.x, vertex.y, vertex.z);
 		glVertex3f(vertex.x + length * normal.x, vertex.y + length * normal.y, vertex.z + length * normal.z);
 	}
@@ -430,31 +430,39 @@ void ModuleRenderer3D::DrawVertexNormals(mesh* Mesh)
 	glEnd();
 }
 
-void ModuleRenderer3D::DrawSelectedNormals(GameObject* gObject)
+void ModuleRenderer3D::DrawSelectedNormals()
 {
-	std::vector<Component*> meshComponents = gObject->GetComponents(typeComponent::Mesh);
-	std::vector<Component*>::iterator item = meshComponents.begin();
-	for (; item != meshComponents.end(); ++item)
+	if (App->editor->drawSelectedFaces || App->editor->drawSelectedVertex)
 	{
-		ComponentTexture* componentTex = (ComponentTexture*)gObject->GetComponent(typeComponent::Material);
-		ComponentMesh* tempComponentMesh = (ComponentMesh*)(*item);
-		if (componentTex != nullptr && gObject->active)
+		GameObject* selectedObject = App->scene->gameObjectSelected;
+		if (selectedObject)
 		{
-			if (App->editor->drawSelectedFaces)	 DrawFaceNormals(tempComponentMesh->GetMesh());
-			if (App->editor->drawSelectedVertex) DrawVertexNormals(tempComponentMesh->GetMesh());
-		}
-		else if (gObject->active)
-		{
-			if (App->editor->drawSelectedFaces)  DrawFaceNormals(tempComponentMesh->GetMesh());
-			if (App->editor->drawSelectedVertex) DrawVertexNormals(tempComponentMesh->GetMesh());
+			ComponentTransform* transform = static_cast<ComponentTransform*>(selectedObject->GetComponent(typeComponent::Transform));
+
+			for (unsigned int i = 0; i < selectedObject->components.size(); ++i)
+			{
+				if (selectedObject->components[i]->type == typeComponent::Mesh)
+				{
+					ComponentMesh* compMesh = static_cast<ComponentMesh*>(selectedObject->components[i]);
+					mesh* Mesh = compMesh->GetMesh();
+
+					if (App->editor->drawSelectedFaces)
+					{
+						DrawFaceNormals(Mesh, transform->GetPosition(), transform->GetScale(), transform->GetRotation());
+					}
+
+					if (App->editor->drawSelectedVertex)
+					{
+						DrawVertexNormals(Mesh, transform->GetPosition(), transform->GetScale(), transform->GetRotation());
+					}
+				}
+			}
 		}
 	}
 }
 
-
 void ModuleRenderer3D::DrawBox(float3* vertices, float3 color)
 {
-	
 	uint indices[24] = {
 
 		0,2,2,
@@ -485,14 +493,14 @@ void ModuleRenderer3D::DrawBox(float3* vertices, float3 color)
 
 void ModuleRenderer3D::RenderBB()
 {
-
-	if (App->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN) {
+	if (App->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN) 
+	{
 		if (App->editor->drawAllBoxes == true) App->editor->drawAllBoxes = false;
 		else if (App->editor->drawAllBoxes == false) App->editor->drawAllBoxes = true;
 	}
-	if (App->editor->drawAllBoxes == true) {
-
-			//Get all the game objects
+	if (App->editor->drawAllBoxes == true) 
+	{
+		//Get all the game objects
 		for (unsigned int i = 0; i < App->scene->gameObjects.size(); i++)
 		{
 				//Get all the components from the Game Object
