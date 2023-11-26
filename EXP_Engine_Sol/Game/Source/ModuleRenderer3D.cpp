@@ -164,11 +164,11 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	App->camera->editorCamera->RenderBuffers(true);
 	App->camera->editorCamera->Update();
 
-	//Draw Grid
-	Grid.Render();
-
 	//Render the Bounding Box for all meshes
 	RenderBB();
+
+	//Draw Grid
+	Grid.Render();
 
 	//Draw Frustum Box
 	App->scene->gameCamera->DrawFrustumCube();
@@ -177,6 +177,8 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	IterateDrawMesh();
 
 	App->camera->editorCamera->RenderBuffers(false);
+
+	//-------------------------------
 
 	App->scene->gameCamera->RenderBuffers(true);
 	App->scene->gameCamera->Update();
@@ -188,8 +190,6 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	}
 
 	App->scene->gameCamera->RenderBuffers(false);
-	//glEnd();
-	//glLineWidth(1.0f);
 
 	//Draw Editor
 	App->editor->DrawEditor();
@@ -266,9 +266,10 @@ void ModuleRenderer3D::IterateDrawMesh()
 			{
 				ComponentTexture* componentTex = (ComponentTexture*)App->scene->gameObjects[i]->GetComponent(typeComponent::Material);
 				ComponentMesh* tempComponentMesh = (ComponentMesh*)(*item);
+				ComponentTransform* tempTrans = (ComponentTransform*)App->scene->gameObjects[i]->GetComponent(typeComponent::Transform);
 				if (componentTex != nullptr && App->scene->gameObjects[i]->active)
 				{
-					DrawMesh(tempComponentMesh->GetMesh(), componentTex->GetTexture()->textID);
+					DrawMesh(tempComponentMesh->GetMesh(), tempTrans->GetTransformMatrix(), componentTex->GetTexture()->textID);
 
 					if (App->editor->drawAllFaces == true) 
 						DrawFaceNormals(tempComponentMesh->GetMesh());
@@ -278,7 +279,7 @@ void ModuleRenderer3D::IterateDrawMesh()
 				}
 				else if (App->scene->gameObjects[i]->active)
 				{
-					DrawMesh(tempComponentMesh->GetMesh());
+					DrawMesh(tempComponentMesh->GetMesh(), tempTrans->GetTransformMatrix());
 
 					if (App->editor->drawAllFaces == true) 
 						DrawFaceNormals(tempComponentMesh->GetMesh());
@@ -318,7 +319,7 @@ void ModuleRenderer3D::IterateDrawMesh()
 						for (; it != meshComp.end(); ++it)
 						{
 							ComponentMesh* tempCompMesh = (ComponentMesh*)(*it);
-							DrawMesh(tempComponentMesh->GetMesh());
+							DrawMesh(tempComponentMesh->GetMesh(), tempTrans->GetTransformMatrix());
 						}
 					}
 				}
@@ -327,8 +328,12 @@ void ModuleRenderer3D::IterateDrawMesh()
 	}
 }
 
-void ModuleRenderer3D::DrawMesh(mesh* mesh, uint id)
+void ModuleRenderer3D::DrawMesh(mesh* mesh, float4x4 transform, uint id)
 {
+	// Update the transfor for meshes
+	glPushMatrix();
+	glMultMatrixf(transform.Transposed().ptr());
+
 	// Bind the VBO and EBO for the mesh
 	glBindBuffer(GL_ARRAY_BUFFER, mesh->VBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->EBO);
@@ -363,6 +368,8 @@ void ModuleRenderer3D::DrawMesh(mesh* mesh, uint id)
 	glDisableClientState(GL_NORMAL_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
+	//Disable the actual transform
+	glPopMatrix();
 }
 
 void ModuleRenderer3D::DrawFaceNormals(mesh* Mesh)
@@ -383,7 +390,7 @@ void ModuleRenderer3D::DrawFaceNormals(mesh* Mesh)
 		// Calculate the face normal
 		float3 faceNormal = CalculateFaceNormal(vertex1, vertex2, vertex3);
 
-		// Calculate the face centroid
+		// Calculate the face center
 		float3 centroid = (vertex1 + vertex2 + vertex3) / 3.0f;
 
 		// Draw the face normal line
@@ -495,9 +502,7 @@ void ModuleRenderer3D::RenderBB()
 				if (App->scene->gameObjects[i]->components[j]->type == typeComponent::Mesh)
 				{
 					ComponentMesh* compMesh = (ComponentMesh*)App->scene->gameObjects[i]->GetComponent(typeComponent::Mesh);
-					
-					compMesh->RenderBoundingBoxes();
-
+					compMesh->UpdateBoundingBoxes();
 				}
 			}
 		}

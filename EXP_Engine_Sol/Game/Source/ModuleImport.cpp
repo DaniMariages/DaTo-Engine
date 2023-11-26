@@ -267,6 +267,7 @@ mesh ModuleImport::ProcessMesh(aiMesh* Mesh, const char* file_path, GameObject* 
 	App->renderer3D->SetUpBuffers(myMesh);
 	meshes.push_back(*myMesh);
 
+
 	return *myMesh;
 }
 

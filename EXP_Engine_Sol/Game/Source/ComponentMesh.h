@@ -38,7 +38,8 @@ private:
 
 	std::string path;
 
+	AABB gAABB;
+
 	AABB aabb;
 	OBB obb;
-
 };
