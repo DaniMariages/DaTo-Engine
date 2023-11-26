@@ -51,8 +51,16 @@ void GameObject::ChangeName(const char* name)
 
 void GameObject::Update() 
 {
-	std::vector<Component*>::iterator item = components.begin();
-	bool ret = true;
+	if (!components.empty())
+	{
+		std::vector<Component*>::iterator item = components.begin();
+		bool ret = true;
+
+		for (; item != components.end() && ret == true; ++item)
+		{
+			(*item)->Update();
+		}
+	}
 }
 
 void GameObject::SetParent(GameObject* parent)

@@ -37,6 +37,14 @@ void ComponentCamera::Update()
 	glLoadMatrixf(GetProjectionMatrix().ptr());
 	glMatrixMode(GL_MODELVIEW);
 	glLoadMatrixf(GetViewMatrix().ptr());
+
+	//MYTODO: It is possible?
+	if (parent != nullptr)
+	{
+		frustum.front = parent->transform->GetForward();
+		frustum.up = parent->transform->GetUp();
+		frustum.pos = parent->transform->GetPosition();
+	}
 }
 
 float ComponentCamera::GetVerticalFOV() const
@@ -292,6 +300,11 @@ void ComponentCamera::DrawInspector()
 			ImGui::EndCombo();
 		}
 	}
+}
+
+void ComponentCamera::OnUpdateTransform(const float4x4& global, const float4x4& parent_global)
+{
+	
 }
 
 void ComponentCamera::LoadBuffers(int width, int height)

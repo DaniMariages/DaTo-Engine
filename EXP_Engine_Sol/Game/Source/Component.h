@@ -1,4 +1,6 @@
 #pragma once
+#include "../External/MathGeoLib/include/Math/float4x4.h"
+
 class GameObject;
 
 enum class typeComponent {
@@ -22,4 +24,6 @@ public:
 	virtual void Disable() {};
 
 	virtual void DrawInspector() {};
+
+	virtual void OnUpdateTransform(const float4x4& global, const float4x4& parent_global = float4x4::identity) {};
 };

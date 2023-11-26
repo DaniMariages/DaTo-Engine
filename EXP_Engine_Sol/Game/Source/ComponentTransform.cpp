@@ -48,6 +48,16 @@ void ComponentTransform::SetScale(float3 scale)
 	UpdateMatrix(); 
 };
 
+float3 ComponentTransform::GetUp()
+{
+	return transform.RotatePart().Col(1).Normalized();
+}
+
+float3 ComponentTransform::GetForward()
+{
+	return transform.RotatePart().Col(2).Normalized();
+}
+
 void ComponentTransform::UpdateMatrix() 
 {
 	transform = float4x4::FromTRS(position, rotation, scale);

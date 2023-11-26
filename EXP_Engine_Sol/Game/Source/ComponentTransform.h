@@ -4,7 +4,7 @@
 
 class ComponentTransform : public Component {
 
-public:
+private:
 	float3 position;
 	Quat rotation;
 	float3 scale;
@@ -21,12 +21,18 @@ public:
 	void SetRotation(Quat rotation);
 	void SetScale(float3 scale);
 
+	float3 GetUp();
+	float3 GetForward();
+
 	float3 GetPosition() const { return this->position; };
 	Quat GetRotation() const { return this->rotation; };
 	float3 GetScale() const { return this->scale; };
+
 	float4x4 GetTransformMatrix() const { return this->transform; };
 
 	ComponentTransform(GameObject* parent);
 	ComponentTransform(GameObject* parent, float3 position, float3 scale, Quat rotation);
+
+	bool updatedTransform = false;
 
 };

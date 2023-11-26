@@ -29,6 +29,7 @@ public:
 	//Disable parent Game Object, including their children
 	void DisableParent();
 
+	//Function to change the name of a game object
 	void ChangeName(const char* name);
 
 	void Update();
