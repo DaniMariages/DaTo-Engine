@@ -57,16 +57,16 @@ void ComponentTransform::DrawInspector()
 {
 	if (ImGui::CollapsingHeader("Component Transform"))
 	{
-		float3 euler_rotation = rotation.ToEulerXYZ();
-		float3 euler_degree = euler_rotation * RADTODEG;
+		float3 eulerRotation = rotation.ToEulerXYZ();
+		float3 eulerDegree = eulerRotation * RADTODEG;
 		ImGui::DragFloat3("Position:", (float*)&position);
 		ImGui::DragFloat3("Scale:", (float*)&scale);
-		bool rot_change = ImGui::DragFloat3("Rotation:", (float*)&euler_degree);
+		bool rotationChanged = ImGui::DragFloat3("Rotation:", (float*)&eulerDegree);
 
-		if (rot_change)
+		if (rotationChanged)
 		{
-			euler_rotation = euler_degree * DEGTORAD;
-			rotation = Quat::FromEulerXYZ(euler_rotation.x, euler_rotation.y, euler_rotation.z);
+			eulerRotation = eulerDegree * DEGTORAD;
+			rotation = Quat::FromEulerXYZ(eulerRotation.x, eulerRotation.y, eulerRotation.z);
 		}
 
 		UpdateMatrix();

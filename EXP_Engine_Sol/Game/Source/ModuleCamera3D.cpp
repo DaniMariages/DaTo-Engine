@@ -75,6 +75,11 @@ update_status ModuleCamera3D::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_LCTRL) == KEY_REPEAT)
 	{
 		editorCamera->Focus(newPos, 6.0f);
+
+		if (App->scene->gameObjectSelected)
+		{
+			editorCamera->Focus(App->scene->gameObjectSelected->transform->GetPosition(), 6.0f);
+		}
 	}
 
 	//Rotate the camera (Right click pressed)

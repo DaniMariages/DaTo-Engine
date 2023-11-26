@@ -330,6 +330,7 @@ void ModuleRenderer3D::IterateDrawMesh()
 
 void ModuleRenderer3D::DrawMesh(mesh* mesh, float4x4 transform, uint id)
 {
+	// Update the transfor for meshes
 	glPushMatrix();
 	glMultMatrixf(transform.Transposed().ptr());
 
@@ -366,8 +367,9 @@ void ModuleRenderer3D::DrawMesh(mesh* mesh, float4x4 transform, uint id)
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_NORMAL_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-	glPopMatrix();
 
+	//Disable the actual transform
+	glPopMatrix();
 }
 
 void ModuleRenderer3D::DrawFaceNormals(mesh* Mesh)

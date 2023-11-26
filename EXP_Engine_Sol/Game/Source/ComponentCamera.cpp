@@ -30,7 +30,7 @@ void ComponentCamera::Enable() {}
 
 void ComponentCamera::Disable() {}
 
-void ComponentCamera::Update() 
+void ComponentCamera::Update()
 {
 	glLoadIdentity();
 	glMatrixMode(GL_PROJECTION);
@@ -175,30 +175,6 @@ void ComponentCamera::Pan(float3& newPos, float speed, float dt)
 	newPos += GetRight() * DeltaX / 2;
 }
 
-//----------------- MYTODO: PUEDE SER UTIL CUANDO TENGAMOS TRANSFORM -----------------
-//
-//void ComponentCamera::Orbit(float motion_x, float motion_y)
-//{
-//	float3 point = looking_at;
-//
-//	if (App->scene->selected_object != nullptr)
-//	{
-//		looking_at = App->scene->selected_object->transform->GetPosition();
-//	}
-//
-//	float3 focus = frustum.Pos() - point;
-//
-//	Quat y = Quat(frustum.Up(), motion_x);
-//	Quat x = Quat(frustum.WorldRight(), motion_y);
-//
-//	focus = x.Transform(focus);
-//	focus = y.Transform(focus);
-//
-//	frustum.SetPos(focus + point);
-//
-//	Look(point);
-//}
-
 void ComponentCamera::Zoom(float3& newPos, float speed)
 {
 	if (ExternalApp->input->GetMouseZ() > 0) newPos += GetFront() * speed;
@@ -267,10 +243,10 @@ void ComponentCamera::Orbit(float3& point, float speed, float dt)
 	int motionY = -ExternalApp->input->GetMouseYMotion();
 
 	// MYTODO: USE WITH TRANSFORM
-	//if (ExternalApp->scene->selected_object != nullptr)
-	//{
-	//	//looking_at = App->scene->selected_object->transform->GetPosition();
-	//}
+	if (ExternalApp->scene->gameObjectSelected != nullptr)
+	{
+		point = ExternalApp->scene->gameObjectSelected->transform->GetPosition();
+	}
 
 	float3 focus = GetPos() - point;
 
