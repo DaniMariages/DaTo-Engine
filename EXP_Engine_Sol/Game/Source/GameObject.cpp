@@ -61,6 +61,22 @@ void GameObject::Update()
 			(*item)->Update();
 		}
 	}
+
+	//MYTODO: Should this be here?
+	if (ExternalApp->scene->gameObjectSelected != nullptr && !ExternalApp->scene->gameObjectSelected->children.empty())
+	{
+		//to dont get a kilometer function
+		GameObject* gameObjectSelected = ExternalApp->scene->gameObjectSelected;
+		
+		for (unsigned int i = 0; i < gameObjectSelected->children.size(); i++)
+		{
+			if (gameObjectSelected->children[i]->GetComponent(typeComponent::Mesh)->type == typeComponent::Mesh)
+			{
+				ComponentTransform* compMesh = (ComponentTransform*)gameObjectSelected->children[i]->GetComponent(typeComponent::Transform);
+				compMesh->SetTransformMatrix(gameObjectSelected->transform->GetTransformMatrix());
+			}
+		}
+	}
 }
 
 void GameObject::SetParent(GameObject* parent)

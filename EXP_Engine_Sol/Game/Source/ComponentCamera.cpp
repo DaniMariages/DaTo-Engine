@@ -21,6 +21,10 @@ ComponentCamera::ComponentCamera(GameObject* parent) : Component(parent)
 	frustum.verticalFov = 60.0f * DEGTORAD;
 	frustum.horizontalFov = 2.0f * atanf(tanf(frustum.verticalFov / 2.0f) * 1.3f);
 
+	FBO = 0; 
+	TCB = 0; 
+	RBO = 0;
+
 	drawBoundingBoxes = true;
 	frustumCulling = true;
 	activeCamera = true;
@@ -41,6 +45,7 @@ void ComponentCamera::Update()
 	//MYTODO: It is possible?
 	if (parent != nullptr)
 	{
+		//Camera movement
 		frustum.front = parent->transform->GetForward();
 		frustum.up = parent->transform->GetUp();
 		frustum.pos = parent->transform->GetPosition();

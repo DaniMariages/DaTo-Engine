@@ -20,12 +20,12 @@ bool ModuleScene::Init()
 	bool ret = true;
 
 	gameCamera = new ComponentCamera(gameCameraObject);
-
-	gameCamera->SetPos(0.0f, 2.0f, 20.0f);
-	gameCamera->LookAt(float3(0.f, 0.f, 0.f));
-	gameCamera->SetAspectRatio(SCREEN_WIDTH / SCREEN_HEIGHT);
-
 	gameCameraObject->AddComponent(gameCamera);
+
+	//Set the game camera starter position
+	gameCameraObject->transform->SetPosition(float3(0.0f, 5.0f, 20.0f));
+	gameCameraObject->transform->SetRotation(Quat::FromEulerXYZ(0.0f, 110.0f, 0.0f));
+
 	totalCameras.push_back(gameCamera);
 
 	return ret;

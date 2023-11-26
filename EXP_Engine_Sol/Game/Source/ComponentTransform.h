@@ -29,6 +29,7 @@ public:
 	float3 GetScale() const { return this->scale; };
 
 	float4x4 GetTransformMatrix() const { return this->transform; };
+	float4x4 SetTransformMatrix(float4x4 transformMatrix);
 
 	ComponentTransform(GameObject* parent);
 	ComponentTransform(GameObject* parent, float3 position, float3 scale, Quat rotation);

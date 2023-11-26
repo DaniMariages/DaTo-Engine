@@ -24,29 +24,34 @@ ComponentTransform::ComponentTransform(GameObject* parent, float3 _position, flo
 	type = typeComponent::Transform;
 };
 
-void ComponentTransform::Enable() {	if (!this->active) this->active = true;	}
+void ComponentTransform::Enable() { if (!this->active) this->active = true; }
 
 void ComponentTransform::Disable() { if (this->active) this->active = false; }
 
 void ComponentTransform::Update() {}
 
-void ComponentTransform::SetPosition(float3 position) 
+void ComponentTransform::SetPosition(float3 position)
 {
-	this->position = position;  
-	UpdateMatrix(); 
+	this->position = position;
+	UpdateMatrix();
 };
 
 void ComponentTransform::SetRotation(Quat rotation)
-{ 
-	this->rotation = rotation; 
-	UpdateMatrix(); 
+{
+	this->rotation = rotation;
+	UpdateMatrix();
 };
 
 void ComponentTransform::SetScale(float3 scale)
-{ 
-	this->scale = scale; 
-	UpdateMatrix(); 
+{
+	this->scale = scale;
+	UpdateMatrix();
 };
+
+float4x4 ComponentTransform::SetTransformMatrix(float4x4 transformMatrix)
+{
+	return transform = transformMatrix;
+}
 
 float3 ComponentTransform::GetUp()
 {
@@ -58,12 +63,12 @@ float3 ComponentTransform::GetForward()
 	return transform.RotatePart().Col(2).Normalized();
 }
 
-void ComponentTransform::UpdateMatrix() 
+void ComponentTransform::UpdateMatrix()
 {
 	transform = float4x4::FromTRS(position, rotation, scale);
 }
 
-void ComponentTransform::DrawInspector() 
+void ComponentTransform::DrawInspector()
 {
 	if (ImGui::CollapsingHeader("Component Transform"))
 	{
@@ -77,6 +82,14 @@ void ComponentTransform::DrawInspector()
 		{
 			eulerRotation = eulerDegree * DEGTORAD;
 			rotation = Quat::FromEulerXYZ(eulerRotation.x, eulerRotation.y, eulerRotation.z);
+		}
+
+		//This button reset all transformations
+		if (ImGui::Button("Reset Transformations")) 
+		{
+			SetPosition(float3(0.0f, 0.0f, 0.0f));
+			SetRotation(Quat::FromEulerXYZ(0.0f, 0.0f, 0.0f));
+			SetScale(float3(1.0f, 1.0f, 1.0f));
 		}
 
 		UpdateMatrix();

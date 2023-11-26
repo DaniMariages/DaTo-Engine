@@ -39,10 +39,10 @@ public:
 	void DrawFaceNormals(mesh* Mesh, float3 position, float3 scale, Quat rotation);
 	void DrawVertexNormals(mesh* Mesh, float3 position, float3 scale, Quat rotation);
 	
+	//Draw normals of a selected game object
 	void DrawSelectedNormals();
-	void DrawSelectedFaces();
-	void DrawSelectedVertex();
 
+	//Import primitives
 	void ImportCube();
 	void ImportSphere();
 	void ImportCone();
