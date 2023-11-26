@@ -35,7 +35,7 @@ public:
 	void SetUpBuffers(mesh* mesh);
 
 	void IterateDrawMesh();
-	void DrawMesh(mesh* mesh, uint id = 0);
+	void DrawMesh(mesh* mesh, float4x4 transform, uint id = 0);
 	void DrawFaceNormals(mesh* Mesh);
 	void DrawVertexNormals(mesh* Mesh);
 	

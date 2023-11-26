@@ -52,9 +52,15 @@ void ComponentMesh::InitBoundingBoxes(mesh* Mesh)
 	aabb.SetFrom(&fArray[0], fArray.size());
 }
 
-void ComponentMesh::UpdateBoundingBoxes()
+void ComponentMesh::UpdateBoundingBoxes(float4x4 transform)
 {
-	//Update when transform
+	obb = aabb;
+	obb.Transform(transform);
+
+	//aabb.SetNegativeInfinity();
+	gAABB.Enclose(obb);
+
+	RenderBoundingBoxes();
 }
 
 void ComponentMesh::RenderBoundingBoxes()

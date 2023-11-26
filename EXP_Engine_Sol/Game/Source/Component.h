@@ -11,6 +11,8 @@ enum class typeComponent {
 
 class Component {
 public:
+	Component(GameObject* parent) : active(true), parent(parent), type(typeComponent::Error) {};
+
 	typeComponent type;
 	bool active;
 	GameObject* parent;
@@ -20,5 +22,4 @@ public:
 	virtual void Disable() {};
 
 	virtual void DrawInspector() {};
-	Component(GameObject* parent) : active(true), parent(parent), type(typeComponent::Error) {};
 };

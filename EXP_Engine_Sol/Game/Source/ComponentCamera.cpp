@@ -34,10 +34,9 @@ void ComponentCamera::Update()
 {
 	glLoadIdentity();
 	glMatrixMode(GL_PROJECTION);
-	glLoadMatrixf((GLfloat*)GetProjectionMatrix().v);
-
+	glLoadMatrixf(GetProjectionMatrix().ptr());
 	glMatrixMode(GL_MODELVIEW);
-	glLoadMatrixf((GLfloat*)GetViewMatrix().v);
+	glLoadMatrixf(GetViewMatrix().ptr());
 }
 
 float ComponentCamera::GetVerticalFOV() const

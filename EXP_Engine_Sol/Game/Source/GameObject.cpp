@@ -10,7 +10,8 @@ GameObject::GameObject(std::string name, GameObject* parent)
 {
 	Name = name;
 	Parent = parent;
-	transform = (ComponentTransform*)AddComponentType(typeComponent::Transform);
+	transform = new ComponentTransform(this);
+	AddComponent(transform);
 }
 
 GameObject::~GameObject() {}
@@ -94,40 +95,6 @@ Component* GameObject::AddComponent(Component* component)
 	}
 
 	components.push_back(component);
-	return ret;
-}
-
-Component* GameObject::AddComponentType(typeComponent typecomponent)
-{
-	Component* ret = nullptr;
-
-	switch (typecomponent)
-	{
-	case(typeComponent::Error):
-		//LOG("Component Type Error! Something broke...");
-		break;
-
-	case(typeComponent::Transform):
-		ret = new ComponentTransform(this);
-		break;
-
-	case(typeComponent::Material):
-		if (this->GetComponent(typeComponent::Material) != nullptr) {
-			return nullptr;
-		}
-		ret = new ComponentTexture(this);
-		break;
-
-	case(typeComponent::Mesh):
-		ret = new ComponentMesh(this);
-		break;
-
-	case(typeComponent::Camera):
-		ret = new ComponentCamera(this);
-		break;
-	}
-
-	components.push_back(ret);
 	return ret;
 }
 

@@ -28,7 +28,7 @@ public:
 	void SetPath(std::string path);
 
 	void InitBoundingBoxes(mesh* Mesh);
-	void UpdateBoundingBoxes();
+	void UpdateBoundingBoxes(float4x4 transform);
 	void RenderBoundingBoxes();
 	void DrawBox(float3* vertices, float3 color);
 
@@ -38,7 +38,8 @@ private:
 
 	std::string path;
 
+	AABB gAABB;
+
 	AABB aabb;
 	OBB obb;
-
 };
