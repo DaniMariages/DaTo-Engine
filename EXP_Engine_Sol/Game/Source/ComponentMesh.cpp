@@ -41,7 +41,7 @@ void ComponentMesh::SetMesh(mesh* Mesh)
 void ComponentMesh::InitBoundingBoxes(mesh* Mesh)
 {
 	obb.SetNegativeInfinity();
-	aabb.SetNegativeInfinity();
+	gAABB.SetNegativeInfinity();
 
 	std::vector<float3> fArray;
 	fArray.reserve(Mesh->vertices.size());
@@ -52,12 +52,12 @@ void ComponentMesh::InitBoundingBoxes(mesh* Mesh)
 	aabb.SetFrom(&fArray[0], fArray.size());
 }
 
-void ComponentMesh::UpdateBoundingBoxes(float4x4 transform)
+void ComponentMesh::UpdateBoundingBoxes()
 {
 	obb = aabb;
-	obb.Transform(transform);
+	obb.Transform(parent->transform->GetTransformMatrix());
 
-	//aabb.SetNegativeInfinity();
+	gAABB.SetNegativeInfinity();
 	gAABB.Enclose(obb);
 
 	RenderBoundingBoxes();
@@ -70,7 +70,7 @@ void ComponentMesh::RenderBoundingBoxes()
 	DrawBox(verticesOBB, float3(255, 0, 0));
 
 	float3 verticesAABB[8];
-	aabb.GetCornerPoints(verticesAABB);
+	gAABB.GetCornerPoints(verticesAABB);
 	DrawBox(verticesAABB, float3(0, 0, 255));
 }
 

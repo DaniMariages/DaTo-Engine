@@ -330,6 +330,7 @@ void ModuleRenderer3D::IterateDrawMesh()
 
 void ModuleRenderer3D::DrawMesh(mesh* mesh, float4x4 transform, uint id)
 {
+	glPushMatrix();
 	glMultMatrixf(transform.Transposed().ptr());
 
 	// Bind the VBO and EBO for the mesh
@@ -365,6 +366,7 @@ void ModuleRenderer3D::DrawMesh(mesh* mesh, float4x4 transform, uint id)
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_NORMAL_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+	glPopMatrix();
 
 }
 
@@ -386,7 +388,7 @@ void ModuleRenderer3D::DrawFaceNormals(mesh* Mesh)
 		// Calculate the face normal
 		float3 faceNormal = CalculateFaceNormal(vertex1, vertex2, vertex3);
 
-		// Calculate the face centroid
+		// Calculate the face center
 		float3 centroid = (vertex1 + vertex2 + vertex3) / 3.0f;
 
 		// Draw the face normal line
@@ -493,8 +495,7 @@ void ModuleRenderer3D::RenderBB()
 				if (App->scene->gameObjects[i]->components[j]->type == typeComponent::Mesh)
 				{
 					ComponentMesh* compMesh = (ComponentMesh*)App->scene->gameObjects[i]->GetComponent(typeComponent::Mesh);
-					ComponentTransform* compTrans = (ComponentTransform*)App->scene->gameObjects[i]->GetComponent(typeComponent::Transform);
-					compMesh->UpdateBoundingBoxes(App->scene->gameObjects[i]->transform->GetTransformMatrix());
+					compMesh->UpdateBoundingBoxes();
 				}
 			}
 		}
