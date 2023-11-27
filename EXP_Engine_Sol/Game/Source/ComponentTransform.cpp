@@ -28,7 +28,25 @@ void ComponentTransform::Enable() { if (!this->active) this->active = true; }
 
 void ComponentTransform::Disable() { if (this->active) this->active = false; }
 
-void ComponentTransform::Update() {}
+void ComponentTransform::Update() 
+{
+	//MYTODO: I think is better get this here instead GameObject Update
+	//if (ExternalApp->scene->gameObjectSelected != nullptr && ExternalApp->scene->gameObjectSelected != ExternalApp->scene->rootGameObject 
+	//	&& !ExternalApp->scene->gameObjectSelected->children.empty())
+	//{
+	//	//to dont get a kilometer function
+	//	GameObject* gameObjectSelected = ExternalApp->scene->gameObjectSelected;
+	//	
+	//	for (unsigned int i = 0; i < gameObjectSelected->children.size(); i++)
+	//	{
+	//		if (gameObjectSelected->children[i]->GetComponent(typeComponent::Mesh)->type == typeComponent::Mesh)
+	//		{
+	//			ComponentTransform* compMesh = (ComponentTransform*)gameObjectSelected->children[i]->GetComponent(typeComponent::Transform);
+	//			compMesh->SetTransformMatrix(gameObjectSelected->transform->GetTransformMatrix());
+	//		}
+	//	}
+	//}
+}
 
 void ComponentTransform::SetPosition(float3 position)
 {

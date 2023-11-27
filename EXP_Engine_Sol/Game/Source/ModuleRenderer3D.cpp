@@ -42,22 +42,22 @@ bool ModuleRenderer3D::Init()
 {
 	LOG("Creating 3D Renderer context");
 	bool ret = true;
-	
+
 	//Create context
 	context = SDL_GL_CreateContext(App->window->window);
-	if(context == NULL)
+	if (context == NULL)
 	{
 		LOG("OpenGL context could not be created! SDL_Error: %s\n", SDL_GetError());
 		ret = false;
 	}
-	
+
 	ilInit();
 	ILenum ILerror = ilGetError();
 
-	if(ret == true)
+	if (ret == true)
 	{
 		//Use Vsync
-		if(VSYNC && SDL_GL_SetSwapInterval(1) < 0)
+		if (VSYNC && SDL_GL_SetSwapInterval(1) < 0)
 			LOG("Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError());
 
 		//Initialize Projection Matrix
@@ -66,7 +66,7 @@ bool ModuleRenderer3D::Init()
 
 		//Check for error
 		GLenum error = glGetError();
-		if(error != GL_NO_ERROR)
+		if (error != GL_NO_ERROR)
 		{
 			LOG("Error initializing OpenGL! %s\n", gluErrorString(error));
 			ret = false;
@@ -78,42 +78,42 @@ bool ModuleRenderer3D::Init()
 
 		//Check for error
 		error = glGetError();
-		if(error != GL_NO_ERROR)
+		if (error != GL_NO_ERROR)
 		{
 			LOG("Error initializing OpenGL! %s\n", gluErrorString(error));
 			ret = false;
 		}
-		
+
 		glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 		glClearDepth(1.0f);
-		
+
 		//Initialize clear color
 		glClearColor(0.f, 0.f, 0.f, 1.f);
 
 		//Check for error
 		error = glGetError();
-		if(error != GL_NO_ERROR)
+		if (error != GL_NO_ERROR)
 		{
 			LOG("Error initializing OpenGL! %s\n", gluErrorString(error));
 			ret = false;
 		}
-		
-		GLfloat LightModelAmbient[] = {0.0f, 0.0f, 0.0f, 1.0f};
+
+		GLfloat LightModelAmbient[] = { 0.0f, 0.0f, 0.0f, 1.0f };
 
 		glLightModelfv(GL_LIGHT_MODEL_AMBIENT, LightModelAmbient);
-		
+
 		lights[0].ref = GL_LIGHT0;
 		lights[0].ambient.Set(0.25f, 0.25f, 0.25f, 1.0f);
 		lights[0].diffuse.Set(0.75f, 0.75f, 0.75f, 1.0f);
 		lights[0].SetPos(0.0f, 0.0f, 2.5f);
 		lights[0].Init();
-		
-		GLfloat MaterialAmbient[] = {1.0f, 1.0f, 1.0f, 1.0f};
+
+		GLfloat MaterialAmbient[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 		glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, MaterialAmbient);
 
 		GLfloat MaterialDiffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 		glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, MaterialDiffuse);
-		
+
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_CULL_FACE);
 
@@ -262,7 +262,7 @@ void ModuleRenderer3D::IterateDrawMesh()
 		{
 			std::vector<Component*> meshComponents = App->scene->gameObjects[i]->GetComponents(typeComponent::Mesh);
 			std::vector<Component*>::iterator item = meshComponents.begin();
-			for (; item != meshComponents.end(); ++item) 
+			for (; item != meshComponents.end(); ++item)
 			{
 				ComponentTexture* componentTex = (ComponentTexture*)App->scene->gameObjects[i]->GetComponent(typeComponent::Material);
 				ComponentMesh* tempComponentMesh = (ComponentMesh*)(*item);
@@ -271,17 +271,17 @@ void ModuleRenderer3D::IterateDrawMesh()
 				{
 					DrawMesh(tempComponentMesh->GetMesh(), tempTrans->GetTransformMatrix(), componentTex->GetTexture()->textID);
 
-					if (App->editor->drawAllFaces == true) 
+					if (App->editor->drawAllFaces == true)
 						DrawFaceNormals(tempComponentMesh->GetMesh(), tempTrans->GetPosition(), tempTrans->GetScale(), tempTrans->GetRotation());
 
-					if (App->editor->drawAllVertex == true) 
+					if (App->editor->drawAllVertex == true)
 						DrawVertexNormals(tempComponentMesh->GetMesh(), tempTrans->GetPosition(), tempTrans->GetScale(), tempTrans->GetRotation());
 				}
 				else if (App->scene->gameObjects[i]->active)
 				{
 					DrawMesh(tempComponentMesh->GetMesh(), tempTrans->GetTransformMatrix());
 
-					if (App->editor->drawAllFaces == true) 
+					if (App->editor->drawAllFaces == true)
 						DrawFaceNormals(tempComponentMesh->GetMesh(), tempTrans->GetPosition(), tempTrans->GetScale(), tempTrans->GetRotation());
 
 					if (App->editor->drawAllVertex == true)
@@ -337,7 +337,7 @@ void ModuleRenderer3D::DrawMesh(mesh* mesh, float4x4 transform, uint id)
 		glEnable(GL_TEXTURE_2D);
 		glBindTexture(GL_TEXTURE_2D, id);
 	}
-	
+
 	// Draw the mesh using glDrawElements
 	glDrawElements(GL_TRIANGLES, mesh->indices.size(), GL_UNSIGNED_INT, 0);
 
@@ -493,20 +493,20 @@ void ModuleRenderer3D::DrawBox(float3* vertices, float3 color)
 
 void ModuleRenderer3D::RenderBB()
 {
-	if (App->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN) 
+	if (App->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN)
 	{
 		if (App->editor->drawAllBoxes == true) App->editor->drawAllBoxes = false;
 		else if (App->editor->drawAllBoxes == false) App->editor->drawAllBoxes = true;
 	}
-	if (App->editor->drawAllBoxes == true) 
+	if (App->editor->drawAllBoxes == true)
 	{
 		//Get all the game objects
 		for (unsigned int i = 0; i < App->scene->gameObjects.size(); i++)
 		{
-				//Get all the components from the Game Object
+			//Get all the components from the Game Object
 			for (unsigned int j = 0; j < App->scene->gameObjects[i]->components.size(); j++)
 			{
-					//If has a Mesh component, then draw its bounding box
+				//If has a Mesh component, then draw its bounding box
 				if (App->scene->gameObjects[i]->components[j]->type == typeComponent::Mesh)
 				{
 					ComponentMesh* compMesh = (ComponentMesh*)App->scene->gameObjects[i]->GetComponent(typeComponent::Mesh);

@@ -66,24 +66,6 @@ void GameObject::Update()
 			(*item)->Update();
 		}
 	}
-
-	//MYTODO: Should this be here? No, Its a little bugged
-
-	//if (ExternalApp->scene->gameObjectSelected != nullptr && ExternalApp->scene->gameObjectSelected != ExternalApp->scene->rootGameObject 
-	//	&& !ExternalApp->scene->gameObjectSelected->children.empty())
-	//{
-	//	//to dont get a kilometer function
-	//	GameObject* gameObjectSelected = ExternalApp->scene->gameObjectSelected;
-	//	
-	//	for (unsigned int i = 0; i < gameObjectSelected->children.size(); i++)
-	//	{
-	//		if (gameObjectSelected->children[i]->GetComponent(typeComponent::Mesh)->type == typeComponent::Mesh)
-	//		{
-	//			ComponentTransform* compMesh = (ComponentTransform*)gameObjectSelected->children[i]->GetComponent(typeComponent::Transform);
-	//			compMesh->SetTransformMatrix(gameObjectSelected->transform->GetTransformMatrix());
-	//		}
-	//	}
-	//}
 }
 
 void GameObject::SetParent(GameObject* parent)
@@ -131,8 +113,51 @@ Component* GameObject::AddComponent(Component* component)
 
 GameObject* GameObject::AddChildren(GameObject* children) 
 {
+	if (this->Parent != nullptr)
+	{
+		GameObject* parentObject = this->Parent;
+
+		while (parentObject != ExternalApp->scene->rootGameObject)
+		{
+			if (parentObject == children)
+			{
+				LOG("ERROR: Can't add %s to %s, they are already parented", children->Name.c_str(), this->Name.c_str());
+				return nullptr;
+			}
+			else if (parentObject->Parent != nullptr)
+			{
+				parentObject = parentObject->Parent;
+			}
+		}
+	}
+
+	if (children->Parent != nullptr)
+	{
+		children->Parent->EraseChild(children); 
+		children->SetParent(this);
+	}
+	else if (children->Parent == nullptr)
+	{
+		children->SetParent(this);
+	}
+
+
 	this->children.push_back(children);
 	return children;
+}
+
+void GameObject::EraseChild(GameObject* child)
+{
+	if (!children.empty())
+	{
+		for (uint i = 0; i < children.size(); ++i)
+		{
+			if (children[i] == child)
+			{
+				children.erase(children.begin() + i);
+			}
+		}
+	}
 }
 
 Component* GameObject::GetComponent(typeComponent type)

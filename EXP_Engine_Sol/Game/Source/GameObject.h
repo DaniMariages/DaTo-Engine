@@ -40,6 +40,7 @@ public:
 
 	std::vector<Component*> GetComponents(typeComponent type);
 	GameObject* AddChildren(GameObject* children);
+	void EraseChild(GameObject* child);
 
 	ComponentTransform* transform = nullptr;
 

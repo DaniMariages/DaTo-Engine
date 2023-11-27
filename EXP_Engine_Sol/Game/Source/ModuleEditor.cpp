@@ -392,6 +392,26 @@ void ModuleEditor::HierarchyWindow(GameObject* gameObject)
 			}
 		}
 
+		if (gameObject != App->scene->rootGameObject)
+		{
+			if (ImGui::BeginDragDropSource())
+			{
+				ImGui::SetDragDropPayload("Dragged_Object", gameObject, sizeof(GameObject));
+				childObject = gameObject;
+				ImGui::EndDragDropSource();
+			}
+			if (ImGui::BeginDragDropTarget())
+			{
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Dragged_Object"))
+				{
+					gameObject->AddChildren(childObject);
+					childObject = nullptr;
+				}
+
+				ImGui::EndDragDropTarget();
+			}
+		}
+
 		if (ImGui::BeginPopupContextItem())
 		{
 			//Show what Game Object is selected

@@ -36,6 +36,8 @@ public:
 
 	/*void AddFPS(const float aFPS);*/
 
+	GameObject* childObject = nullptr;
+
 	std::vector<std::string> log_history;
 	float aFPS;
 
