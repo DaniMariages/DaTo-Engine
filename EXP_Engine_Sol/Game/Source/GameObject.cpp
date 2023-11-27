@@ -10,8 +10,13 @@ GameObject::GameObject(std::string name, GameObject* parent)
 {
 	Name = name;
 	Parent = parent;
-	transform = new ComponentTransform(this);
-	AddComponent(transform);
+
+	//Only Scene Game Object has nullptr as a parent, so dont add a transform to it
+	if (parent != nullptr)
+	{
+		transform = new ComponentTransform(this);
+		AddComponent(transform);
+	}
 }
 
 GameObject::~GameObject() {}
@@ -62,21 +67,23 @@ void GameObject::Update()
 		}
 	}
 
-	//MYTODO: Should this be here?
-	if (ExternalApp->scene->gameObjectSelected != nullptr && !ExternalApp->scene->gameObjectSelected->children.empty())
-	{
-		//to dont get a kilometer function
-		GameObject* gameObjectSelected = ExternalApp->scene->gameObjectSelected;
-		
-		for (unsigned int i = 0; i < gameObjectSelected->children.size(); i++)
-		{
-			if (gameObjectSelected->children[i]->GetComponent(typeComponent::Mesh)->type == typeComponent::Mesh)
-			{
-				ComponentTransform* compMesh = (ComponentTransform*)gameObjectSelected->children[i]->GetComponent(typeComponent::Transform);
-				compMesh->SetTransformMatrix(gameObjectSelected->transform->GetTransformMatrix());
-			}
-		}
-	}
+	//MYTODO: Should this be here? No, Its a little bugged
+
+	//if (ExternalApp->scene->gameObjectSelected != nullptr && ExternalApp->scene->gameObjectSelected != ExternalApp->scene->rootGameObject 
+	//	&& !ExternalApp->scene->gameObjectSelected->children.empty())
+	//{
+	//	//to dont get a kilometer function
+	//	GameObject* gameObjectSelected = ExternalApp->scene->gameObjectSelected;
+	//	
+	//	for (unsigned int i = 0; i < gameObjectSelected->children.size(); i++)
+	//	{
+	//		if (gameObjectSelected->children[i]->GetComponent(typeComponent::Mesh)->type == typeComponent::Mesh)
+	//		{
+	//			ComponentTransform* compMesh = (ComponentTransform*)gameObjectSelected->children[i]->GetComponent(typeComponent::Transform);
+	//			compMesh->SetTransformMatrix(gameObjectSelected->transform->GetTransformMatrix());
+	//		}
+	//	}
+	//}
 }
 
 void GameObject::SetParent(GameObject* parent)
