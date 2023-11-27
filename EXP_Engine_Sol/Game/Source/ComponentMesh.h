@@ -32,14 +32,14 @@ public:
 	void RenderBoundingBoxes();
 	void DrawBox(float3* vertices, float3 color);
 
+	AABB gAABB;
+
+	AABB aabb;
+	OBB obb;
+
 private:
 	
 	mesh* Mesh;
 
 	std::string path;
-
-	AABB gAABB;
-
-	AABB aabb;
-	OBB obb;
 };

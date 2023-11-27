@@ -79,7 +79,7 @@ public:
 	bool drawSelected = true;
 	bool drawSelectedVertex = false;
 	bool drawSelectedFaces = false;
-	bool drawSelectedTexture = false;
+	bool drawSelectedTexture = true;
 	bool drawSelectedBoxes = true;
 
 	bool Wireframe = false;

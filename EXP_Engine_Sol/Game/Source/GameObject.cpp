@@ -19,7 +19,28 @@ GameObject::GameObject(std::string name, GameObject* parent)
 	}
 }
 
-GameObject::~GameObject() {}
+GameObject::~GameObject() 
+{
+	transform = nullptr;
+
+	if (Parent != nullptr) Parent->EraseChild(this);
+
+	for (size_t i = 0; i < components.size(); ++i)
+	{
+		Component* component = components[i];
+		if (component != nullptr)
+		{
+			delete components[i];
+			components[i] = nullptr;
+		}
+	}
+
+	for (size_t i = 0; i < children.size(); ++i)
+	{
+		delete children[i];
+		children[i] = nullptr;
+	}
+}
 
 void GameObject::Enable() //Start up + bool toggle
 {
@@ -174,6 +195,20 @@ Component* GameObject::GetComponent(typeComponent type)
 	return nullptr;
 }
 
+bool GameObject::HasComponent(typeComponent type)
+{
+	std::vector<Component*>::iterator item = components.begin();
+
+	for (; item != components.end(); ++item)
+	{
+		if ((*item)->type == type)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
 std::vector<Component*> GameObject::GetComponents(typeComponent type)
 {
 	std::vector<Component*>::iterator item = components.begin();
@@ -189,3 +224,4 @@ std::vector<Component*> GameObject::GetComponents(typeComponent type)
 
 	return ret;
 }
+

@@ -1,5 +1,7 @@
 #include "ComponentTransform.h"
 #include "GameObject.h"
+#include "Application.h"
+#include "ModuleScene.h"
 
 #include "Globals.h"
 #include "../External/ImGui/imgui.h"
@@ -28,7 +30,7 @@ void ComponentTransform::Enable() { if (!this->active) this->active = true; }
 
 void ComponentTransform::Disable() { if (this->active) this->active = false; }
 
-void ComponentTransform::Update() 
+void ComponentTransform::Update()
 {
 	//MYTODO: I think is better get this here instead GameObject Update
 	//if (ExternalApp->scene->gameObjectSelected != nullptr && ExternalApp->scene->gameObjectSelected != ExternalApp->scene->rootGameObject 
@@ -36,7 +38,7 @@ void ComponentTransform::Update()
 	//{
 	//	//to dont get a kilometer function
 	//	GameObject* gameObjectSelected = ExternalApp->scene->gameObjectSelected;
-	//	
+	//
 	//	for (unsigned int i = 0; i < gameObjectSelected->children.size(); i++)
 	//	{
 	//		if (gameObjectSelected->children[i]->GetComponent(typeComponent::Mesh)->type == typeComponent::Mesh)
@@ -103,7 +105,7 @@ void ComponentTransform::DrawInspector()
 		}
 
 		//This button reset all transformations
-		if (ImGui::Button("Reset Transformations")) 
+		if (ImGui::Button("Reset Transformations"))
 		{
 			SetPosition(float3(0.0f, 0.0f, 0.0f));
 			SetRotation(Quat::FromEulerXYZ(0.0f, 0.0f, 0.0f));

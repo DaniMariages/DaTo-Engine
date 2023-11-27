@@ -106,6 +106,8 @@ void ModuleScene::DeleteGameObject(GameObject* gameObject)
 		}
 	}
 
+	delete gameObject;
+
 	//Set the gameObjects null
 	gameObject = nullptr;
 	gameObjectSelected = nullptr;

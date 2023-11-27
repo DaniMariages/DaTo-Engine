@@ -58,6 +58,9 @@ public:
 	//Function to draw the bounding box of a game object
 	void RenderBB();
 
+	//Bool to know if a AABB is inside the FOV camera
+	bool InsideCamera(const ComponentCamera* camera, const AABB& aabb);
+
 public:
 
 	Light lights[MAX_LIGHTS];

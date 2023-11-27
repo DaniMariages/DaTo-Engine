@@ -293,18 +293,22 @@ void ModuleRenderer3D::IterateDrawMesh()
 
 				if (App->editor->drawSelectedTexture)
 				{
-					ComponentTexture* componentTex = (ComponentTexture*)App->scene->gameObjectSelected->GetComponent(typeComponent::Material);
-					ComponentMesh* tempComponentMesh = (ComponentMesh*)(*item);
-					if (componentTex != nullptr)
+					if (App->scene->gameObjectSelected != nullptr)
 					{
-						std::vector<Component*> meshComp = App->scene->gameObjectSelected->GetComponents(typeComponent::Mesh);
-						std::vector<Component*>::iterator it = meshComp.begin();
-						for (; it != meshComp.end(); ++it)
+						ComponentTexture* componentTex = (ComponentTexture*)App->scene->gameObjectSelected->GetComponent(typeComponent::Material);
+						ComponentMesh* tempComponentMesh = (ComponentMesh*)(*item);
+						if (componentTex != nullptr)
 						{
-							ComponentMesh* tempCompMesh = (ComponentMesh*)(*it);
-							DrawMesh(tempComponentMesh->GetMesh(), tempTrans->GetTransformMatrix());
+							std::vector<Component*> meshComp = App->scene->gameObjectSelected->GetComponents(typeComponent::Mesh);
+							std::vector<Component*>::iterator it = meshComp.begin();
+							for (; it != meshComp.end(); ++it)
+							{
+								ComponentMesh* tempCompMesh = (ComponentMesh*)(*it);
+								DrawMesh(tempComponentMesh->GetMesh(), tempTrans->GetTransformMatrix());
+							}
 						}
 					}
+
 				}
 			}
 		}
@@ -331,7 +335,7 @@ void ModuleRenderer3D::DrawMesh(mesh* mesh, float4x4 transform, uint id)
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 	glTexCoordPointer(2, GL_FLOAT, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords));
 
-	if (App->editor->drawTextures || App->editor->drawSelectedTexture)
+	if (App->editor->drawTextures && App->editor->drawSelectedTexture)
 	{
 		// Bind the texture
 		glEnable(GL_TEXTURE_2D);
@@ -510,13 +514,38 @@ void ModuleRenderer3D::RenderBB()
 				if (App->scene->gameObjects[i]->components[j]->type == typeComponent::Mesh)
 				{
 					ComponentMesh* compMesh = (ComponentMesh*)App->scene->gameObjects[i]->GetComponent(typeComponent::Mesh);
-					compMesh->UpdateBoundingBoxes();
+					if(InsideCamera(App->scene->gameCamera, compMesh->gAABB)) compMesh->UpdateBoundingBoxes();
 				}
 			}
 		}
 	}
 }
 
+bool ModuleRenderer3D::InsideCamera(const ComponentCamera* camera, const AABB& aabb)
+{
+	//If frustum culling is enabled then continue
+	if (camera->frustumCulling)
+	{
+		Plane frustumPlanes[6];
+		camera->frustum.GetPlanes(frustumPlanes);
+
+		float3 cornerPoints[8];
+		aabb.GetCornerPoints(cornerPoints);
+
+		for (int i = 0; i < 6; ++i) 
+		{
+			uint pointsInside = 8;
+			for (int j = 0; j < 8; ++j)
+			{
+				if (frustumPlanes[i].IsOnPositiveSide(cornerPoints[j])) --pointsInside;
+			}
+
+			if (pointsInside == 0) return false;
+		}
+	}
+
+	return true;
+}
 
 void ModuleRenderer3D::ImportCube()
 {
