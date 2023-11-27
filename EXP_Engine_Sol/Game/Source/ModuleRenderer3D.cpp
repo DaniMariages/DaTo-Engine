@@ -267,7 +267,7 @@ void ModuleRenderer3D::IterateDrawMesh()
 				ComponentTexture* componentTex = (ComponentTexture*)App->scene->gameObjects[i]->GetComponent(typeComponent::Material);
 				ComponentMesh* tempComponentMesh = (ComponentMesh*)(*item);
 				ComponentTransform* tempTrans = (ComponentTransform*)App->scene->gameObjects[i]->GetComponent(typeComponent::Transform);
-				if (componentTex != nullptr && App->scene->gameObjects[i]->active)
+				if (componentTex != nullptr && App->scene->gameObjects[i]->active && InsideCamera(App->scene->gameCamera, tempComponentMesh->gAABB))
 				{
 					DrawMesh(tempComponentMesh->GetMesh(), tempTrans->GetTransformMatrix(), componentTex->GetTexture()->textID);
 
@@ -277,7 +277,7 @@ void ModuleRenderer3D::IterateDrawMesh()
 					if (App->editor->drawAllVertex == true)
 						DrawVertexNormals(tempComponentMesh->GetMesh(), tempTrans->GetPosition(), tempTrans->GetScale(), tempTrans->GetRotation());
 				}
-				else if (App->scene->gameObjects[i]->active)
+				else if (App->scene->gameObjects[i]->active && InsideCamera(App->scene->gameCamera, tempComponentMesh->gAABB))
 				{
 					DrawMesh(tempComponentMesh->GetMesh(), tempTrans->GetTransformMatrix());
 
