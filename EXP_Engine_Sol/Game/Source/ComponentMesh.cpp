@@ -2,6 +2,7 @@
 #include "ComponentMesh.h"
 #include "GameObject.h"
 #include "ModuleImport.h"
+#include "ModuleEditor.h"
 
 #include "../External/ImGui/imgui.h"
 
@@ -59,8 +60,6 @@ void ComponentMesh::UpdateBoundingBoxes()
 
 	gAABB.SetNegativeInfinity();
 	gAABB.Enclose(obb);
-
-	RenderBoundingBoxes();
 }
 
 void ComponentMesh::RenderBoundingBoxes()

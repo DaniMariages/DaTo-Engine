@@ -63,6 +63,8 @@ public:
 
 public:
 
+	bool insideCam = true;
+
 	Light lights[MAX_LIGHTS];
 	SDL_GLContext context;
 	CPlane Grid;

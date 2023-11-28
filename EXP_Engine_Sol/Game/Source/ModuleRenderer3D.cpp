@@ -171,7 +171,8 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	Grid.Render();
 
 	//Draw Frustum Box
-	App->scene->gameCamera->DrawFrustumCube();
+	if (App->scene->gameCameraObject->active)
+		App->scene->gameCamera->DrawFrustumCube();
 
 	//Draw meshes
 	IterateDrawMesh();
@@ -258,7 +259,7 @@ void ModuleRenderer3D::IterateDrawMesh()
 {
 	for (unsigned int i = 0; i < App->scene->gameObjects.size(); i++)
 	{
-		if (App->scene->gameObjects[i]->GetComponent(typeComponent::Mesh) != nullptr)
+		if (App->scene->gameObjects[i]->HasComponent(typeComponent::Mesh))
 		{
 			std::vector<Component*> meshComponents = App->scene->gameObjects[i]->GetComponents(typeComponent::Mesh);
 			std::vector<Component*>::iterator item = meshComponents.begin();
@@ -290,10 +291,9 @@ void ModuleRenderer3D::IterateDrawMesh()
 
 				if (App->editor->drawSelectedFaces) DrawSelectedNormals();
 				if (App->editor->drawSelectedVertex) DrawSelectedNormals();
-
-				if (App->editor->drawSelectedTexture)
+				/*if (App->editor->drawSelectedTexture)
 				{
-					if (App->scene->gameObjectSelected != nullptr)
+					if (App->scene->gameObjectSelected != nullptr && App->scene->gameObjectSelected->active)
 					{
 						ComponentTexture* componentTex = (ComponentTexture*)App->scene->gameObjectSelected->GetComponent(typeComponent::Material);
 						ComponentMesh* tempComponentMesh = (ComponentMesh*)(*item);
@@ -308,8 +308,7 @@ void ModuleRenderer3D::IterateDrawMesh()
 							}
 						}
 					}
-
-				}
+				}*/
 			}
 		}
 	}
@@ -497,28 +496,26 @@ void ModuleRenderer3D::DrawBox(float3* vertices, float3 color)
 
 void ModuleRenderer3D::RenderBB()
 {
-	if (App->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN)
+	//Get all the game objects
+	for (unsigned int i = 0; i < App->scene->gameObjects.size(); i++)
 	{
-		if (App->editor->drawAllBoxes == true) App->editor->drawAllBoxes = false;
-		else if (App->editor->drawAllBoxes == false) App->editor->drawAllBoxes = true;
-	}
-	if (App->editor->drawAllBoxes == true)
-	{
-		//Get all the game objects
-		for (unsigned int i = 0; i < App->scene->gameObjects.size(); i++)
+		//Get all the components from the Game Object
+		for (unsigned int j = 0; j < App->scene->gameObjects[i]->components.size(); j++)
 		{
-			//Get all the components from the Game Object
-			for (unsigned int j = 0; j < App->scene->gameObjects[i]->components.size(); j++)
+			//If has a Mesh component, then update its bounding box
+			if (App->scene->gameObjects[i]->HasComponent(typeComponent::Mesh))
 			{
-				//If has a Mesh component, then draw its bounding box
-				if (App->scene->gameObjects[i]->components[j]->type == typeComponent::Mesh)
-				{
-					ComponentMesh* compMesh = (ComponentMesh*)App->scene->gameObjects[i]->GetComponent(typeComponent::Mesh);
-					if(InsideCamera(App->scene->gameCamera, compMesh->gAABB)) compMesh->UpdateBoundingBoxes();
-				}
+				ComponentMesh* compMesh = (ComponentMesh*)App->scene->gameObjects[i]->GetComponent(typeComponent::Mesh);
+
+				//Update the position of the Bounding Box
+				compMesh->UpdateBoundingBoxes();
+
+				//If Bounding Box is inside camera, then draw it
+				if (InsideCamera(App->scene->gameCamera, compMesh->gAABB)) compMesh->RenderBoundingBoxes();
 			}
 		}
 	}
+
 }
 
 bool ModuleRenderer3D::InsideCamera(const ComponentCamera* camera, const AABB& aabb)
@@ -532,7 +529,7 @@ bool ModuleRenderer3D::InsideCamera(const ComponentCamera* camera, const AABB& a
 		float3 cornerPoints[8];
 		aabb.GetCornerPoints(cornerPoints);
 
-		for (int i = 0; i < 6; ++i) 
+		for (int i = 0; i < 6; ++i)
 		{
 			uint pointsInside = 8;
 			for (int j = 0; j < 8; ++j)
