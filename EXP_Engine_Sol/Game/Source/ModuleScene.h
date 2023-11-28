@@ -4,6 +4,8 @@
 #include "Globals.h"
 #include "GameObject.h"
 
+#include "../External/ImGuizmo/ImGuizmo.h"
+
 #include <vector>
 
 class ComponentCamera;
@@ -21,6 +23,8 @@ public:
 
 	GameObject* CreateGameObject(std::string Name, GameObject* parent);
 	void DeleteGameObject(GameObject* gameObject);
+
+	void ImGuizmoHandling();
 
 public: 
 

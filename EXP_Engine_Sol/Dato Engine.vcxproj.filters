@@ -76,6 +76,9 @@
     <Filter Include="Source\Modules\GameObjects">
       <UniqueIdentifier>{37263bf4-e696-4a16-88ef-4fabd4430b98}</UniqueIdentifier>
     </Filter>
+    <Filter Include="External\ImGuizmo">
+      <UniqueIdentifier>{b931f816-fd50-4331-8110-011282d264c0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\External\DevIL\include\devil_cpp_wrapper.hpp">
@@ -723,6 +726,24 @@
     <ClInclude Include="Game\Source\ComponentCamera.h">
       <Filter>Source\Modules\GameObjects</Filter>
     </ClInclude>
+    <ClInclude Include="Game\External\ImGuizmo\GraphEditor.h">
+      <Filter>External\ImGuizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\External\ImGuizmo\ImCurveEdit.h">
+      <Filter>External\ImGuizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\External\ImGuizmo\ImGradient.h">
+      <Filter>External\ImGuizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\External\ImGuizmo\ImGuizmo.h">
+      <Filter>External\ImGuizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\External\ImGuizmo\ImSequencer.h">
+      <Filter>External\ImGuizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\External\ImGuizmo\ImZoomSlider.h">
+      <Filter>External\ImGuizmo</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game\External\DevIL\include\luadevil.c">
@@ -904,6 +925,21 @@
     </ClCompile>
     <ClCompile Include="Game\Source\ComponentCamera.cpp">
       <Filter>Source\Modules\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\External\ImGuizmo\GraphEditor.cpp">
+      <Filter>External\ImGuizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\External\ImGuizmo\ImCurveEdit.cpp">
+      <Filter>External\ImGuizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\External\ImGuizmo\ImGradient.cpp">
+      <Filter>External\ImGuizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\External\ImGuizmo\ImGuizmo.cpp">
+      <Filter>External\ImGuizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\External\ImGuizmo\ImSequencer.cpp">
+      <Filter>External\ImGuizmo</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
