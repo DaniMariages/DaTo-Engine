@@ -4,7 +4,7 @@
 // You may use this file to debug, understand or extend Dear ImGui features but we don't provide any guarantee of forward compatibility.
 // To implement maths operators for ImVec2 (disabled by default to not conflict with using IM_VEC2_CLASS_EXTRA with your own math types+operators), use:
 /*
-#define 
+#define IMGUI_DEFINE_MATH_OPERATORS
 #include "imgui_internal.h"
 */
 
