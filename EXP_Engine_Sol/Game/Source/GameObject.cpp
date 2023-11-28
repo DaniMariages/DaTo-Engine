@@ -10,6 +10,7 @@ GameObject::GameObject(std::string name, GameObject* parent)
 {
 	Name = name;
 	Parent = parent;
+	drawTexture = true;
 
 	//Only Scene Game Object has nullptr as a parent, so dont add a transform to it
 	if (parent != nullptr)
@@ -67,6 +68,34 @@ void GameObject::DisableParent()
 	for (unsigned int i = 0; i < this->children.size(); i++)
 	{
 		children[i]->DisableParent();
+	}
+}
+
+void GameObject::EnableTexture()
+{
+	this->drawTexture = true;
+}
+
+void GameObject::DisableTexture()
+{
+	this->drawTexture = false;
+}
+
+void GameObject::EnableTextureParent()
+{
+	this->drawTexture = true;
+	for (unsigned int i = 0; i < this->children.size(); i++)
+	{
+		children[i]->EnableTexture();
+	}
+}
+
+void GameObject::DisableTextureParent()
+{
+	this->drawTexture = false;
+	for (unsigned int i = 0; i < this->children.size(); i++)
+	{
+		children[i]->DisableTexture();
 	}
 }
 

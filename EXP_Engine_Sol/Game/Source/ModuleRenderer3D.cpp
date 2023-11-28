@@ -268,7 +268,7 @@ void ModuleRenderer3D::IterateDrawMesh()
 				ComponentTexture* componentTex = (ComponentTexture*)App->scene->gameObjects[i]->GetComponent(typeComponent::Material);
 				ComponentMesh* tempComponentMesh = (ComponentMesh*)(*item);
 				ComponentTransform* tempTrans = (ComponentTransform*)App->scene->gameObjects[i]->GetComponent(typeComponent::Transform);
-				if (componentTex != nullptr && App->scene->gameObjects[i]->active && InsideCamera(App->scene->gameCamera, tempComponentMesh->gAABB))
+				if (componentTex != nullptr && App->scene->gameObjects[i]->active && App->scene->gameObjects[i]->drawTexture && InsideCamera(App->scene->gameCamera, tempComponentMesh->gAABB))
 				{
 					DrawMesh(tempComponentMesh->GetMesh(), tempTrans->GetTransformMatrix(), componentTex->GetTexture()->textID);
 
@@ -291,24 +291,7 @@ void ModuleRenderer3D::IterateDrawMesh()
 
 				if (App->editor->drawSelectedFaces) DrawSelectedNormals();
 				if (App->editor->drawSelectedVertex) DrawSelectedNormals();
-				/*if (App->editor->drawSelectedTexture)
-				{
-					if (App->scene->gameObjectSelected != nullptr && App->scene->gameObjectSelected->active)
-					{
-						ComponentTexture* componentTex = (ComponentTexture*)App->scene->gameObjectSelected->GetComponent(typeComponent::Material);
-						ComponentMesh* tempComponentMesh = (ComponentMesh*)(*item);
-						if (componentTex != nullptr)
-						{
-							std::vector<Component*> meshComp = App->scene->gameObjectSelected->GetComponents(typeComponent::Mesh);
-							std::vector<Component*>::iterator it = meshComp.begin();
-							for (; it != meshComp.end(); ++it)
-							{
-								ComponentMesh* tempCompMesh = (ComponentMesh*)(*it);
-								DrawMesh(tempComponentMesh->GetMesh(), tempTrans->GetTransformMatrix());
-							}
-						}
-					}
-				}*/
+				
 			}
 		}
 	}
@@ -334,7 +317,7 @@ void ModuleRenderer3D::DrawMesh(mesh* mesh, float4x4 transform, uint id)
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 	glTexCoordPointer(2, GL_FLOAT, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords));
 
-	if (App->editor->drawTextures && App->editor->drawSelectedTexture)
+	if (App->editor->drawTextures)
 	{
 		// Bind the texture
 		glEnable(GL_TEXTURE_2D);
@@ -511,7 +494,7 @@ void ModuleRenderer3D::RenderBB()
 				compMesh->UpdateBoundingBoxes();
 
 				//If Bounding Box is inside camera, then draw it
-				if (InsideCamera(App->scene->gameCamera, compMesh->gAABB)) compMesh->RenderBoundingBoxes();
+				if (InsideCamera(App->scene->gameCamera, compMesh->gAABB) && compMesh->showBB && App->editor->drawAllBoxes) compMesh->RenderBoundingBoxes();
 			}
 		}
 	}

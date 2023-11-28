@@ -99,3 +99,18 @@ void ComponentMesh::DrawBox(float3* vertices, float3 color)
 	glColor3f(255.f, 255.f, 255.f);
 	glEnd();
 }
+
+void ComponentMesh::EnableBB()
+{
+	this->showBB = true;
+}
+
+void ComponentMesh::DisableBB()
+{
+	this->showBB = false;
+}
+
+void ComponentMesh::ToggleBB()
+{
+	this->showBB = !this->showBB;
+}

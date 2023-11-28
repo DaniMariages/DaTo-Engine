@@ -162,10 +162,10 @@ void ModuleEditor::UpdateFPS(const float aFPS)
 	}
 }
 
-void ModuleEditor::MainMenuBar() 
+void ModuleEditor::MainMenuBar()
 {
 
-	if (ImGui::BeginMainMenuBar()) 
+	if (ImGui::BeginMainMenuBar())
 	{
 		if (ImGui::BeginMenu("File"))
 		{
@@ -178,7 +178,7 @@ void ModuleEditor::MainMenuBar()
 
 		if (ImGui::BeginMenu("Game Objects"))
 		{
-			if (ImGui::BeginMenu("Primitives")) 
+			if (ImGui::BeginMenu("Primitives"))
 			{
 				if (ImGui::MenuItem("Cube")) {
 					App->renderer3D->ImportCube();
@@ -198,7 +198,7 @@ void ModuleEditor::MainMenuBar()
 
 				ImGui::EndMenu();
 			}
-			if (ImGui::MenuItem("Empty Game Object")) 
+			if (ImGui::MenuItem("Empty Game Object"))
 			{
 				App->scene->CreateGameObject("Empty Game Object", App->scene->rootGameObject);
 			}
@@ -290,45 +290,31 @@ void ModuleEditor::Config() {
 		}
 		if (ImGui::CollapsingHeader("Draw Settings"))
 		{
-			if (ImGui::Checkbox("Draw", &drawAll)) {
-			}
-			if (ImGui::Checkbox("Normals", &drawAllFaces)) {
-			}
-			if (ImGui::Checkbox("Vertex", &drawAllVertex)) {
-			}
-			if (ImGui::Checkbox("Textures", &drawTextures)) {
-			}
-			if (ImGui::Checkbox("Bounding Boxes", &drawAllBoxes)) {
-			}
-
+			if (ImGui::Checkbox("Draw", &drawAll)) {}
+			if (ImGui::Checkbox("Normals", &drawAllFaces)) {}
+			if (ImGui::Checkbox("Vertex", &drawAllVertex)) {}
+			if (ImGui::Checkbox("Textures", &drawTextures)) {}
+			if (ImGui::Checkbox("Bounding Boxes", &drawAllBoxes)) {}
 		}
 		if (ImGui::CollapsingHeader("View"))
 		{
-			if (ImGui::Checkbox("Top", &top)) {
-			}
-			if (ImGui::Checkbox("Front", &front)) {
-			}
-			if (ImGui::Checkbox("Left side", &side_1)) {
-			}
-			if (ImGui::Checkbox("Right side", &side_2)) {
-			}
+			if (ImGui::Checkbox("Top", &top)) {}
+			if (ImGui::Checkbox("Front", &front)) {}
+			if (ImGui::Checkbox("Left side", &side_1)) {}
+			if (ImGui::Checkbox("Right side", &side_2)) {}
 		}
-		if (ImGui::CollapsingHeader("Renderer")) {
-			if (ImGui::Checkbox("Shader", &shader)) {
-				if (shader) {
-					glEnable(GL_LIGHTING);
-				}
-				else {
-					glDisable(GL_LIGHTING);
-				}
+		if (ImGui::CollapsingHeader("Renderer"))
+		{
+			if (ImGui::Checkbox("Shader", &shader))
+			{
+				if (shader) glEnable(GL_LIGHTING);
+				else glDisable(GL_LIGHTING);
 			}
-			if (ImGui::Checkbox("Cull face", &cullface)) {
-				if (cullface) {
-					glEnable(GL_CULL_FACE);
-				}
-				else {
-					glDisable(GL_CULL_FACE);
-				}
+
+			if (ImGui::Checkbox("Cull face", &cullface))
+			{
+				if (cullface) glEnable(GL_CULL_FACE);
+				else glDisable(GL_CULL_FACE);
 			}
 		}
 		ImGui::End();
@@ -383,11 +369,11 @@ void ModuleEditor::HierarchyWindow(GameObject* gameObject)
 		if (ImGui::IsItemClicked() || ImGui::IsItemClicked(1)) //Selectable with left and right mouse button
 		{
 			gameObject->selected = true; //Draw the gameObject as selected
-
 			App->scene->gameObjectSelected = gameObject; //Assign the game object selected
 
 			for (std::vector<GameObject*>::iterator it = App->scene->gameObjects.begin(); it != App->scene->gameObjects.end(); ++it)
 			{
+				//Deselect the rest of game objects to dont show them as selected
 				if ((*it) != gameObject) (*it)->selected = false;
 			}
 		}
@@ -486,8 +472,8 @@ void ModuleEditor::Inspector(GameObject* gameObject)
 			ImGui::TextColored(GREEN, "%s", App->scene->gameObjectSelected->Parent->Name.c_str());
 		}
 		else ImGui::Text("No Parent");
-		
-		if (ImGui::Button("Delete")) //MYTODO: Hacer una confirmacion en todos los objetos, y una opcion de "Dont show again" (con un bool showAgain)
+
+		if (ImGui::Button("Delete"))
 		{
 			show_delete_scene_modal = true;
 		}
@@ -509,8 +495,22 @@ void ModuleEditor::Inspector(GameObject* gameObject)
 			}
 			if (ImGui::Checkbox("Normals", &drawSelectedFaces));
 			if (ImGui::Checkbox("Vertex", &drawSelectedVertex));
-			if (ImGui::Checkbox("Textures", &drawSelectedTexture));
-			if (ImGui::Checkbox("Boudnig Boxes", &drawSelectedBoxes));
+			if (ImGui::Checkbox("Textures", &drawSelectedTexture))
+			{
+				if (gameObject->drawTexture) gameObject->DisableTexture();
+				else gameObject->EnableTexture();
+
+				if (!gameObject->children.empty())
+				{
+					if (!gameObject->drawTexture) gameObject->DisableTextureParent();
+					else gameObject->EnableTextureParent();
+				}
+			}
+			if (ImGui::Checkbox("Bounding Box", &drawSelectedBoxes))
+			{
+				ComponentMesh* tMesh = (ComponentMesh*)gameObject->GetComponent(typeComponent::Mesh);
+				tMesh->ToggleBB();
+			}
 
 			ImGui::TreePop();
 		}
@@ -569,7 +569,7 @@ void ModuleEditor::DrawSceneAlert()
 			show_delete_scene_modal = false;
 		}
 	}
-	else 
+	else
 	{
 		//Non deletable object
 		ImGui::OpenPopup("Action not allowed");

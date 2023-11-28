@@ -37,9 +37,14 @@ public:
 	AABB aabb;
 	OBB obb;
 
+	void EnableBB();
+	void DisableBB();
+	void ToggleBB();
+	bool showBB = true;
+
 private:
 	
 	mesh* Mesh;
-
 	std::string path;
+
 };

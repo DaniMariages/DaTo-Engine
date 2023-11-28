@@ -13,6 +13,7 @@ public:
 	std::string Name;
 	std::vector<Component*> components;
 	bool active;
+	bool drawTexture;
 
 	GameObject* Parent;
 	std::vector<GameObject*> children;
@@ -23,10 +24,16 @@ public:
 	void Enable(); //Start up + bool toggle
 	void Disable();//Clean up + bool toggle
 
-	//Enable parent Game Object, including their children
-	void EnableParent(); 
+	//Enable and disable texture of a Game Object
+	void EnableTexture();
+	void DisableTexture();
 
-	//Disable parent Game Object, including their children
+	//Enable and disable the textures of parent and childrens
+	void EnableTextureParent();
+	void DisableTextureParent();
+
+	//Enable and disable parent Game Object, including their children
+	void EnableParent(); 
 	void DisableParent();
 
 	//Function to change the name of a game object
