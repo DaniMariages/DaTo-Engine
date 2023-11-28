@@ -123,6 +123,12 @@
     <ClInclude Include="Game\External\DevIL\include\ilut_config.h" />
     <ClInclude Include="Game\External\DevIL\include\ilu_region.h" />
     <ClInclude Include="Game\External\DevIL\include\il_wrap.h" />
+    <ClInclude Include="Game\External\ImGuizmo\GraphEditor.h" />
+    <ClInclude Include="Game\External\ImGuizmo\ImCurveEdit.h" />
+    <ClInclude Include="Game\External\ImGuizmo\ImGradient.h" />
+    <ClInclude Include="Game\External\ImGuizmo\ImGuizmo.h" />
+    <ClInclude Include="Game\External\ImGuizmo\ImSequencer.h" />
+    <ClInclude Include="Game\External\ImGuizmo\ImZoomSlider.h" />
     <ClInclude Include="Game\External\ImGui\backends\imgui_impl_opengl3.h" />
     <ClInclude Include="Game\External\ImGui\backends\imgui_impl_opengl3_loader.h" />
     <ClInclude Include="Game\External\ImGui\backends\imgui_impl_sdl2.h" />
@@ -296,6 +302,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game\External\DevIL\include\luadevil.c" />
+    <ClCompile Include="Game\External\ImGuizmo\GraphEditor.cpp" />
+    <ClCompile Include="Game\External\ImGuizmo\ImCurveEdit.cpp" />
+    <ClCompile Include="Game\External\ImGuizmo\ImGradient.cpp" />
+    <ClCompile Include="Game\External\ImGuizmo\ImGuizmo.cpp" />
+    <ClCompile Include="Game\External\ImGuizmo\ImSequencer.cpp" />
     <ClCompile Include="Game\External\ImGui\backends\imgui_impl_opengl3.cpp" />
     <ClCompile Include="Game\External\ImGui\backends\imgui_impl_sdl2.cpp" />
     <ClCompile Include="Game\External\ImGui\imgui.cpp" />
