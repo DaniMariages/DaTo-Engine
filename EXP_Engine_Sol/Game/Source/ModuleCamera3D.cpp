@@ -188,6 +188,11 @@ update_status ModuleCamera3D::Update(float dt)
 	}
 
 	editorCamera->UpdatePos(newPos);
-
 	return UPDATE_CONTINUE;
+}
+
+void ModuleCamera3D::MousePickingRay(float posX, float posY)
+{
+	mousePickingRay = editorCamera->frustum.UnProjectLineSegment(posX, posY);
+	App->scene->SelectGameObject(mousePickingRay);
 }

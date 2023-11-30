@@ -16,7 +16,10 @@ public:
 	update_status Update(float dt);
 	bool CleanUp();
 
+	void MousePickingRay(float posX, float posY);
+
 public:
 	
+	LineSegment mousePickingRay;
 	ComponentCamera* editorCamera;
 };

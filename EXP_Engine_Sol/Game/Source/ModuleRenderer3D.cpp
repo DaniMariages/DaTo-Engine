@@ -167,6 +167,9 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	//Render the Bounding Box for all meshes
 	RenderBB();
 
+	//Render ray of editor camera
+	RenderRay();
+
 	//Draw Grid
 	Grid.Render();
 
@@ -291,7 +294,6 @@ void ModuleRenderer3D::IterateDrawMesh()
 
 				if (App->editor->drawSelectedFaces) DrawSelectedNormals();
 				if (App->editor->drawSelectedVertex) DrawSelectedNormals();
-				
 			}
 		}
 	}
@@ -421,6 +423,7 @@ void ModuleRenderer3D::DrawSelectedNormals()
 	if (App->editor->drawSelectedFaces || App->editor->drawSelectedVertex)
 	{
 		GameObject* selectedObject = App->scene->gameObjectSelected;
+
 		if (selectedObject)
 		{
 			ComponentTransform* transform = static_cast<ComponentTransform*>(selectedObject->GetComponent(typeComponent::Transform));
@@ -466,10 +469,9 @@ void ModuleRenderer3D::DrawBox(float3* vertices, float3 color)
 	glBegin(GL_LINES);
 	glColor3fv(color.ptr());
 
-	for (size_t i = 0; i < (sizeof(indices) / sizeof(indices[0])); i++) {
-
+	for (size_t i = 0; i < (sizeof(indices) / sizeof(indices[0])); i++) 
+	{
 		glVertex3fv(vertices[indices[i]].ptr());
-
 	}
 
 	glColor3f(255.f, 255.f, 255.f);
@@ -494,11 +496,21 @@ void ModuleRenderer3D::RenderBB()
 				compMesh->UpdateBoundingBoxes();
 
 				//If Bounding Box is inside camera, then draw it
-				if (InsideCamera(App->scene->gameCamera, compMesh->gAABB) && compMesh->showBB && App->editor->drawAllBoxes) compMesh->RenderBoundingBoxes();
+				if (InsideCamera(App->scene->gameCamera, compMesh->gAABB) && compMesh->showBB && App->editor->drawAllBoxes) 
+					compMesh->RenderBoundingBoxes();
 			}
 		}
 	}
+}
 
+void ModuleRenderer3D::RenderRay()
+{
+	glColor4f(0.0f, 1.0f, 1.0f, 0.0f);
+	glBegin(GL_LINES);
+	glVertex3fv(&App->scene->pickingDebug.a.x);
+	glVertex3fv(&App->scene->pickingDebug.b.x);
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	glEnd();
 }
 
 bool ModuleRenderer3D::InsideCamera(const ComponentCamera* camera, const AABB& aabb)
@@ -523,7 +535,6 @@ bool ModuleRenderer3D::InsideCamera(const ComponentCamera* camera, const AABB& a
 			if (pointsInside == 0) return false;
 		}
 	}
-
 	return true;
 }
 

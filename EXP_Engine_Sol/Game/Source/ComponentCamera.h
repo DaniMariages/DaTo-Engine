@@ -24,6 +24,8 @@ public:
 	bool frustumCulling;
 	bool drawBoundingBoxes;
 
+	LineSegment mousePickingRay;
+
 public:
 	void Enable() override;
 	void Update() override;
@@ -49,10 +51,7 @@ public:
 	void SetAspectRatio(float AspectRatio);
 
 	float GetNearPlane() const;
-	void SetNearPlane(float distance);
-
 	float GetFarPlane() const;
-	void SetFarPlane(float distance);
 
 	void DrawFrustumCube() const;
 

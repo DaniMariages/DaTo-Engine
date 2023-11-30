@@ -36,25 +36,7 @@ void ComponentTransform::Enable() { if (!this->active) this->active = true; }
 
 void ComponentTransform::Disable() { if (this->active) this->active = false; }
 
-void ComponentTransform::Update()
-{
-	//MYTODO: I think is better get this here instead GameObject Update
-	//if (ExternalApp->scene->gameObjectSelected != nullptr && ExternalApp->scene->gameObjectSelected != ExternalApp->scene->rootGameObject 
-	//	&& !ExternalApp->scene->gameObjectSelected->children.empty())
-	//{
-	//	//to dont get a kilometer function
-	//	GameObject* gameObjectSelected = ExternalApp->scene->gameObjectSelected;
-	//
-	//	for (unsigned int i = 0; i < gameObjectSelected->children.size(); i++)
-	//	{
-	//		if (gameObjectSelected->children[i]->GetComponent(typeComponent::Mesh)->type == typeComponent::Mesh)
-	//		{
-	//			ComponentTransform* compMesh = (ComponentTransform*)gameObjectSelected->children[i]->GetComponent(typeComponent::Transform);
-	//			compMesh->SetTransformMatrix(gameObjectSelected->transform->GetTransformMatrix());
-	//		}
-	//	}
-	//}
-}
+void ComponentTransform::Update() {}
 
 void ComponentTransform::SetGlobalPosition(float3 position)
 {
@@ -88,7 +70,7 @@ void ComponentTransform::SetGlobalScale(float3 scale)
 	float3 newSca;
 
 	if (parent->Parent != nullptr) parentScale = parent->Parent->transform->GetScale();
-	newSca = position - parentScale;
+	newSca = scale - parentScale;
 	SetScale(newSca);
 }
 
@@ -119,6 +101,7 @@ void ComponentTransform::SetScale(float3 scale)
 {
 	this->scale = scale;
 	UpdateMatrix();
+	UpdateTransform();
 };
 
 float4x4 ComponentTransform::SetTransformMatrix(float4x4 transformMatrix)

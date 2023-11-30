@@ -61,6 +61,9 @@ public:
 	//Bool to know if a AABB is inside the FOV camera
 	bool InsideCamera(const ComponentCamera* camera, const AABB& aabb);
 
+	//Debug the ray of editor camera
+	void RenderRay();
+
 public:
 
 	Light lights[MAX_LIGHTS];

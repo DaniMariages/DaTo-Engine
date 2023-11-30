@@ -99,17 +99,30 @@ void ModuleEditor::DrawEditor()
 	if (show_inspector_window) DrawInspector();
 	if (show_delete_scene_modal) DrawSceneAlert();
 
-	if (ImGui::Begin("Scene"), true) {
-
+	if (ImGui::Begin("Scene"), true)
+	{
+		//Render the screen Scene (Editor camera)
 		ImVec2 size = ImGui::GetContentRegionAvail();
 		App->camera->editorCamera->SetAspectRatio(size.x / size.y);
 		ImGui::Image((ImTextureID)App->camera->editorCamera->TCB, size, ImVec2(0, 1), ImVec2(1, 0));
 
+		//Scene info needed for Mouse Picking function
+		ImVec2 mousePosition = ImGui::GetMousePos();
+		ImVec2 windowPos = ImGui::GetWindowPos();
+		ImVec2 windowSize = ImGui::GetWindowSize();
+		ImVec2 contentRegionMax = ImGui::GetContentRegionMax();
+		float sceneFrameHeightOffset = ImGui::GetFrameHeight() / 2.0f;
+
+		//This function is here because we need the info of the screen
+		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN) 
+			MousePicking(mousePosition, windowPos, windowSize, sceneFrameHeightOffset);
+
 		ImGui::End();
 	}
 
-	if (ImGui::Begin("Game"), true) {
-
+	if (ImGui::Begin("Game"), true) 
+	{
+		//Render the screen Game (Game camera)
 		ImVec2 size = ImGui::GetContentRegionAvail();
 		App->scene->gameCamera->SetAspectRatio(size.x / size.y);
 		ImGui::Image((ImTextureID)App->scene->gameCamera->TCB, size, ImVec2(0, 1), ImVec2(1, 0));
@@ -125,20 +138,12 @@ void ModuleEditor::DrawEditor()
 	// Rendering
 	ImGui::Render();
 	glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
-	//glClearColor(1.0, 1.0, 1.0, 0.0);
-	//glClear(GL_COLOR_BUFFER_BIT);
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
 // Called before quitting
 bool ModuleEditor::CleanUp()
 {
-	//// Cleanup
-	//ImGui_ImplOpenGL3_Shutdown();
-	//ImGui_ImplSDL2_Shutdown();
-	//ImGui::DestroyContext();
-
-	//SDL_GL_DeleteContext(context);
 	return true;
 }
 
@@ -164,7 +169,6 @@ void ModuleEditor::UpdateFPS(const float aFPS)
 
 void ModuleEditor::MainMenuBar()
 {
-
 	if (ImGui::BeginMainMenuBar())
 	{
 		if (ImGui::BeginMenu("File"))
@@ -198,12 +202,15 @@ void ModuleEditor::MainMenuBar()
 
 				ImGui::EndMenu();
 			}
+
 			if (ImGui::MenuItem("Empty Game Object"))
 			{
 				App->scene->CreateGameObject("Empty Game Object", App->scene->rootGameObject);
 			}
+
 			ImGui::EndMenu();
 		}
+
 		if (ImGui::BeginMenu("Window"))
 		{
 			if (ImGui::MenuItem("Configuration")) {
@@ -226,6 +233,7 @@ void ModuleEditor::MainMenuBar()
 			}
 			ImGui::EndMenu();
 		}
+
 		if (ImGui::BeginMenu("About"))
 		{
 			ImGui::Text("DaTo Engine by Dani Mariages & Toni Romanos");
@@ -233,7 +241,6 @@ void ModuleEditor::MainMenuBar()
 			if (ImGui::Selectable(label, true))	RequestBrowser("https://github.com/DaniMariages/DaTo-Engine");
 			ImGui::EndMenu();
 		}
-
 
 		ImGui::EndMainMenuBar();
 	}
@@ -260,6 +267,7 @@ void ModuleEditor::Config() {
 				App->window->Borderless(borderless);
 			}
 		}
+
 		if (ImGui::CollapsingHeader("Hardware"))
 		{
 			//Display current hardware and driver capabilities
@@ -284,10 +292,12 @@ void ModuleEditor::Config() {
 			ImGui::SameLine();
 			ImGui::TextColored(YELLOW, "%s", glGetString(GL_SHADING_LANGUAGE_VERSION));
 		}
+
 		if (ImGui::CollapsingHeader("Framerate"))
 		{
 			ImGui::PlotHistogram("##FPS", &App->mFPSLog[0], App->mFPSLog.size(), 0, "", 0.0f, 100.0f, ImVec2(300, 100));
 		}
+
 		if (ImGui::CollapsingHeader("Draw Settings"))
 		{
 			if (ImGui::Checkbox("Draw", &drawAll)) {}
@@ -296,6 +306,7 @@ void ModuleEditor::Config() {
 			if (ImGui::Checkbox("Textures", &drawTextures)) {}
 			if (ImGui::Checkbox("Bounding Boxes", &drawAllBoxes)) {}
 		}
+
 		if (ImGui::CollapsingHeader("View"))
 		{
 			if (ImGui::Checkbox("Top", &top)) {}
@@ -303,6 +314,7 @@ void ModuleEditor::Config() {
 			if (ImGui::Checkbox("Left side", &side_1)) {}
 			if (ImGui::Checkbox("Right side", &side_2)) {}
 		}
+
 		if (ImGui::CollapsingHeader("Renderer"))
 		{
 			if (ImGui::Checkbox("Shader", &shader))
@@ -325,7 +337,8 @@ void ModuleEditor::Console()
 {
 	ImGuiStyle& style = ImGui::GetStyle();
 
-	if (show_console) {
+	if (show_console) 
+	{
 		ImGui::Begin("Console", &show_console);
 
 		for (int i = 0; i < log_history.size(); i++)
@@ -587,4 +600,29 @@ void ModuleEditor::DrawSceneAlert()
 			ImGui::EndPopup();
 		}
 	}
+}
+
+// Function to Mouse Picking
+void ModuleEditor::MousePicking(ImVec2 mousePosition, ImVec2 sceneWindowPos, ImVec2 sceneWindowSize, float sceneFrameHeightOffset) 
+{
+	ImVec2 normalizedPoint = NormalizePoint(sceneWindowPos.x, sceneWindowPos.y + (sceneFrameHeightOffset * 2), sceneWindowSize.x, sceneWindowSize.y - (sceneFrameHeightOffset * 2), mousePosition);
+
+	normalizedPoint.x = (normalizedPoint.x - 0.5f) / 0.5f;
+	normalizedPoint.y = -((normalizedPoint.y - 0.5f) / 0.5f);
+
+	if ((normalizedPoint.x >= -1 && normalizedPoint.x <= 1) && (normalizedPoint.y >= -1 && normalizedPoint.y <= 1))
+	{
+		App->camera->MousePickingRay(normalizedPoint.x, normalizedPoint.y);
+	}
+
+}
+
+ImVec2 ModuleEditor::NormalizePoint(float x, float y, float w, float h, ImVec2 originalPoint)
+{
+	ImVec2 normalizedPoint;
+
+	normalizedPoint.x = (originalPoint.x - x) / ((x + w) - x);
+	normalizedPoint.y = (originalPoint.y - y) / ((y + h) - y);
+
+	return normalizedPoint;
 }
