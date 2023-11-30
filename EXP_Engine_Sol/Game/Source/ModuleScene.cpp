@@ -3,6 +3,8 @@
 #include "ModuleCamera3D.h"
 #include "ModuleImport.h"
 
+#include <map>
+
 ModuleScene::ModuleScene(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 	rootGameObject = CreateGameObject("Scene", nullptr);
@@ -61,8 +63,6 @@ GameObject* ModuleScene::CreateGameObject(std::string Name, GameObject* parent)
 
 void ModuleScene::DeleteGameObject(GameObject* gameObject)
 {
-	LOG("Deleting Game Object: %s.", gameObject->Name.c_str());
-
 	//If the game object has children delete them first
 	if (!gameObject->children.empty())
 	{
@@ -95,7 +95,7 @@ void ModuleScene::DeleteGameObject(GameObject* gameObject)
 			break;
 		}
 	}
-	
+
 	//When references deleted, delete the game Object
 	for (unsigned int i = 0; i < gameObjects.size(); i++)
 	{
@@ -106,9 +106,98 @@ void ModuleScene::DeleteGameObject(GameObject* gameObject)
 		}
 	}
 
-	delete gameObject;
-
 	//Set the gameObjects null
 	gameObject = nullptr;
 	gameObjectSelected = nullptr;
+}
+
+void ModuleScene::SelectGameObject(const LineSegment& ray)
+{
+	//Line Segment to debug
+	pickingDebug = ray;
+
+	std::map<float, ComponentMesh*> cMeshCandidates;
+	for (const auto& gameObject : gameObjects) 
+	{
+		for (const auto& component : gameObject->components) 
+		{
+			if (component->type == typeComponent::Mesh) 
+			{
+				ComponentMesh* tempMesh = static_cast<ComponentMesh*>(gameObject->GetComponent(typeComponent::Mesh));
+				float closest;
+				float furthest;
+
+				if (ray.Intersects(tempMesh->gAABB, closest, furthest)) 
+					cMeshCandidates[closest] = tempMesh;
+			}
+		}
+	}
+
+	std::vector<ComponentMesh*> cMeshSorted;
+	for (auto& candidate : cMeshCandidates) 
+	{
+		cMeshSorted.push_back(candidate.second);
+	}
+
+	for (ComponentMesh* mesh : cMeshSorted) 
+	{
+		if (mesh != nullptr && mesh->parent != nullptr) 
+		{
+			mesh->parent->selected = false;
+		}
+	}
+
+	for (ComponentMesh* mesh : cMeshSorted) 
+	{
+		if (mesh != nullptr) 
+		{
+			LineSegment localRay = ray;
+
+			ComponentTransform* tempTrans = (ComponentTransform*)mesh->parent->GetComponent(typeComponent::Transform);
+			localRay.Transform(tempTrans->GetTransformMatrix().Inverted());
+
+			// Iterate over triangles in the mesh.
+			for (unsigned int i = 0; i < mesh->GetMesh()->indices.size(); i += 3) 
+			{
+				uint triangle_indices[3] = { mesh->GetMesh()->indices[i], mesh->GetMesh()->indices[i + 1], mesh->GetMesh()->indices[i + 2] };
+
+				float3 aPoint(mesh->GetMesh()->vertices[triangle_indices[0]].Position);
+				float3 bPoint(mesh->GetMesh()->vertices[triangle_indices[1]].Position);
+				float3 cPoint(mesh->GetMesh()->vertices[triangle_indices[2]].Position);
+
+				Triangle triangle(aPoint, bPoint, cPoint);
+
+				// Check if ray intersect with the triangle
+				if (localRay.Intersects(triangle, nullptr, nullptr)) 
+				{
+					// If mesh parent is not null
+					if (mesh->parent != nullptr) 
+					{
+						// Game object selected will be mesh parent
+						gameObjectSelected = mesh->parent;
+						mesh->parent->selected = true;
+
+						// Iterate through all game objects in the scene.
+						for (auto it = App->scene->gameObjects.begin(); it != App->scene->gameObjects.end(); ++it) 
+						{
+							// Unselect other game objects.
+							if ((*it) != mesh->parent) 
+							{
+								(*it)->selected = false;
+							}
+						}
+					}
+
+					//Return when the ray interesect
+					return;
+				}
+			}
+		}
+	}
+
+	// No intersection found, clear the selection for all meshes.
+	for (auto it = App->scene->gameObjects.begin(); it != App->scene->gameObjects.end(); ++it) 
+	{
+		(*it)->selected = false;
+	}
 }

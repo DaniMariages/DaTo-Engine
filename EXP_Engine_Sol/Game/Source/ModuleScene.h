@@ -4,6 +4,9 @@
 #include "Globals.h"
 #include "GameObject.h"
 
+#include "../External/MathGeoLib/include/Geometry/LineSegment.h"
+
+#include <string>
 #include <vector>
 
 class ComponentCamera;
@@ -21,6 +24,10 @@ public:
 
 	GameObject* CreateGameObject(std::string Name, GameObject* parent);
 	void DeleteGameObject(GameObject* gameObject);
+
+	// Mouse picking function
+	void SelectGameObject(const LineSegment& ray);
+	LineSegment pickingDebug;
 
 public: 
 

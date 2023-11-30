@@ -42,7 +42,6 @@ void ComponentCamera::Update()
 	glMatrixMode(GL_MODELVIEW);
 	glLoadMatrixf(GetViewMatrix().ptr());
 
-	//MYTODO: It is possible?
 	if (parent != nullptr)
 	{
 		//Camera movement

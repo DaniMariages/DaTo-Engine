@@ -2,11 +2,13 @@
 #ifndef MODULE_EDITOR
 #define MODUEL_EDITOR
 
-#include <string>
-
 #include "Module.h"
 #include "Globals.h"
+
+#include "../External/ImGui/imgui.h"
+
 #include <vector>
+#include <string>
 
 #define YELLOW ImVec4(1.0f, 1.0f, 0.0f, 1.0f)
 class GameObject;
@@ -32,12 +34,12 @@ public:
 	void HierarchyWindow(GameObject* gameObject);
 	void DrawSceneAlert();
 
+	void MousePicking(ImVec2 mousePosition, ImVec2 sceneWindowPos, ImVec2 sceneWindowSize, float sceneFrameHeightOffset);
+	ImVec2 NormalizePoint(float x, float y, float w, float h, ImVec2 originalPoint);
+
 	void RequestBrowser(const char* path);
 
-	/*void AddFPS(const float aFPS);*/
-
 	GameObject* childObject = nullptr;
-
 	std::vector<std::string> log_history;
 	float aFPS;
 
