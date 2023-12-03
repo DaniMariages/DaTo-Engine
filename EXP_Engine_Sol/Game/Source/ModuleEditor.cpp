@@ -132,6 +132,7 @@ void ModuleEditor::DrawEditor()
 
 	Config();
 	Console();
+	DrawPausePlay();
 
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 
@@ -600,6 +601,26 @@ void ModuleEditor::DrawSceneAlert()
 			ImGui::EndPopup();
 		}
 	}
+}
+
+void ModuleEditor::DrawPausePlay() {
+	if (ImGui::Begin(" "))
+	{
+		if (ImGui::Button("Play"))
+		{
+		}
+		ImGui::SameLine();
+
+		if (ImGui::Button("Pause"))
+		{
+		}
+		ImGui::SameLine();
+
+		if (ImGui::Button("Stop"))
+		{
+		}
+	}
+	ImGui::End();
 }
 
 // Function to Mouse Picking

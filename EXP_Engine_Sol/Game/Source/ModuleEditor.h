@@ -33,6 +33,7 @@ public:
 	void Inspector(GameObject* gameObject);
 	void HierarchyWindow(GameObject* gameObject);
 	void DrawSceneAlert();
+	void DrawPausePlay();
 
 	void MousePicking(ImVec2 mousePosition, ImVec2 sceneWindowPos, ImVec2 sceneWindowSize, float sceneFrameHeightOffset);
 	ImVec2 NormalizePoint(float x, float y, float w, float h, ImVec2 originalPoint);
