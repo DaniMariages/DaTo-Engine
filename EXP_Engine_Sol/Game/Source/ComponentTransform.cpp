@@ -152,7 +152,7 @@ void ComponentTransform::UpdateTransform()
 			// If has component Transform
 			if (tempTrans->parent->Parent->HasComponent(typeComponent::Transform))
 				// Set the auxiliar matrix as parent matrix transform
-				parentWorldMatrix = tempTrans->parent->Parent->transform->GetTransformMatrix();
+				parentWorldMatrix = tempTrans->parent->Parent->transform->GetGlobalTransform();
 		}
 
 		tempTrans->gTransform = parentWorldMatrix * tempTrans->transform;

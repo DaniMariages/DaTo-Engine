@@ -276,10 +276,9 @@ void ComponentCamera::Focus(float3& center, float distance)
 
 void ComponentCamera::DrawInspector()
 {
-
 	if (ImGui::CollapsingHeader("Component Camera"))
 	{
-		if (ImGui::Checkbox("Frustum Culling", &frustumCulling));
+		ImGui::Checkbox("Frustum Culling", &frustumCulling);
 
 		//Set General FOV
 		float FOV = GetVerticalFOV();
@@ -306,10 +305,7 @@ void ComponentCamera::DrawInspector()
 	}
 }
 
-void ComponentCamera::OnUpdateTransform(const float4x4& global, const float4x4& parent_global)
-{
-	
-}
+void ComponentCamera::OnUpdateTransform(const float4x4& global, const float4x4& parent_global) {}
 
 void ComponentCamera::LoadBuffers(int width, int height)
 {
@@ -329,26 +325,24 @@ void ComponentCamera::LoadBuffers(int width, int height)
 
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, RBO);
 
-	SetAspectRatio(width / height);
+	SetAspectRatio((float)width / (float)height);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 void ComponentCamera::RenderBuffers(bool active)
 {
-	if (active) {
-
+	if (active) 
+	{
 		glBindFramebuffer(GL_FRAMEBUFFER, FBO);
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 	}
-	else {
-
+	else 
+	{
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 	}
 }
 

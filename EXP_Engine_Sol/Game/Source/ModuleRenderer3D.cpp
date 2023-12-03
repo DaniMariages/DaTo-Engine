@@ -273,7 +273,7 @@ void ModuleRenderer3D::IterateDrawMesh()
 				ComponentTransform* tempTrans = (ComponentTransform*)App->scene->gameObjects[i]->GetComponent(typeComponent::Transform);
 				if (componentTex != nullptr && App->scene->gameObjects[i]->active && App->scene->gameObjects[i]->drawTexture && InsideCamera(App->scene->gameCamera, tempComponentMesh->gAABB))
 				{
-					DrawMesh(tempComponentMesh->GetMesh(), tempTrans->GetTransformMatrix(), componentTex->GetTexture()->textID);
+					DrawMesh(tempComponentMesh->GetMesh(), tempTrans->GetGlobalTransform(), componentTex->GetTexture()->textID);
 
 					if (App->editor->drawAllFaces == true)
 						DrawFaceNormals(tempComponentMesh->GetMesh(), tempTrans->GetPosition(), tempTrans->GetScale(), tempTrans->GetRotation());
@@ -283,7 +283,7 @@ void ModuleRenderer3D::IterateDrawMesh()
 				}
 				else if (App->scene->gameObjects[i]->active && InsideCamera(App->scene->gameCamera, tempComponentMesh->gAABB))
 				{
-					DrawMesh(tempComponentMesh->GetMesh(), tempTrans->GetTransformMatrix());
+					DrawMesh(tempComponentMesh->GetMesh(), tempTrans->GetGlobalTransform());
 
 					if (App->editor->drawAllFaces == true)
 						DrawFaceNormals(tempComponentMesh->GetMesh(), tempTrans->GetPosition(), tempTrans->GetScale(), tempTrans->GetRotation());
