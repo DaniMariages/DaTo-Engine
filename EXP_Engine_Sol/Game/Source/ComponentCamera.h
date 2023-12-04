@@ -79,7 +79,7 @@ public:
 	void OnUpdateTransform(const float4x4& global, const float4x4& parent_global) override;
 
 	//RENDER
-	void LoadBuffers(int width, int height);
+	void LoadBuffers();
 	void RenderBuffers(bool active);
 	void UnloadBuffers();
 

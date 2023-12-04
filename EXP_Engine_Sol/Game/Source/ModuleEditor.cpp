@@ -92,12 +92,13 @@ void ModuleEditor::DrawEditor()
 
 	if (ImGui::Begin("Scene"), true)
 	{
+		ImVec2 size = ImGui::GetContentRegionAvail();
+		App->camera->editorCamera->SetAspectRatio(size.x / size.y);
+		ImGui::Image((ImTextureID)App->camera->editorCamera->TCB, size, ImVec2(0, 1), ImVec2(1, 0));
+
 		//Render the screen Scene (Editor camera)
 		sizeScene = ImGui::GetContentRegionAvail();
 		windowPos = ImGui::GetWindowPos();
-
-		App->camera->editorCamera->SetAspectRatio(sizeScene.x / sizeScene.y);
-		ImGui::Image((ImTextureID)App->camera->editorCamera->TCB, sizeScene, ImVec2(0, 1), ImVec2(1, 0));
 
 		//Scene info needed for Mouse Picking function
 		ImVec2 mousePosition = ImGui::GetMousePos();

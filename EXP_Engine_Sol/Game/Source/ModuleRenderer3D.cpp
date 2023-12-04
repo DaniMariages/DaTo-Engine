@@ -131,8 +131,8 @@ bool ModuleRenderer3D::Init()
 	App->importer->ReadFile("Assets/Models/BakerHouse.fbx");
 	App->importer->ReadFile("Assets/Textures/BakerHouse.png");
 
-	// Projection matrix for
-	OnResize(SCREEN_WIDTH, SCREEN_HEIGHT);
+	App->scene->gameCamera->LoadBuffers();
+	App->camera->editorCamera->LoadBuffers();
 
 	return ret;
 }
@@ -216,8 +216,10 @@ bool ModuleRenderer3D::CleanUp()
 
 void ModuleRenderer3D::OnResize(int width, int height)
 {
-	App->camera->editorCamera->LoadBuffers(width, height);
-	App->scene->gameCamera->LoadBuffers(width, height);
+	for (unsigned int i = 0; i < App->scene->totalCameras.size(); i++)
+	{
+		App->scene->totalCameras[i]->SetAspectRatio((float)width / (float)height);
+	}
 }
 
 void ModuleRenderer3D::UseCheckerTexture() {

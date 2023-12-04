@@ -307,7 +307,7 @@ void ComponentCamera::DrawInspector()
 
 void ComponentCamera::OnUpdateTransform(const float4x4& global, const float4x4& parent_global) {}
 
-void ComponentCamera::LoadBuffers(int width, int height)
+void ComponentCamera::LoadBuffers()
 {
 	glGenFramebuffers(1, &FBO);
 	glBindFramebuffer(GL_FRAMEBUFFER, FBO);
@@ -324,8 +324,6 @@ void ComponentCamera::LoadBuffers(int width, int height)
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, RBO);
-
-	SetAspectRatio((float)width / (float)height);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }

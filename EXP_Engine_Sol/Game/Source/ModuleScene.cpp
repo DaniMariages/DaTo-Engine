@@ -32,6 +32,7 @@ bool ModuleScene::Init()
 	gameCameraObject->transform->SetRotation(Quat::FromEulerXYZ(0.0f, 110.0f, 0.0f));
 
 	totalCameras.push_back(gameCamera);
+	totalCameras.push_back(App->camera->editorCamera);
 
 	return ret;
 }
