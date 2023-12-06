@@ -310,10 +310,15 @@ void ModuleEditor::Config() {
 
 		if (ImGui::CollapsingHeader("View"))
 		{
-			if (ImGui::Checkbox("Top", &top)) {}
-			if (ImGui::Checkbox("Front", &front)) {}
-			if (ImGui::Checkbox("Left side", &side_1)) {}
-			if (ImGui::Checkbox("Right side", &side_2)) {}
+			if (ImGui::Button("Top")) { App->camera->TopView(); }
+			ImGui::SameLine();
+			if (ImGui::Button("Front")) { App->camera->FrontView(); }
+			ImGui::SameLine();
+			if (ImGui::Button("Left side")) { App->camera->Side_1View(); }
+			ImGui::SameLine();
+			if (ImGui::Button("Right side")) { App->camera->Side_2View(); }
+			ImGui::SameLine();
+			if (ImGui::Button("Back")) { App->camera->BackView(); }
 		}
 
 		if (ImGui::CollapsingHeader("Renderer"))
@@ -606,6 +611,8 @@ void ModuleEditor::DrawSceneAlert()
 void ModuleEditor::DrawPausePlay() {
 	if (ImGui::Begin(" "))
 	{
+		ImGui::Text("                                   ");
+		ImGui::SameLine();
 		if (ImGui::Button("Play"))
 		{
 		}
