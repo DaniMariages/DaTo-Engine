@@ -244,6 +244,7 @@ void ModuleRenderer3D::UseCheckerTexture() {
 	glDisable(GL_TEXTURE_2D);
 }
 
+
 void ModuleRenderer3D::IterateDrawMesh()
 {
 	for (unsigned int i = 0; i < App->scene->gameObjects.size(); i++)

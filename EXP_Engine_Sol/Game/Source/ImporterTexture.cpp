@@ -22,25 +22,13 @@
 #pragma comment (lib, "Game/External/Devil/libx86/ILU.lib")
 #pragma comment (lib, "Game/External/Devil/libx86/ILUT.lib")
 
-void Importer::TextureImporter::InitDevil()
-{
-	ilInit();
-	iluInit();
-	ilutInit();
-	ilutRenderer(ILUT_OPENGL);
-}
-
 void Importer::TextureImporter::ImportTexture(ResourceTexture* rMaterial, const char* buffer, uint size)
 {
-
 	if (ilLoadL(IL_TYPE_UNKNOWN, (const void*)buffer, size))
 	{
 		LOG("Succesfully imported texture");
 	}
-	else
-	{
-		LOG("ERROR: Texture could not be loaded");
-	}
+	else LOG("ERROR: Texture could not be loaded");
 }
 
 uint Importer::TextureImporter::Save(const Texture* texture, char** buffer)
@@ -73,6 +61,5 @@ void Importer::TextureImporter::Load(Texture* texture, char* buffer, uint size)
 	ilLoadL(IL_TYPE_UNKNOWN, (const void*)buffer, size);
 	texture->textID = (ilutGLBindTexImage());
 	ilDeleteImages(1, &Il_Tex);
-
 }
 

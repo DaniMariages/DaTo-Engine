@@ -97,6 +97,9 @@
     <Filter Include="External\PCG %28Random UID%29">
       <UniqueIdentifier>{9185591a-6d7a-4a2c-a792-ecbf59d6bdc7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Resources">
+      <UniqueIdentifier>{60f30161-162d-4d6a-89c2-7b8c2ecb91f7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\External\DevIL\include\devil_cpp_wrapper.hpp">
@@ -789,6 +792,12 @@
     <ClInclude Include="Game\External\PCG\pcg_uint128.hpp">
       <Filter>External\PCG %28Random UID%29</Filter>
     </ClInclude>
+    <ClInclude Include="Game\Source\Resource.h">
+      <Filter>Source\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Source\ResourceMesh.h">
+      <Filter>Source\Resources</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game\External\DevIL\include\luadevil.c">
@@ -1000,6 +1009,12 @@
     </ClCompile>
     <ClCompile Include="Game\Source\Random.cpp">
       <Filter>Source\Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Source\Resource.cpp">
+      <Filter>Source\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Source\ResourceMesh.cpp">
+      <Filter>Source\Resources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

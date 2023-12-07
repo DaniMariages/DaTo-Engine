@@ -1,12 +1,8 @@
 #pragma once
 #include "Globals.h"
-#include "ModuleImport.h"
 
-struct aiScene;
-struct aiNode;
-struct aiMesh;
-class ResourceMesh;
-class mesh;
+#include "ModuleImport.h"
+#include "ResourceMesh.h"
 
 namespace Importer
 {

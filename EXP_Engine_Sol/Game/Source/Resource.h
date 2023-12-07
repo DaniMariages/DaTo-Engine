@@ -8,6 +8,7 @@
 #include <vector>
 
 class JsonConfig;
+
 enum class ResourceType
 {
 	Mesh,
@@ -25,15 +26,16 @@ public:
 	ResourceType type = ResourceType::None;
 	uint UID = 0;
 
-
 	std::string assetsFile = "";
 	std::string libraryFile = "";
 	uint referenceCount = 0;
 
 	std::string name = "";
 	std::vector<uint> resourcesInModels;
+
 protected:
 	Random randomNum;
+
 public:
 
 	Resource();
@@ -48,9 +50,5 @@ public:
 	inline std::string GetLibraryFile() const { return libraryFile; }
 
 	inline uint GetReferenceCount() const { return referenceCount; }
-
-	bool IsLoadedToMemory() const;
-
-
 };
 #endif //__RESOURCE_H__

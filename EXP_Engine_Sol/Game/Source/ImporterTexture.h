@@ -18,7 +18,6 @@ namespace Importer
 
 	namespace TextureImporter
 	{
-		void InitDevil();
 		void ImportTexture(ResourceTexture* rMaterial, const char* buffer, uint size);
 		uint Save(const ResourceTexture* rMaterial, char** buffer); // Save in ResourceTexture
 		void Load(ResourceTexture* rMaterial, char* buffer, uint size); // Load from ResourceTexture

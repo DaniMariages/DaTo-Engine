@@ -306,6 +306,8 @@
     <ClInclude Include="Game\Source\ModuleWindow.h" />
     <ClInclude Include="Game\Source\Primitive.h" />
     <ClInclude Include="Game\Source\Random.h" />
+    <ClInclude Include="Game\Source\Resource.h" />
+    <ClInclude Include="Game\Source\ResourceMesh.h" />
     <ClInclude Include="Game\Source\Timer.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
@@ -379,6 +381,8 @@
     <ClCompile Include="Game\Source\ModuleWindow.cpp" />
     <ClCompile Include="Game\Source\Primitive.cpp" />
     <ClCompile Include="Game\Source\Random.cpp" />
+    <ClCompile Include="Game\Source\Resource.cpp" />
+    <ClCompile Include="Game\Source\ResourceMesh.cpp" />
     <ClCompile Include="Game\Source\Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
