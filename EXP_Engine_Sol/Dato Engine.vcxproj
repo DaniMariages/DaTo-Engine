@@ -198,6 +198,8 @@
     <ClInclude Include="Game\External\MathGeoLib\include\Math\sse_mathfun.h" />
     <ClInclude Include="Game\External\MathGeoLib\include\Math\TransformOps.h" />
     <ClInclude Include="Game\External\MathGeoLib\include\Time\Clock.h" />
+    <ClInclude Include="Game\External\Parson\parson.h" />
+    <ClInclude Include="Game\External\PhysFS\include\physfs.h" />
     <ClInclude Include="Game\External\SDL\include\begin_code.h" />
     <ClInclude Include="Game\External\SDL\include\close_code.h" />
     <ClInclude Include="Game\External\SDL\include\SDL.h" />
@@ -285,12 +287,13 @@
     <ClInclude Include="Game\Source\ComponentTexture.h" />
     <ClInclude Include="Game\Source\ComponentTransform.h" />
     <ClInclude Include="Game\Source\GameObject.h" />
-    <ClInclude Include="Game\Source\glmath.h" />
     <ClInclude Include="Game\Source\Globals.h" />
+    <ClInclude Include="Game\Source\Json.h" />
     <ClInclude Include="Game\Source\Light.h" />
     <ClInclude Include="Game\Source\Module.h" />
     <ClInclude Include="Game\Source\ModuleCamera3D.h" />
     <ClInclude Include="Game\Source\ModuleEditor.h" />
+    <ClInclude Include="Game\Source\ModuleFileSystem.h" />
     <ClInclude Include="Game\Source\ModuleImport.h" />
     <ClInclude Include="Game\Source\ModuleInput.h" />
     <ClInclude Include="Game\Source\ModuleRenderer3D.h" />
@@ -346,6 +349,7 @@
     <ClCompile Include="Game\External\MathGeoLib\include\Math\SSEMath.cpp" />
     <ClCompile Include="Game\External\MathGeoLib\include\Math\TransformOps.cpp" />
     <ClCompile Include="Game\External\MathGeoLib\include\Time\Clock.cpp" />
+    <ClCompile Include="Game\External\Parson\parson.c" />
     <ClCompile Include="Game\Source\Application.cpp" />
     <ClCompile Include="Game\Source\Color.cpp" />
     <ClCompile Include="Game\Source\ComponentCamera.cpp" />
@@ -353,12 +357,13 @@
     <ClCompile Include="Game\Source\ComponentTexture.cpp" />
     <ClCompile Include="Game\Source\ComponentTransform.cpp" />
     <ClCompile Include="Game\Source\GameObject.cpp" />
-    <ClCompile Include="Game\Source\glmath.cpp" />
+    <ClCompile Include="Game\Source\Json.cpp" />
     <ClCompile Include="Game\Source\Light.cpp" />
     <ClCompile Include="Game\Source\log.cpp" />
     <ClCompile Include="Game\Source\Main.cpp" />
     <ClCompile Include="Game\Source\ModuleCamera3D.cpp" />
     <ClCompile Include="Game\Source\ModuleEditor.cpp" />
+    <ClCompile Include="Game\Source\ModuleFileSystem.cpp" />
     <ClCompile Include="Game\Source\ModuleImport.cpp" />
     <ClCompile Include="Game\Source\ModuleInput.cpp" />
     <ClCompile Include="Game\Source\ModuleRenderer3D.cpp" />

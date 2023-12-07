@@ -7,6 +7,7 @@
 #include "ModuleEditor.h"
 #include "ModuleImport.h"
 #include "ModuleScene.h"
+#include "ModuleFileSystem.h"
 
 extern Application* ExternalApp = nullptr;
 Application::Application()
@@ -20,12 +21,14 @@ Application::Application()
 	editor = new ModuleEditor(this);
 	importer = new ModuleImport(this);
 	scene = new ModuleScene(this);
+	fileSystem = new ModuleFileSystem(this);
 
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
 	// They will CleanUp() in reverse order
 
 	// Main Modules
+	AddModule(fileSystem);
 	AddModule(importer);
 	AddModule(window);
 	AddModule(camera);

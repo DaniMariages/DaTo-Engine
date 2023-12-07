@@ -21,12 +21,12 @@ bool ModuleImport::CleanUp() { return true; }
 
 update_status ModuleImport::Update(float dt) { return UPDATE_CONTINUE; }
 
-void ModuleImport::ReadFile(const char* file_path)
+void ModuleImport::ReadFile(const char* filePath)
 {
-	LOG("Reading file, path: %s.", file_path);
+	LOG("Reading file, path: %s.", filePath);
 
-	name = GetName(file_path);
-	path = file_path;
+	name = GetName(filePath);
+	path = filePath;
 	typeFile extension = ReadExtension(name);
 
 	//Assign a unique Name to the new game Object
@@ -40,7 +40,7 @@ void ModuleImport::ReadFile(const char* file_path)
 		if (App->scene->gameObjectSelected != nullptr && App->scene->gameObjectSelected != App->scene->rootGameObject)
 		{
 			GO = typeOfGO::CHILD_OF_OBJECT;
-			LoadMesh(file_path);
+			LoadMesh(filePath);
 			LOG("MODEL LOADED");
 		}
 
@@ -48,7 +48,7 @@ void ModuleImport::ReadFile(const char* file_path)
 		else
 		{
 			GO = typeOfGO::CHILD_OF_SCENE;
-			LoadMesh(file_path);
+			LoadMesh(filePath);
 			LOG("MODEL LOADED");
 		}
 
@@ -62,7 +62,7 @@ void ModuleImport::ReadFile(const char* file_path)
 			for (unsigned int i = 0; i < newGameObject->children.size(); i++)
 			{
 				ComponentTexture* tempCompTex = new ComponentTexture(newGameObject->children[i]);
-				tempCompTex->SetTexture(LoadTexture(file_path));
+				tempCompTex->SetTexture(LoadTexture(filePath));
 				LOG("Texture of: %s is loaded", newGameObject->children[i]->Name.c_str());
 				newGameObject->children[i]->AddComponent(tempCompTex);
 			}
@@ -70,7 +70,7 @@ void ModuleImport::ReadFile(const char* file_path)
 		else
 		{
 			ComponentTexture* tempCompTex = new ComponentTexture(newGameObject);
-			tempCompTex->SetTexture(LoadTexture(file_path));
+			tempCompTex->SetTexture(LoadTexture(filePath));
 			LOG("Texture of: %s is loaded", newGameObject->Name.c_str());
 			newGameObject->AddComponent(tempCompTex);
 		}
@@ -79,9 +79,9 @@ void ModuleImport::ReadFile(const char* file_path)
 	}
 }
 
-std::string ModuleImport::GetName(const char* file_path)
+std::string ModuleImport::GetName(const char* filePath)
 {
-	std::string getName(file_path);
+	std::string getName(filePath);
 	size_t lastSeparator = getName.find_last_of("/\\");
 
 	if (lastSeparator != std::string::npos)
@@ -162,19 +162,19 @@ typeFile ModuleImport::ReadExtension(std::string name)
 	return typeExtension;
 }
 
-void ModuleImport::LoadMesh(const char* file_path)
+void ModuleImport::LoadMesh(const char* filePath)
 {
-	const aiScene* scene = aiImportFile(file_path, aiProcess_Triangulate | aiProcess_FlipUVs);
+	const aiScene* scene = aiImportFile(filePath, aiProcess_Triangulate | aiProcess_FlipUVs);
 
 	if (scene != nullptr && scene->HasMeshes())
 	{
 		if (GO == typeOfGO::CHILD_OF_SCENE) 
-			GetSceneInfo(scene->mRootNode, scene, file_path, nullptr);
+			GetSceneInfo(scene->mRootNode, scene, filePath, nullptr);
 
 		if (GO == typeOfGO::CHILD_OF_OBJECT)
 		{
 			scene->mRootNode->mName = name; //change the root name to the game object name
-			GetSceneInfo(scene->mRootNode, scene, file_path, App->scene->gameObjectSelected);
+			GetSceneInfo(scene->mRootNode, scene, filePath, App->scene->gameObjectSelected);
 		}
 			
 		//ComponentTransform* compTrans = new ComponentTransform(newGameObject);	//PROVISIONAL
@@ -183,10 +183,10 @@ void ModuleImport::LoadMesh(const char* file_path)
 		LOG("Scene loaded correctly");
 		aiReleaseImport(scene);
 	}
-	else LOG("Error loading scene % s", file_path);
+	else LOG("Error loading scene % s", filePath);
 }
 
-void ModuleImport::GetSceneInfo(aiNode* node, const aiScene* scene, const char* file_path, GameObject* gameObject)
+void ModuleImport::GetSceneInfo(aiNode* node, const aiScene* scene, const char* filePath, GameObject* gameObject)
 {
 	GameObject* tempObject{}; //Needed to know where add mesh
 	
@@ -199,16 +199,16 @@ void ModuleImport::GetSceneInfo(aiNode* node, const aiScene* scene, const char* 
 
 	for (unsigned int i = 0; i < node->mNumMeshes; i++)
 	{
-		ProcessMesh(scene->mMeshes[node->mMeshes[i]], file_path, tempObject);
+		ProcessMesh(scene->mMeshes[node->mMeshes[i]], filePath, tempObject);
 	}
 
 	for (unsigned int i = 0; i < node->mNumChildren; i++)
 	{
-		GetSceneInfo(node->mChildren[i], scene, file_path, tempObject);
+		GetSceneInfo(node->mChildren[i], scene, filePath, tempObject);
 	}
 }
 
-mesh ModuleImport::ProcessMesh(aiMesh* Mesh, const char* file_path, GameObject* gameObject)
+mesh ModuleImport::ProcessMesh(aiMesh* Mesh, const char* filePath, GameObject* gameObject)
 {
 	mesh* myMesh = new mesh();
 	ComponentMesh* compMesh = new ComponentMesh(gameObject);
@@ -259,7 +259,7 @@ mesh ModuleImport::ProcessMesh(aiMesh* Mesh, const char* file_path, GameObject* 
 			}
 		}
 	}
-	compMesh->SetPath(std::string(file_path));
+	compMesh->SetPath(std::string(filePath));
 	compMesh->SetMesh(myMesh);
 	compMesh->InitBoundingBoxes(myMesh);
 
@@ -271,7 +271,7 @@ mesh ModuleImport::ProcessMesh(aiMesh* Mesh, const char* file_path, GameObject* 
 	return *myMesh;
 }
 
-Texture* ModuleImport::LoadTexture(const char* file_path)
+Texture* ModuleImport::LoadTexture(const char* filePath)
 {
 	ILenum image;
 	GLboolean imageLoaded;
@@ -279,7 +279,7 @@ Texture* ModuleImport::LoadTexture(const char* file_path)
 	ilGenImages(1, &image);
 	ilBindImage(image);
 
-	if (ilLoadImage(file_path))
+	if (ilLoadImage(filePath))
 	{
 		ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
 
@@ -310,7 +310,7 @@ Texture* ModuleImport::LoadTexture(const char* file_path)
 		newTexture->height = ImageInfo.Height;
 		newTexture->width = ImageInfo.Width;
 		newTexture->textID = texture_id;
-		newTexture->path = file_path;
+		newTexture->path = filePath;
 
 		LOG("Texture loaded correctly");
 		return newTexture;

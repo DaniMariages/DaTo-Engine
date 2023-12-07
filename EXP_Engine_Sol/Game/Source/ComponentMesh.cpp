@@ -29,9 +29,9 @@ void ComponentMesh::DrawInspector()
 	}
 }
 
-void ComponentMesh::SetPath(std::string file_path)
+void ComponentMesh::SetPath(std::string filePath)
 {
-	this->path = file_path;
+	this->path = filePath;
 }
 
 void ComponentMesh::SetMesh(mesh* Mesh)

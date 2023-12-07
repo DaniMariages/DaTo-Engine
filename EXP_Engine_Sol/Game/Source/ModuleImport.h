@@ -72,7 +72,7 @@ public:
 	update_status Update(float dt);
 	bool CleanUp();
 
-	void ReadFile(const char* file_path);
+	void ReadFile(const char* filePath);
 
 	//Function that check if the name exists in game objects, if exists, call ReName.
 	std::string GetUniqueName(std::string Name);
@@ -80,18 +80,18 @@ public:
 private:
 	
 	//Get the name of game object from the file path.
-	std::string GetName(const char* file_path);
+	std::string GetName(const char* filePath);
 
 	//Rename the game object if its necessary (called from GetUniqueName).
 	std::string ReName(std::string Name, int counter);
 
-	typeFile ReadExtension(std::string file_path);
+	typeFile ReadExtension(std::string filePath);
 
-	void LoadMesh(const char* file_path);
-	Texture* LoadTexture(const char* file_path);
+	void LoadMesh(const char* filePath);
+	Texture* LoadTexture(const char* filePath);
 
-	mesh ProcessMesh(aiMesh* Mesh, const char* file_path, GameObject* gameObject);
-	void GetSceneInfo(aiNode* node, const aiScene* scene, const char* file_path, GameObject* gameObject);
+	mesh ProcessMesh(aiMesh* Mesh, const char* filePath, GameObject* gameObject);
+	void GetSceneInfo(aiNode* node, const aiScene* scene, const char* filePath, GameObject* gameObject);
 
 	GameObject* newGameObject = nullptr;
 	typeOfGO GO = typeOfGO::UNKNOWN;

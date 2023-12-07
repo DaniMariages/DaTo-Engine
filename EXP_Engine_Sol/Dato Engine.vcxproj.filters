@@ -73,11 +73,26 @@
     <Filter Include="Icon">
       <UniqueIdentifier>{69be2175-ac24-4315-a7c7-cd0e1913c236}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Modules\GameObjects">
-      <UniqueIdentifier>{37263bf4-e696-4a16-88ef-4fabd4430b98}</UniqueIdentifier>
-    </Filter>
     <Filter Include="External\ImGuizmo">
       <UniqueIdentifier>{935bea94-ad5d-48eb-ae2d-6153104d7fae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\GameObjects">
+      <UniqueIdentifier>{37263bf4-e696-4a16-88ef-4fabd4430b98}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Core">
+      <UniqueIdentifier>{f9dc97d9-6651-4658-96d0-b7a6c6096158}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Helpers">
+      <UniqueIdentifier>{d6bfbb27-d4be-4150-b16e-d3280d8873f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\CFF">
+      <UniqueIdentifier>{04c55c24-ff12-4784-b363-92206e225540}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="External\PhysFS">
+      <UniqueIdentifier>{79bf2177-b0ff-4f4c-bf84-c6f57d257af9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="External\Parson">
+      <UniqueIdentifier>{ee8bc039-a7dc-4e4a-af47-28c1e207de9a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -423,27 +438,6 @@
     <ClInclude Include="Game\External\MathGeoLib\include\Algorithm\Random\LCG.h">
       <Filter>External\MathGeoLib\Algorithm\Random</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Source\Application.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Source\Color.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Source\glmath.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Source\Globals.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Source\Light.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Source\Primitive.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Source\Timer.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Game\External\SDL\include\begin_code.h">
       <Filter>External\SDL\include</Filter>
     </ClInclude>
@@ -706,25 +700,25 @@
       <Filter>Icon</Filter>
     </ClInclude>
     <ClInclude Include="Game\Source\Component.h">
-      <Filter>Source\Modules\GameObjects</Filter>
+      <Filter>Source\GameObjects</Filter>
     </ClInclude>
     <ClInclude Include="Game\Source\ComponentMesh.h">
-      <Filter>Source\Modules\GameObjects</Filter>
+      <Filter>Source\GameObjects</Filter>
     </ClInclude>
     <ClInclude Include="Game\Source\ComponentTexture.h">
-      <Filter>Source\Modules\GameObjects</Filter>
+      <Filter>Source\GameObjects</Filter>
     </ClInclude>
     <ClInclude Include="Game\Source\ComponentTransform.h">
-      <Filter>Source\Modules\GameObjects</Filter>
+      <Filter>Source\GameObjects</Filter>
     </ClInclude>
     <ClInclude Include="Game\Source\GameObject.h">
-      <Filter>Source\Modules\GameObjects</Filter>
+      <Filter>Source\GameObjects</Filter>
     </ClInclude>
     <ClInclude Include="Game\Source\ModuleScene.h">
       <Filter>Source\Modules</Filter>
     </ClInclude>
     <ClInclude Include="Game\Source\ComponentCamera.h">
-      <Filter>Source\Modules\GameObjects</Filter>
+      <Filter>Source\GameObjects</Filter>
     </ClInclude>
     <ClInclude Include="Game\External\ImGuizmo\GraphEditor.h">
       <Filter>External\ImGuizmo</Filter>
@@ -743,6 +737,36 @@
     </ClInclude>
     <ClInclude Include="Game\External\ImGuizmo\ImZoomSlider.h">
       <Filter>External\ImGuizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Source\Application.h">
+      <Filter>Source\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Source\Globals.h">
+      <Filter>Source\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Source\Color.h">
+      <Filter>Source\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Source\Light.h">
+      <Filter>Source\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Source\Primitive.h">
+      <Filter>Source\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Source\Timer.h">
+      <Filter>Source\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Source\Json.h">
+      <Filter>Source\CFF</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\External\PhysFS\include\physfs.h">
+      <Filter>External\PhysFS</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\External\Parson\parson.h">
+      <Filter>External\Parson</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Source\ModuleFileSystem.h">
+      <Filter>Source\Modules</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -866,30 +890,6 @@
     <ClCompile Include="Game\External\MathGeoLib\include\Algorithm\Random\LCG.cpp">
       <Filter>External\MathGeoLib\Algorithm\Random</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Source\Application.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Source\Color.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Source\glmath.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Source\Light.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Source\log.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Source\Main.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Source\Primitive.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Source\Timer.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Game\Source\ModuleCamera3D.cpp">
       <Filter>Source\Modules</Filter>
     </ClCompile>
@@ -909,22 +909,22 @@
       <Filter>Source\Modules</Filter>
     </ClCompile>
     <ClCompile Include="Game\Source\ComponentMesh.cpp">
-      <Filter>Source\Modules\GameObjects</Filter>
+      <Filter>Source\GameObjects</Filter>
     </ClCompile>
     <ClCompile Include="Game\Source\ComponentTexture.cpp">
-      <Filter>Source\Modules\GameObjects</Filter>
+      <Filter>Source\GameObjects</Filter>
     </ClCompile>
     <ClCompile Include="Game\Source\ComponentTransform.cpp">
-      <Filter>Source\Modules\GameObjects</Filter>
+      <Filter>Source\GameObjects</Filter>
     </ClCompile>
     <ClCompile Include="Game\Source\GameObject.cpp">
-      <Filter>Source\Modules\GameObjects</Filter>
+      <Filter>Source\GameObjects</Filter>
     </ClCompile>
     <ClCompile Include="Game\Source\ModuleScene.cpp">
       <Filter>Source\Modules</Filter>
     </ClCompile>
     <ClCompile Include="Game\Source\ComponentCamera.cpp">
-      <Filter>Source\Modules\GameObjects</Filter>
+      <Filter>Source\GameObjects</Filter>
     </ClCompile>
     <ClCompile Include="Game\External\ImGuizmo\GraphEditor.cpp">
       <Filter>External\ImGuizmo</Filter>
@@ -940,6 +940,36 @@
     </ClCompile>
     <ClCompile Include="Game\External\ImGuizmo\ImSequencer.cpp">
       <Filter>External\ImGuizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Source\Application.cpp">
+      <Filter>Source\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Source\Main.cpp">
+      <Filter>Source\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Source\Color.cpp">
+      <Filter>Source\Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Source\Light.cpp">
+      <Filter>Source\Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Source\log.cpp">
+      <Filter>Source\Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Source\Primitive.cpp">
+      <Filter>Source\Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Source\Timer.cpp">
+      <Filter>Source\Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Source\Json.cpp">
+      <Filter>Source\CFF</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\External\Parson\parson.c">
+      <Filter>External\Parson</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Source\ModuleFileSystem.cpp">
+      <Filter>Source\Modules</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
