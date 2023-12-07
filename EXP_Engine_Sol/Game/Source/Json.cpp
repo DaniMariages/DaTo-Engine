@@ -23,7 +23,7 @@ JsonConfig::JsonConfig(std::string _path, JSON_Object* _object, JSON_Value* _val
     value = _value;
 }
 
-JsonConfig::JsonConfig(JSON_Object* jsonObject) : node(jsonObject){}
+JsonConfig::JsonConfig(JSON_Object* jsonObject) : node(jsonObject) {}
 
 JsonConfig::~JsonConfig()
 {

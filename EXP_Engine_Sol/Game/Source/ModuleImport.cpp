@@ -2,6 +2,7 @@
 #include "ModuleRenderer3D.h"
 #include "ModuleImport.h"
 #include "ModuleScene.h"
+#include "ImporterMesh.h"
 
 #pragma comment(lib, "Game/External/DevIL/libx86/DevIL.lib")
 #pragma comment(lib, "Game/External/DevIL/libx86/ILU.lib")

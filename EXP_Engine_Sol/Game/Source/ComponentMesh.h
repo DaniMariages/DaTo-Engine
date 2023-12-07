@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "Component.h"
 #include "ModuleImport.h"
+#include "ResourceMesh.h"
 
 #include "../External/MathGeoLib/include/MathGeoLib.h"
 #include "../External/MathGeoLib/include/Geometry/AABB.h"
@@ -25,9 +26,13 @@ public:
 	std::string GetPath() const { return path; };
 
 	void SetMesh(mesh* Mesh);
+	void SetMesh(ResourceMesh* Mesh);
+
 	void SetPath(std::string path);
 
 	void InitBoundingBoxes(mesh* Mesh);
+	void InitBoundingBoxes(ResourceMesh* Mesh);
+
 	void UpdateBoundingBoxes();
 	void RenderBoundingBoxes();
 	void DrawBox(float3* vertices, float3 color);
@@ -45,6 +50,7 @@ public:
 private:
 	
 	mesh* Mesh;
+	ResourceMesh* rMesh = nullptr;
 	std::string path;
 
 };

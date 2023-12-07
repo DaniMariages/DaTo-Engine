@@ -1,7 +1,4 @@
 #pragma once
-#ifndef __ResourceMesh_H__
-#define __ResourceMesh_H__
-
 #include "Globals.h"
 #include "Resource.h"
 
@@ -30,4 +27,3 @@ public:
 	void SetUpBuffers(ResourceMesh* mesh);
 
 };
-#endif //__ResourceMesh_H__

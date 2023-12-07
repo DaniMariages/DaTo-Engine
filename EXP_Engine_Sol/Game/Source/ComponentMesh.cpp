@@ -39,7 +39,26 @@ void ComponentMesh::SetMesh(mesh* Mesh)
 	this->Mesh = Mesh;
 }
 
+void ComponentMesh::SetMesh(ResourceMesh* Mesh)
+{
+	this->rMesh = Mesh;
+}
+
 void ComponentMesh::InitBoundingBoxes(mesh* Mesh)
+{
+	obb.SetNegativeInfinity();
+	gAABB.SetNegativeInfinity();
+
+	std::vector<float3> fArray;
+	fArray.reserve(Mesh->vertices.size());
+
+	for (const auto& vertex : Mesh->vertices)
+		fArray.push_back(vertex.Position);
+
+	aabb.SetFrom(&fArray[0], fArray.size());
+}
+
+void ComponentMesh::InitBoundingBoxes(ResourceMesh* Mesh)
 {
 	obb.SetNegativeInfinity();
 	gAABB.SetNegativeInfinity();

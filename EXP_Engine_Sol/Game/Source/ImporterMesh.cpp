@@ -14,60 +14,70 @@
 
 #pragma comment (lib, "Game/External/Assimp/libx86/assimp.lib")
 
-void Importer::MeshImporter::LoadMeshes(ResourceMesh* mesh, const aiMesh* aiMesh)
+void Importer::MeshImporter::LoadMeshes(const aiMesh* Mesh, GameObject* gameObject, const char* file_path)
 {
-    //mesh->size[ResourceMesh::vertex] = aiMesh->mNumVertices;
-    //mesh->vertices = new float[mesh->size[ResourceMesh::vertex] * 3];
-    //memcpy(mesh->vertices, aiMesh->mVertices, sizeof(float) * mesh->size[ResourceMesh::vertex] * 3);
-    //LOG("New mesh with %d vertices", mesh->size[ResourceMesh::vertex]);
+	ResourceMesh* myMesh = new ResourceMesh();
+	ComponentMesh* compMesh = new ComponentMesh(gameObject);
 
-    //mesh->CreateAABB();
+	for (unsigned int j = 0; j < Mesh->mNumVertices; j++)
+	{
+		Vertex vertex;
+		float3 vector;
+		vector.x = Mesh->mVertices[j].x;
+		vector.y = Mesh->mVertices[j].y;
+		vector.z = Mesh->mVertices[j].z;
+		vertex.Position = vector;
 
-    //if (aiMesh->HasFaces())
-    //{
-    //    mesh->size[ResourceMesh::index] = aiMesh->mNumFaces * 3;
-    //    mesh->indices = new uint[mesh->size[ResourceMesh::index]];
-    //    for (uint f = 0; f < aiMesh->mNumFaces; ++f)
-    //    {
-    //        if (aiMesh->mFaces[f].mNumIndices != 3)
-    //        {
-    //            LOG("Mesh face with less or more than 3 indices!");
-    //        }
-    //        else
-    //        {
-    //            memcpy(&mesh->indices[f * 3], aiMesh->mFaces[f].mIndices, 3 * sizeof(uint));
-    //        }
-    //    }
+		if (Mesh->HasNormals())
+		{
+			vertex.Normal.x = Mesh->mNormals[j].x;
+			vertex.Normal.y = Mesh->mNormals[j].y;
+			vertex.Normal.z = Mesh->mNormals[j].z;
 
-    //    LOG("With %d indices", mesh->size[ResourceMesh::index]);
-    //}
+		}
+		if (Mesh->HasTextureCoords(0))
+		{
+			vertex.TexCoords.x = Mesh->mTextureCoords[0][j].x;
+			vertex.TexCoords.y = Mesh->mTextureCoords[0][j].y;
+		}
+		else
+		{
+			vertex.TexCoords.x = 0.0f;
+			vertex.TexCoords.y = 0.0f;
+		}
 
-    //if (aiMesh->HasNormals())
-    //{
-    //    mesh->size[ResourceMesh::normal] = aiMesh->mNumVertices;
-    //    mesh->normals = new float[mesh->size[ResourceMesh::normal] * 3];
-    //    memcpy(mesh->normals, aiMesh->mNormals, sizeof(float) * mesh->size[ResourceMesh::normal] * 3);
-    //}
+		myMesh->vertices.push_back(vertex);
+	}
 
-    //if (aiMesh->HasTextureCoords(0))
-    //{
-    //    mesh->size[ResourceMesh::texture] = aiMesh->mNumVertices;
-    //    mesh->texCoords = new float[aiMesh->mNumVertices * 2];
+	if (Mesh->HasFaces())
+	{
+		myMesh->indices.resize(Mesh->mNumFaces * 3);	//assume each face is a triangle
 
-    //    for (int j = 0; j < mesh->size[ResourceMesh::texture]; j++)
-    //    {
-    //        mesh->texCoords[j * 2] = aiMesh->mTextureCoords[0][j].x;
-    //        mesh->texCoords[j * 2 + 1] = aiMesh->mTextureCoords[0][j].y;
-    //    }
-    //}
+		for (uint y = 0; y < Mesh->mNumFaces; y++)
+		{
+			if (Mesh->mFaces[y].mNumIndices != 3)
+			{
+				LOG("WARNING, geometry face with != 3 indices!");
+			}
+			else
+			{
+				memcpy(&myMesh->indices[y * 3], Mesh->mFaces[y].mIndices, 3 * sizeof(unsigned int));
+			}
+		}
+	}
 
+	compMesh->SetPath(std::string(file_path));
+	compMesh->SetMesh(myMesh);
+	compMesh->InitBoundingBoxes(myMesh);
 
-
-    //mesh->SetUpBuffers(mesh); // This have to go out
-    ////meshes.push_back(tempMesh);
+	myMesh->SetUpBuffers(myMesh);
+	gameObject->AddComponent(compMesh);
+	
+	//SetUpBuffers(myMesh);
+	//meshes.push_back(*myMesh);*/
 
     ///*char* buffer = nullptr;
-    //uint64 size = Importer::MeshImporter::Save(tempMesh, &buffer);*/
+    //uint size = Importer::MeshImporter::Save(myMesh, &buffer);
 }
 
 void Importer::MeshImporter::Load(ResourceMesh* Mesh, const char* buffer)
