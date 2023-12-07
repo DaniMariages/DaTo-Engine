@@ -756,9 +756,6 @@
     <ClInclude Include="Game\Source\Timer.h">
       <Filter>Source\Helpers</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Source\Json.h">
-      <Filter>Source\CFF</Filter>
-    </ClInclude>
     <ClInclude Include="Game\External\PhysFS\include\physfs.h">
       <Filter>External\PhysFS</Filter>
     </ClInclude>
@@ -767,6 +764,15 @@
     </ClInclude>
     <ClInclude Include="Game\Source\ModuleFileSystem.h">
       <Filter>Source\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Source\Json.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Source\ImporterMesh.h">
+      <Filter>Source\CFF</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Source\ImporterTexture.h">
+      <Filter>Source\CFF</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -962,14 +968,20 @@
     <ClCompile Include="Game\Source\Timer.cpp">
       <Filter>Source\Helpers</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Source\Json.cpp">
-      <Filter>Source\CFF</Filter>
-    </ClCompile>
     <ClCompile Include="Game\External\Parson\parson.c">
       <Filter>External\Parson</Filter>
     </ClCompile>
     <ClCompile Include="Game\Source\ModuleFileSystem.cpp">
       <Filter>Source\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Source\Json.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Source\ImporterMesh.cpp">
+      <Filter>Source\CFF</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Source\ImporterTexture.cpp">
+      <Filter>Source\CFF</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

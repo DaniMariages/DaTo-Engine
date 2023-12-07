@@ -32,8 +32,6 @@ public:
 
 	void UseCheckerTexture();
 	
-	void SetUpBuffers(mesh* mesh);
-
 	void IterateDrawMesh();
 	void DrawMesh(mesh* mesh, float4x4 transform, uint id = 0);
 	void DrawFaceNormals(mesh* Mesh, float3 position, float3 scale, Quat rotation);

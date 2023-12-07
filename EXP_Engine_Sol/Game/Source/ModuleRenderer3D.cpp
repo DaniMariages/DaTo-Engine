@@ -244,20 +244,6 @@ void ModuleRenderer3D::UseCheckerTexture() {
 	glDisable(GL_TEXTURE_2D);
 }
 
-void ModuleRenderer3D::SetUpBuffers(mesh* mesh)
-{
-	glGenBuffers(1, &mesh->VBO);
-	glBindBuffer(GL_ARRAY_BUFFER, mesh->VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * mesh->vertices.size(), &mesh->vertices[0], GL_STATIC_DRAW);
-
-	glGenBuffers(1, &mesh->EBO);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * mesh->indices.size(), &mesh->indices[0], GL_STATIC_DRAW);
-
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-}
-
 void ModuleRenderer3D::IterateDrawMesh()
 {
 	for (unsigned int i = 0; i < App->scene->gameObjects.size(); i++)

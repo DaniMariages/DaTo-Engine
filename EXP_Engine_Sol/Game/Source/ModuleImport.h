@@ -77,6 +77,9 @@ public:
 	//Function that check if the name exists in game objects, if exists, call ReName.
 	std::string GetUniqueName(std::string Name);
 
+	//Set up the buffers for meshes
+	void SetUpBuffers(const mesh* Mesh);
+
 private:
 	
 	//Get the name of game object from the file path.

@@ -288,6 +288,8 @@
     <ClInclude Include="Game\Source\ComponentTransform.h" />
     <ClInclude Include="Game\Source\GameObject.h" />
     <ClInclude Include="Game\Source\Globals.h" />
+    <ClInclude Include="Game\Source\ImporterMesh.h" />
+    <ClInclude Include="Game\Source\ImporterTexture.h" />
     <ClInclude Include="Game\Source\Json.h" />
     <ClInclude Include="Game\Source\Light.h" />
     <ClInclude Include="Game\Source\Module.h" />
@@ -357,6 +359,8 @@
     <ClCompile Include="Game\Source\ComponentTexture.cpp" />
     <ClCompile Include="Game\Source\ComponentTransform.cpp" />
     <ClCompile Include="Game\Source\GameObject.cpp" />
+    <ClCompile Include="Game\Source\ImporterMesh.cpp" />
+    <ClCompile Include="Game\Source\ImporterTexture.cpp" />
     <ClCompile Include="Game\Source\Json.cpp" />
     <ClCompile Include="Game\Source\Light.cpp" />
     <ClCompile Include="Game\Source\log.cpp" />

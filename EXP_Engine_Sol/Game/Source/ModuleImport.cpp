@@ -162,6 +162,8 @@ typeFile ModuleImport::ReadExtension(std::string name)
 	return typeExtension;
 }
 
+//------------------------- MESHES -------------------------
+
 void ModuleImport::LoadMesh(const char* filePath)
 {
 	const aiScene* scene = aiImportFile(filePath, aiProcess_Triangulate | aiProcess_FlipUVs);
@@ -264,12 +266,28 @@ mesh ModuleImport::ProcessMesh(aiMesh* Mesh, const char* filePath, GameObject* g
 	compMesh->InitBoundingBoxes(myMesh);
 
 	gameObject->AddComponent(compMesh);
-	App->renderer3D->SetUpBuffers(myMesh);
+	SetUpBuffers(myMesh);
 	meshes.push_back(*myMesh);
 
 
 	return *myMesh;
 }
+
+void ModuleImport::SetUpBuffers(const mesh* Mesh)
+{
+	glGenBuffers(1, &(GLuint)Mesh->VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, Mesh->VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * Mesh->vertices.size(), &Mesh->vertices[0], GL_STATIC_DRAW);
+
+	glGenBuffers(1, &(GLuint)Mesh->EBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, Mesh->EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * Mesh->indices.size(), &Mesh->indices[0], GL_STATIC_DRAW);
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+}
+
+//------------------------- TEXTURES -------------------------
 
 Texture* ModuleImport::LoadTexture(const char* filePath)
 {
