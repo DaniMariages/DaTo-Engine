@@ -94,6 +94,9 @@
     <Filter Include="External\Parson">
       <UniqueIdentifier>{ee8bc039-a7dc-4e4a-af47-28c1e207de9a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="External\PCG %28Random UID%29">
+      <UniqueIdentifier>{9185591a-6d7a-4a2c-a792-ecbf59d6bdc7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\External\DevIL\include\devil_cpp_wrapper.hpp">
@@ -774,6 +777,18 @@
     <ClInclude Include="Game\Source\ImporterTexture.h">
       <Filter>Source\CFF</Filter>
     </ClInclude>
+    <ClInclude Include="Game\Source\Random.h">
+      <Filter>Source\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\External\PCG\pcg_extras.hpp">
+      <Filter>External\PCG %28Random UID%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\External\PCG\pcg_random.hpp">
+      <Filter>External\PCG %28Random UID%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\External\PCG\pcg_uint128.hpp">
+      <Filter>External\PCG %28Random UID%29</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game\External\DevIL\include\luadevil.c">
@@ -982,6 +997,9 @@
     </ClCompile>
     <ClCompile Include="Game\Source\ImporterTexture.cpp">
       <Filter>Source\CFF</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Source\Random.cpp">
+      <Filter>Source\Helpers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -10,6 +10,8 @@ GameObject::GameObject(std::string name, GameObject* parent)
 {
 	Name = name;
 	Parent = parent;
+	UID = randomInt.GenerateRandomInt();
+
 	drawTexture = true;
 
 	//Only Scene Game Object has nullptr as a parent, so dont add a transform to it

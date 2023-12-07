@@ -199,6 +199,9 @@
     <ClInclude Include="Game\External\MathGeoLib\include\Math\TransformOps.h" />
     <ClInclude Include="Game\External\MathGeoLib\include\Time\Clock.h" />
     <ClInclude Include="Game\External\Parson\parson.h" />
+    <ClInclude Include="Game\External\PCG\pcg_extras.hpp" />
+    <ClInclude Include="Game\External\PCG\pcg_random.hpp" />
+    <ClInclude Include="Game\External\PCG\pcg_uint128.hpp" />
     <ClInclude Include="Game\External\PhysFS\include\physfs.h" />
     <ClInclude Include="Game\External\SDL\include\begin_code.h" />
     <ClInclude Include="Game\External\SDL\include\close_code.h" />
@@ -302,6 +305,7 @@
     <ClInclude Include="Game\Source\ModuleScene.h" />
     <ClInclude Include="Game\Source\ModuleWindow.h" />
     <ClInclude Include="Game\Source\Primitive.h" />
+    <ClInclude Include="Game\Source\Random.h" />
     <ClInclude Include="Game\Source\Timer.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
@@ -374,6 +378,7 @@
     <ClCompile Include="Game\Source\ModuleScene.cpp" />
     <ClCompile Include="Game\Source\ModuleWindow.cpp" />
     <ClCompile Include="Game\Source\Primitive.cpp" />
+    <ClCompile Include="Game\Source\Random.cpp" />
     <ClCompile Include="Game\Source\Timer.cpp" />
   </ItemGroup>
   <ItemGroup>

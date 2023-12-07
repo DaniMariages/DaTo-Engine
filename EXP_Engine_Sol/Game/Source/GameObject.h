@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "ComponentTransform.h"
+#include "Random.h"
 
 class Component;
 enum class typeComponent;
@@ -17,6 +18,9 @@ public:
 
 	GameObject* Parent;
 	std::vector<GameObject*> children;
+
+	uint UID;
+	Random randomInt;
 
 	GameObject(std::string Name, GameObject* parent);
 	~GameObject();
