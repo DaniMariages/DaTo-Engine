@@ -6,6 +6,8 @@
 
 #include "../External/MathGeoLib/include/MathGeolib.h"
 
+struct Vertex;
+
 class ResourceMesh : public Resource
 {
 public:

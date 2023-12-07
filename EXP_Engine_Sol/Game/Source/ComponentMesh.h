@@ -8,8 +8,8 @@
 #include "../External/MathGeoLib/include/Geometry/AABB.h"
 #include "../External/MathGeoLib/include/Geometry/OBB.h"
 
-
 struct mesh;
+class ResourceMesh;
 
 class ComponentMesh : public Component 
 {
