@@ -136,12 +136,8 @@ void ModuleScene::SelectGameObject(const LineSegment& ray)
 				float closest;
 				float furthest;
 
-				if (ray.Intersects(tempMesh->gAABB, closest, furthest))
-				{
-					//Sky box shouldn't can be selected
-					if(!InsideBBObject(ray.a, tempMesh->gAABB)) 
-						cMeshCandidates[closest] = tempMesh;
-				}
+				if (ray.Intersects(tempMesh->gAABB, closest, furthest)) 
+					cMeshCandidates[closest] = tempMesh;
 			}
 		}
 	}
@@ -183,8 +179,8 @@ void ModuleScene::SelectGameObject(const LineSegment& ray)
 				// Check if ray intersect with the triangle
 				if (localRay.Intersects(triangle, nullptr, nullptr)) 
 				{
-					// If mesh parent is not null and is selectable with MousePicking
-					if (mesh->parent != nullptr && mesh->parent->selectableWithMP) 
+					// If mesh parent is not null
+					if (mesh->parent != nullptr) 
 					{
 						// Game object selected will be mesh parent
 						gameObjectSelected = mesh->parent;
@@ -249,11 +245,4 @@ void ModuleScene::DrawImGuizmo(ImVec2 windowPos, ImVec2 contentRegionMax, float 
 		selected_transform->SetLocalTransform(modelProjection);
 		App->scene->gameObjectSelected->transform->UpdateTransform();
 	}
-}
-
-bool ModuleScene::InsideBBObject(const float3& point, AABB& aabb)
-{
-	return point.x >= aabb.minPoint.x && point.x <= aabb.maxPoint.x
-		&& point.y >= aabb.minPoint.y && point.y <= aabb.maxPoint.y
-		&& point.z >= aabb.minPoint.z && point.z <= aabb.maxPoint.z;
 }

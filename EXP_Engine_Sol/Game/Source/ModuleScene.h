@@ -34,9 +34,6 @@ public:
 	void DrawImGuizmo(ImVec2 windowPos, ImVec2 contentRegionMax, float offset);
 	ImGuizmo::OPERATION gizmoOperation = ImGuizmo::OPERATION::TRANSLATE;
 	ImGuizmo::MODE gizmoMode = ImGuizmo::MODE::WORLD;
-	
-	// This function check if a game object is inside another game object
-	bool InsideBBObject(const float3& point, AABB& aabb);
 
 public: 
 
