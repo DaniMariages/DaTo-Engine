@@ -8,7 +8,6 @@
 #include "../External/MathGeoLib/include/Geometry/AABB.h"
 #include "../External/MathGeoLib/include/Geometry/OBB.h"
 
-struct mesh;
 class ResourceMesh;
 
 class ComponentMesh : public Component 
@@ -23,15 +22,11 @@ public:
 	void DrawInspector() override;
 
 	ResourceMesh* GetrMesh() const { return rMesh; };
-	mesh* GetMesh() const { return Mesh; };
 	std::string GetPath() const { return path; };
 
-	void SetMesh(mesh* Mesh);
 	void SetMesh(ResourceMesh* Mesh);
-
 	void SetPath(std::string path);
 
-	void InitBoundingBoxes(mesh* Mesh);
 	void InitBoundingBoxes(ResourceMesh* Mesh);
 
 	void UpdateBoundingBoxes();
@@ -50,7 +45,6 @@ public:
 
 private:
 	
-	mesh* Mesh;
 	ResourceMesh* rMesh = nullptr;
 	std::string path;
 

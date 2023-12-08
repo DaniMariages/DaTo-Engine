@@ -14,7 +14,7 @@
 
 #pragma comment (lib, "Game/External/Assimp/libx86/assimp.lib")
 
-void Importer::MeshImporter::LoadMeshes(const aiMesh* Mesh, GameObject* gameObject, const char* file_path)
+void Importer::MeshImporter::LoadMeshes(ResourceMesh* rMesh, const aiMesh* Mesh, GameObject* gameObject, const char* file_path)
 {
 	ResourceMesh* myMesh = new ResourceMesh();
 	ComponentMesh* compMesh = new ComponentMesh(gameObject);
@@ -164,53 +164,4 @@ void Importer::MeshImporter::Load(ResourceMesh* Mesh, const char* buffer)
     bytes = sizeof(float) * 3 * Mesh->vertices.size() + sizeof(float) * 3 * Mesh->vertices.size() + sizeof(float) * 2 * Mesh->vertices.size();
     memcpy(Mesh->vertices.data(), cursor, bytes);
     cursor += bytes;
-}
-
-uint Importer::MeshImporter::Save(const mesh* Mesh, char** buffer)
-{
-    uint headerSize = sizeof(uint) * 2; 
-    uint vertexSize = sizeof(float) * 3 + sizeof(float) * 3 + sizeof(float) * 2;
-
-    uint size = headerSize + sizeof(uint) * Mesh->indices.size() + vertexSize * Mesh->vertices.size();
-
-    *buffer = new char[size];
-    char* cursor = *buffer;
-
-    uint ranges[2] = { Mesh->indices.size(), Mesh->vertices.size() };
-    uint bytes = headerSize;
-    memcpy(cursor, ranges, bytes);
-    cursor += bytes;
-
-    bytes = sizeof(uint) * Mesh->indices.size();
-    memcpy(cursor, Mesh->indices.data(), bytes);
-    cursor += bytes;
-
-    bytes = sizeof(float) * 3 * Mesh->vertices.size() + sizeof(float) * 3 * Mesh->vertices.size() + sizeof(float) * 2 * Mesh->vertices.size();
-    memcpy(cursor, Mesh->vertices.data(), bytes);
-    cursor += bytes;
-
-    return size;
-}
-
-void Importer::MeshImporter::Load(mesh* Mesh, const char* buffer)
-{
-    char* cursor = const_cast<char*>(buffer);
-
-    uint ranges[2];
-    uint bytes = sizeof(ranges);
-    memcpy(ranges, cursor, bytes);
-    cursor += bytes;
-
-    Mesh->indices.resize(ranges[0]);
-    Mesh->vertices.resize(ranges[1]);
-
-    bytes = sizeof(uint) * Mesh->indices.size();
-    memcpy(Mesh->indices.data(), cursor, bytes);
-    cursor += bytes;
-
-    bytes = sizeof(float) * 3 * Mesh->vertices.size() + sizeof(float) * 3 * Mesh->vertices.size() + sizeof(float) * 2 * Mesh->vertices.size();
-    memcpy(Mesh->vertices.data(), cursor, bytes);
-    cursor += bytes;
-
-    ExternalApp->importer->SetUpBuffers(Mesh);
 }

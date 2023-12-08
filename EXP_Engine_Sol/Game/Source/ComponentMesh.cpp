@@ -1,15 +1,14 @@
 #pragma once
 #include "ComponentMesh.h"
 #include "GameObject.h"
-#include "ModuleImport.h"
 #include "ModuleEditor.h"
 
 #include "../External/ImGui/imgui.h"
 
 ComponentMesh::ComponentMesh(GameObject* parent) : Component(parent)
 {
-	Mesh = new mesh();
-	Mesh = nullptr;
+	rMesh = new ResourceMesh();
+	rMesh = nullptr;
 	path = "NO PATH";
 	type = typeComponent::Mesh;
 }
@@ -24,8 +23,8 @@ void ComponentMesh::DrawInspector()
 {
 	if (ImGui::CollapsingHeader("Component Mesh"))
 	{
-		ImGui::Text("Indices: %d.", Mesh->indices.size());
-		ImGui::Text("Vertices: %d.", Mesh->vertices.size());
+		ImGui::Text("Indices: %d.", rMesh->indices.size());
+		ImGui::Text("Vertices: %d.", rMesh->vertices.size());
 	}
 }
 
@@ -34,28 +33,9 @@ void ComponentMesh::SetPath(std::string filePath)
 	this->path = filePath;
 }
 
-void ComponentMesh::SetMesh(mesh* Mesh)
-{
-	this->Mesh = Mesh;
-}
-
 void ComponentMesh::SetMesh(ResourceMesh* Mesh)
 {
 	this->rMesh = Mesh;
-}
-
-void ComponentMesh::InitBoundingBoxes(mesh* Mesh)
-{
-	obb.SetNegativeInfinity();
-	gAABB.SetNegativeInfinity();
-
-	std::vector<float3> fArray;
-	fArray.reserve(Mesh->vertices.size());
-
-	for (const auto& vertex : Mesh->vertices)
-		fArray.push_back(vertex.Position);
-
-	aabb.SetFrom(&fArray[0], fArray.size());
 }
 
 void ComponentMesh::InitBoundingBoxes(ResourceMesh* Mesh)

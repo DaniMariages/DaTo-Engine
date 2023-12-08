@@ -7,9 +7,9 @@
 #include "GameObject.h"
 #include "ComponentTexture.h"
 
-//#include "ModuleResource.h"
-//#include "ResourceMaterial.h"
-//#include "ResourceTexture.h"
+#include "ModuleResource.h"
+#include "ResourceMaterial.h"
+#include "ResourceTexture.h"
 
 #include "../External/Assimp/include/material.h"
 #include "../External/Assimp/include/texture.h"
@@ -22,16 +22,107 @@
 #pragma comment (lib, "Game/External/Devil/libx86/ILU.lib")
 #pragma comment (lib, "Game/External/Devil/libx86/ILUT.lib")
 
+void Importer::MaterialsImporter::ImportMaterial(aiMaterial* aiMaterial, ResourceMaterial* resourceMaterial)
+{
+	aiColor4D	color;
+	aiString	texPath;
+	aiString	matName;
+	std::string		texName;
+	std::string		texExtension;
+
+	if (aiMaterial->Get(AI_MATKEY_COLOR_DIFFUSE, color) == AI_SUCCESS)										// Could also get specular and ambient occlusion colours.
+	{
+		resourceMaterial->SetColor(Color(color.r, color.g, color.b, color.a));
+		aiMaterial->Get(AI_MATKEY_NAME, matName);
+		resourceMaterial->name = matName.C_Str();
+	}
+	if (aiMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &texPath) == AI_SUCCESS)
+	{
+		ExternalApp->fileSystem->SplitFilePath(texPath.C_Str(), nullptr, &texName, &texExtension);
+
+		texName = "Assets/Textures/" + texName + "." + texExtension;
+
+		char* buffer = nullptr;
+		uint size = ExternalApp->fileSystem->Load(texName.c_str(), &buffer);
+
+		//This shouldn't be here (Works for now)
+		ResourceTexture* tempTex = new ResourceTexture();
+
+		Importer::TextureImporter::Load(tempTex, buffer, size);
+
+		resourceMaterial->SetTexture(tempTex);
+		resourceMaterial->SetPath(texName);
+	}
+	else
+	{
+		ResourceTexture* tempTex = new ResourceTexture();
+		resourceMaterial->SetTexture(tempTex);
+	}
+}
+
+uint Importer::MaterialsImporter::Save(ResourceMaterial* rMaterial, char** buffer)
+{
+	uint size;
+	char* cursor;
+	uint bytes;
+
+	size = sizeof(unsigned long long) + sizeof(float) * 4;
+
+	*buffer = new char[size];
+	cursor = *buffer;
+
+	uint textureID = rMaterial->GetId();
+	bytes = sizeof(unsigned long long);
+	memcpy(cursor, &textureID, bytes);
+	cursor += bytes;
+
+	float color[4]{ rMaterial->GetColor().r, rMaterial->GetColor().g, rMaterial->GetColor().b, rMaterial->GetColor().a };
+	bytes = sizeof(float) * 4;
+	memcpy(cursor, color, bytes);
+	cursor += bytes;
+
+	return size;
+}
+
+void Importer::MaterialsImporter::Load(ResourceMaterial* rMaterial, const char* buffer)
+{
+	uint textureID = 0;
+	uint bytes;
+
+	const char* cursor = buffer;
+
+	bytes = sizeof(unsigned long long);
+	memcpy(&textureID, cursor, bytes);
+	cursor += bytes;
+	//rMaterial->SetId(textureID);
+
+	float color[4];
+	bytes = sizeof(float) * 4;
+	memcpy(color, cursor, bytes);
+	cursor += bytes;
+
+	Color _color = Color(color[0], color[1], color[2], color[3]);
+	rMaterial->SetColor(_color);
+	//rMaterial->SetPath(rMaterial->GetAssetsFile());
+
+	ResourceTexture* texture = new ResourceTexture(textureID, rMaterial->GetAssetsFile());
+	rMaterial->SetTexture(texture);
+}
+
 void Importer::TextureImporter::ImportTexture(ResourceTexture* rMaterial, const char* buffer, uint size)
 {
+
 	if (ilLoadL(IL_TYPE_UNKNOWN, (const void*)buffer, size))
 	{
 		LOG("Succesfully imported texture");
 	}
-	else LOG("ERROR: Texture could not be loaded");
+	else
+	{
+		LOG("ERROR: Texture could not be loaded");
+	}
 }
 
-uint Importer::TextureImporter::Save(const Texture* texture, char** buffer)
+uint Importer::TextureImporter::Save(const ResourceTexture* rMaterial, char** buffer)
 {
 	ilEnable(IL_FILE_OVERWRITE);
 
@@ -47,11 +138,10 @@ uint Importer::TextureImporter::Save(const Texture* texture, char** buffer)
 			*buffer = (char*)ILbuffer;
 		}
 	}
-	
 	return size;
 }
 
-void Importer::TextureImporter::Load(Texture* texture, char* buffer, uint size)
+void Importer::TextureImporter::Load(ResourceTexture* rTexture, char* buffer, uint size)
 {
 	ILuint Il_Tex;
 
@@ -59,7 +149,6 @@ void Importer::TextureImporter::Load(Texture* texture, char* buffer, uint size)
 	ilBindImage(Il_Tex);
 
 	ilLoadL(IL_TYPE_UNKNOWN, (const void*)buffer, size);
-	texture->textID = (ilutGLBindTexImage());
+	rTexture->id = (ilutGLBindTexImage());
 	ilDeleteImages(1, &Il_Tex);
 }
-

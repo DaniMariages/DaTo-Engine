@@ -6,7 +6,12 @@
 
 #include "../External/MathGeoLib/include/MathGeolib.h"
 
-struct Vertex;
+struct Vertex
+{
+	float3 Position;
+	float3 Normal;
+	float2 TexCoords;
+};
 
 class ResourceMesh : public Resource
 {

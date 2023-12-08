@@ -478,7 +478,7 @@ void ModuleRenderer3D::RenderBB()
 			if (App->scene->gameObjects[i]->HasComponent(typeComponent::Mesh))
 			{
 				ComponentMesh* compMesh = (ComponentMesh*)App->scene->gameObjects[i]->GetComponent(typeComponent::Mesh);
-
+				
 				//Update the position of the Bounding Box
 				compMesh->UpdateBoundingBoxes();
 
@@ -525,27 +525,27 @@ bool ModuleRenderer3D::InsideCamera(const ComponentCamera* camera, const AABB& a
 	return true;
 }
 
-void ModuleRenderer3D::ImportCube()
-{
-	App->importer->ReadFile("Assets/Models/Primitives/Cube.fbx");
-}
-
-void ModuleRenderer3D::ImportSphere()
-{
-	App->importer->ReadFile("Assets/Models/Primitives/Sphere.fbx");
-}
-
-void ModuleRenderer3D::ImportCone()
-{
-	App->importer->ReadFile("Assets/Models/Primitives/Cone.fbx");
-}
-
-void ModuleRenderer3D::ImportCylinder()
-{
-	App->importer->ReadFile("Assets/Models/Primitives/Cylinder.fbx");
-}
-
-void ModuleRenderer3D::ImportTorus()
-{
-	App->importer->ReadFile("Assets/Models/Primitives/Torus.fbx");
-}
+//void ModuleRenderer3D::ImportCube()
+//{
+//	App->importer->ReadFile("Assets/Models/Primitives/Cube.fbx");
+//}
+//
+//void ModuleRenderer3D::ImportSphere()
+//{
+//	App->importer->ReadFile("Assets/Models/Primitives/Sphere.fbx");
+//}
+//
+//void ModuleRenderer3D::ImportCone()
+//{
+//	App->importer->ReadFile("Assets/Models/Primitives/Cone.fbx");
+//}
+//
+//void ModuleRenderer3D::ImportCylinder()
+//{
+//	App->importer->ReadFile("Assets/Models/Primitives/Cylinder.fbx");
+//}
+//
+//void ModuleRenderer3D::ImportTorus()
+//{
+//	App->importer->ReadFile("Assets/Models/Primitives/Torus.fbx");
+//}

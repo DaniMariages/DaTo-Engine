@@ -2,17 +2,15 @@
 #include "Component.h"
 #include "Globals.h"
 #include "ModuleImport.h"
-#include "ResourceTexture.h"
 
 #include "../External/MathGeoLib/include/MathGeoLib.h"
 
-struct Texture;
+class ResourceMaterial;
 
 class ComponentTexture : public Component
 {
 private:
-	Texture* texture;
-	ResourceTexture* rTexture;
+	ResourceMaterial* rMaterial = nullptr;
 
 public:
 	ComponentTexture(GameObject* parent);
@@ -23,8 +21,7 @@ public:
 	void Disable() override;
 	void DrawInspector() override;
 
-	ResourceTexture* GetrTexture() const { return rTexture; };
+	ResourceMaterial* GetrMaterial() const { return rMaterial; };
 	Texture* GetTexture();
 	void SetTexture(Texture* texture);
-
 };

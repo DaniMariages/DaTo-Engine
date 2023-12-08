@@ -250,7 +250,7 @@ uint Importer::SceneImporter::Save(const ResourceScene* scene, char** buffer)
 
 			case (typeComponent::Material):
 				compConfig.SetString("Type", "Material");
-				compConfig.SetNumber("Resource UID", componentTex->GetrTexture()->GetUID());
+				compConfig.SetNumber("Resource UID", componentTex->GetrMaterial()->GetUID());
 				break;
 
 			case (typeComponent::Transform):
