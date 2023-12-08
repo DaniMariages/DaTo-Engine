@@ -14,6 +14,9 @@ public:
 	std::vector<Component*> components;
 	bool active;
 	bool drawTexture;
+	
+	//Bool to know if the game object can be selected with mouse picking
+	bool selectableWithMP;
 
 	GameObject* Parent;
 	std::vector<GameObject*> children;

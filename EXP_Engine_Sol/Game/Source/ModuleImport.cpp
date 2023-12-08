@@ -104,7 +104,7 @@ std::string ModuleImport::GetUniqueName(std::string Name)
 	int counter = 0;
 	if (App->scene->gameObjects.size() > 0)
 	{
-		for (int i = 0; i < App->scene->gameObjects.size(); i++)
+		for (unsigned int i = 0; i < App->scene->gameObjects.size(); i++)
 		{
 			if (Name == App->scene->gameObjects[i]->Name)	//If the name exists, add 1 to counter
 			{
@@ -274,8 +274,6 @@ mesh ModuleImport::ProcessMesh(aiMesh* Mesh, const char* file_path, GameObject* 
 Texture* ModuleImport::LoadTexture(const char* file_path)
 {
 	ILenum image;
-	GLboolean imageLoaded;
-
 	ilGenImages(1, &image);
 	ilBindImage(image);
 

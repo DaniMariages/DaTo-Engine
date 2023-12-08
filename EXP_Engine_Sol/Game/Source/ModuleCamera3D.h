@@ -18,6 +18,12 @@ public:
 
 	void MousePickingRay(float posX, float posY);
 
+	void TopView();
+	void FrontView();
+	void Side_1View();
+	void Side_2View();
+	void BackView();
+
 public:
 	
 	LineSegment mousePickingRay;

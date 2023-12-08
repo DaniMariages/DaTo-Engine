@@ -37,6 +37,7 @@ public:
 	void Inspector(GameObject* gameObject);
 	void HierarchyWindow(GameObject* gameObject);
 	void DrawSceneAlert();
+	void DrawPausePlay();
 
 	// Mouse picking
 	void MousePicking(ImVec2 mousePosition, ImVec2 windowPos, ImVec2 windowSize, float frameHeightOffset);

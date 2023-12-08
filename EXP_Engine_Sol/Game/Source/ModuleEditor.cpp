@@ -128,6 +128,7 @@ void ModuleEditor::DrawEditor()
 
 	Config();
 	Console();
+	DrawPausePlay();
 
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 
@@ -233,7 +234,7 @@ void ModuleEditor::MainMenuBar()
 		if (ImGui::BeginMenu("About"))
 		{
 			ImGui::Text("DaTo Engine by Dani Mariages & Toni Romanos");
-			sprintf(label, "Github Repository");
+			sprintf_s(label, "Github Repository");
 			if (ImGui::Selectable(label, true))	RequestBrowser("https://github.com/DaniMariages/DaTo-Engine");
 			ImGui::EndMenu();
 		}
@@ -305,10 +306,15 @@ void ModuleEditor::Config() {
 
 		if (ImGui::CollapsingHeader("View"))
 		{
-			if (ImGui::Checkbox("Top", &top)) {}
-			if (ImGui::Checkbox("Front", &front)) {}
-			if (ImGui::Checkbox("Left side", &side_1)) {}
-			if (ImGui::Checkbox("Right side", &side_2)) {}
+			if (ImGui::Button("Top")) { App->camera->TopView(); }
+			ImGui::SameLine();
+			if (ImGui::Button("Front")) { App->camera->FrontView(); }
+			ImGui::SameLine();
+			if (ImGui::Button("Left side")) { App->camera->Side_1View(); }
+			ImGui::SameLine();
+			if (ImGui::Button("Right side")) { App->camera->Side_2View(); }
+			ImGui::SameLine();
+			if (ImGui::Button("Back")) { App->camera->BackView(); }
 		}
 
 		if (ImGui::CollapsingHeader("Renderer"))
@@ -337,7 +343,7 @@ void ModuleEditor::Console()
 	{
 		ImGui::Begin("Console", &show_console);
 
-		for (int i = 0; i < log_history.size(); i++)
+		for (unsigned int i = 0; i < log_history.size(); i++)
 		{
 			ImGui::Text("%s", log_history[i].c_str());
 		}
@@ -487,6 +493,8 @@ void ModuleEditor::Inspector(GameObject* gameObject)
 			show_delete_scene_modal = true;
 		}
 
+		ImGui::Checkbox("Selectable with Mouse Picking", &App->scene->gameObjectSelected->selectableWithMP);
+
 		ImGui::Separator();
 
 		if (ImGui::TreeNode("Draw options"))
@@ -502,9 +510,11 @@ void ModuleEditor::Inspector(GameObject* gameObject)
 					else gameObject->EnableParent();
 				}
 			}
-			if (ImGui::Checkbox("Normals", &drawSelectedFaces));
-			if (ImGui::Checkbox("Vertex", &drawSelectedVertex));
-			if (ImGui::Checkbox("Textures", &drawSelectedTexture))
+
+			ImGui::Checkbox("Normals", &drawSelectedFaces);
+			ImGui::Checkbox("Vertex", &drawSelectedVertex);
+			ImGui::Checkbox("Textures", &drawSelectedTexture);
+
 			{
 				if (gameObject->drawTexture) gameObject->DisableTexture();
 				else gameObject->EnableTexture();
@@ -550,7 +560,7 @@ void ModuleEditor::DrawSceneAlert()
 			if (ImGui::BeginPopupModal("ATENTION", NULL, ImGuiWindowFlags_AlwaysAutoResize))
 			{
 				ImGui::Text("This action cannot be undone!\nAre you sure?");
-				if (ImGui::Checkbox("Dont show me this again", &dontShowAgainPressed));
+				ImGui::Checkbox("Dont show me this again", &dontShowAgainPressed);
 
 				ImGui::Separator();
 
@@ -598,8 +608,30 @@ void ModuleEditor::DrawSceneAlert()
 	}
 }
 
-// Function to Mouse Picking MYTODO: GET THIS OUT OF HERE
-void ModuleEditor::MousePicking(ImVec2 mousePosition, ImVec2 sceneWindowPos, ImVec2 sceneWindowSize, float sceneFrameHeightOffset)
+void ModuleEditor::DrawPausePlay() {
+	if (ImGui::Begin(" "))
+	{
+		ImGui::Text("                                   ");
+		ImGui::SameLine();
+		if (ImGui::Button("Play"))
+		{
+		}
+		ImGui::SameLine();
+
+		if (ImGui::Button("Pause"))
+		{
+		}
+		ImGui::SameLine();
+
+		if (ImGui::Button("Stop"))
+		{
+		}
+	}
+	ImGui::End();
+}
+
+// Function to Mouse Picking
+void ModuleEditor::MousePicking(ImVec2 mousePosition, ImVec2 sceneWindowPos, ImVec2 sceneWindowSize, float sceneFrameHeightOffset) 
 {
 	ImVec2 normalizedPoint = NormalizePoint(sceneWindowPos.x, sceneWindowPos.y + (sceneFrameHeightOffset * 2), sceneWindowSize.x, sceneWindowSize.y - (sceneFrameHeightOffset * 2), mousePosition);
 

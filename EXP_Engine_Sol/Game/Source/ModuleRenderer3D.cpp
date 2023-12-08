@@ -124,6 +124,8 @@ bool ModuleRenderer3D::Init()
 		glewInit();
 	}
 
+	
+
 	UseCheckerTexture();
 
 	Grid.axis = true;
