@@ -279,7 +279,7 @@ void ComponentCamera::DrawInspector()
 
 	if (ImGui::CollapsingHeader("Component Camera"))
 	{
-		if (ImGui::Checkbox("Frustum Culling", &frustumCulling));
+		ImGui::Checkbox("Frustum Culling", &frustumCulling);
 
 		//Set General FOV
 		float FOV = GetVerticalFOV();
@@ -329,7 +329,7 @@ void ComponentCamera::LoadBuffers(int width, int height)
 
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, RBO);
 
-	SetAspectRatio(width / height);
+	SetAspectRatio((float)width / (float)height);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }

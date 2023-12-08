@@ -196,3 +196,88 @@ void ModuleCamera3D::MousePickingRay(float posX, float posY)
 	mousePickingRay = editorCamera->frustum.UnProjectLineSegment(posX, posY);
 	App->scene->SelectGameObject(mousePickingRay);
 }
+
+void ModuleCamera3D::TopView() 
+{
+	float3 newPos(0, 0, 0);
+
+	if (App->scene->gameObjectSelected != nullptr)
+	{
+		editorCamera->SetPos(App->scene->gameObjectSelected->transform->GetPosition() + float3(0.0f, 10.0f, 0.0f));
+		editorCamera->LookAt(App->scene->gameObjectSelected->transform->GetPosition());
+	}
+	else
+	{
+		newPos = float3(0.0f, 10.0f, 0.0f);
+		editorCamera->SetPos(newPos);
+		editorCamera->LookAt(float3(0, 0, 0));
+	}
+}
+
+void ModuleCamera3D::FrontView() 
+{
+	float3 newPos(0, 0, 0);
+
+	if (App->scene->gameObjectSelected != nullptr)
+	{
+		editorCamera->SetPos(App->scene->gameObjectSelected->transform->GetPosition() + float3(0.0f, 0.0f, 10.0f));
+		editorCamera->LookAt(App->scene->gameObjectSelected->transform->GetPosition());
+	}
+	else
+	{
+		newPos = float3(0.0f, 0.0f, 10.0f);
+		editorCamera->SetPos(newPos);
+		editorCamera->LookAt(float3(0, 0, 0));
+	}
+}
+
+void ModuleCamera3D::Side_1View()
+{
+	float3 newPos(0, 0, 0);
+
+	if (App->scene->gameObjectSelected != nullptr)
+	{
+		editorCamera->SetPos(App->scene->gameObjectSelected->transform->GetPosition() + float3(10.0f, 00.0f, 0.0f));
+		editorCamera->LookAt(App->scene->gameObjectSelected->transform->GetPosition());
+	}
+	else
+	{
+		newPos = float3(10.0f, 00.0f, 0.0f);
+		editorCamera->SetPos(newPos);
+		editorCamera->LookAt(float3(0, 0, 0));
+	}
+}
+
+void ModuleCamera3D::Side_2View()
+{
+	float3 newPos(0, 0, 0);
+
+	if (App->scene->gameObjectSelected != nullptr)
+	{
+		editorCamera->SetPos(App->scene->gameObjectSelected->transform->GetPosition() + float3(-10.0f, 00.0f, 0.0f));
+		editorCamera->LookAt(App->scene->gameObjectSelected->transform->GetPosition());
+	}
+	else
+	{
+		newPos = float3(-10.0f, 00.0f, 0.0f);
+		editorCamera->SetPos(newPos);
+		editorCamera->LookAt(float3(0, 0, 0));
+	}
+}
+
+void ModuleCamera3D::BackView()
+{
+	float3 newPos(0, 0, 0);
+
+	if (App->scene->gameObjectSelected != nullptr)
+	{
+		editorCamera->SetPos(App->scene->gameObjectSelected->transform->GetPosition() + float3(0.0f, 0.0f, 10.0f));
+		editorCamera->LookAt(App->scene->gameObjectSelected->transform->GetPosition());
+	}
+	else
+	{
+		newPos = float3(0.0f, 0.0f, -10.0f);
+		editorCamera->SetPos(newPos);
+		editorCamera->LookAt(float3(0, 0, 0));
+	}
+}
