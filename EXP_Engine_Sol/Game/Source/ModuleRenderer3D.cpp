@@ -124,12 +124,18 @@ bool ModuleRenderer3D::Init()
 		glewInit();
 	}
 
+	
+
 	UseCheckerTexture();
 
 	Grid.axis = true;
 
 	App->importer->ReadFile("Assets/Models/BakerHouse.fbx");
 	App->importer->ReadFile("Assets/Textures/BakerHouse.png");
+
+	//Skybox
+	App->importer->ReadFile("Assets/Models/Skybox.fbx");
+	App->importer->ReadFile("Assets/Textures/Skybox.png");
 
 	// Projection matrix for
 	OnResize(SCREEN_WIDTH, SCREEN_HEIGHT);
