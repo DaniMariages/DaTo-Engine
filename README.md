@@ -23,8 +23,12 @@ This engine is developed by:
 - Down Arrow --> Front view
 - Scroll up --> Zoom in
 - Scroll down --> Zoom out
+#While selected (Guizmo):
+- W --> Position
+- R --> Scale
+- E --> Rotate
 ### Additional functionalities
-- Top, side and front view.
+- Top, side and front view (Reworked).
 - Quick options when you right click on the Game Objects displayed in the Hierarchy
 
 ## Features
