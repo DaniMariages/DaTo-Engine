@@ -497,6 +497,8 @@ void ModuleEditor::Inspector(GameObject* gameObject)
 			show_delete_scene_modal = true;
 		}
 
+		ImGui::Checkbox("Selectable with Mouse Picking", &App->scene->gameObjectSelected->selectableWithMP);
+
 		ImGui::Separator();
 
 		if (ImGui::TreeNode("Draw options"))

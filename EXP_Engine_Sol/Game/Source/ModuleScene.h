@@ -29,6 +29,9 @@ public:
 	void SelectGameObject(const LineSegment& ray);
 	LineSegment pickingDebug;
 
+	// This function check if a game object is inside another game object
+	bool InsideBBObject(const float3& point, AABB& aabb);
+
 public: 
 
 	GameObject* rootGameObject = nullptr;

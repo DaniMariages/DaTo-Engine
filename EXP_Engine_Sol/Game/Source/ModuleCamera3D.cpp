@@ -109,83 +109,23 @@ update_status ModuleCamera3D::Update(float dt)
 
 	//Top view
 	if (App->input->GetKey(SDL_SCANCODE_RSHIFT) == KEY_REPEAT || App->editor->top == true)
-	{
-		if (App->scene->gameObjectSelected != nullptr)
-		{
-			editorCamera->SetPos(App->scene->gameObjectSelected->transform->GetPosition() + float3(0.0f, 10.0f, 0.0f));
-			editorCamera->LookAt(App->scene->gameObjectSelected->transform->GetPosition());
-		}
-		else
-		{
-			newPos = float3(0.0f, 10.0f, 0.0f);
-			editorCamera->SetPos(newPos);
-			editorCamera->LookAt(float3(0, 0, 0));
-		}
-	}
+		TopView();
 
 	//Front view
 	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT || App->editor->front == true)
-	{
-		if (App->scene->gameObjectSelected != nullptr)
-		{
-			editorCamera->SetPos(App->scene->gameObjectSelected->transform->GetPosition() + float3(0.0f, 0.0f, 10.0f));
-			editorCamera->LookAt(App->scene->gameObjectSelected->transform->GetPosition());
-		}
-		else
-		{
-			newPos = float3(0.0f, 0.0f, 10.0f);
-			editorCamera->SetPos(newPos);
-			editorCamera->LookAt(float3(0, 0, 0));
-		}
-	}
+		FrontView();
 
 	//Back view
 	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT || App->editor->front == true)
-	{
-		if (App->scene->gameObjectSelected != nullptr)
-		{
-			editorCamera->SetPos(App->scene->gameObjectSelected->transform->GetPosition() + float3(0.0f, 0.0f, -10.0f));
-			editorCamera->LookAt(App->scene->gameObjectSelected->transform->GetPosition());
-		}
-		else
-		{
-			newPos = float3(0.0f, 0.0f, -10.0f);
-			editorCamera->SetPos(newPos);
-			editorCamera->LookAt(float3(0, 0, 0));
-		}
-	}
+		BackView();
 
 	//Side view (left)
 	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT || App->editor->side_1 == true)
-	{
-		if (App->scene->gameObjectSelected != nullptr)
-		{
-			editorCamera->SetPos(App->scene->gameObjectSelected->transform->GetPosition() + float3(10.0f, 00.0f, 0.0f));
-			editorCamera->LookAt(App->scene->gameObjectSelected->transform->GetPosition());
-		}
-		else
-		{
-			newPos = float3(10.0f, 00.0f, 0.0f);
-			editorCamera->SetPos(newPos);
-			editorCamera->LookAt(float3(0, 0, 0));
-		}
-	}
+		Side_1View();
 
 	//Side view (right)
-	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT || App->editor->side_2 == true)
-	{
-		if (App->scene->gameObjectSelected != nullptr)
-		{
-			editorCamera->SetPos(App->scene->gameObjectSelected->transform->GetPosition() + float3(-10.0f, 00.0f, 0.0f));
-			editorCamera->LookAt(App->scene->gameObjectSelected->transform->GetPosition());
-		}
-		else
-		{
-			newPos = float3(-10.0f, 00.0f, 0.0f);
-			editorCamera->SetPos(newPos);
-			editorCamera->LookAt(float3(0, 0, 0));
-		}
-	}
+	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT || App->editor->side_2 == true) 
+		Side_2View();
 
 	editorCamera->UpdatePos(newPos);
 	return UPDATE_CONTINUE;
