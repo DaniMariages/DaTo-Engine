@@ -206,11 +206,15 @@ void ComponentCamera::LookAt(float3& Spot)
 
 void ComponentCamera::Move(float3& newPos, float speed)
 {
+	//FPS movement
 	if (ExternalApp->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) newPos += GetFront() * speed;
 	if (ExternalApp->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) newPos -= GetFront() * speed;
-
 	if (ExternalApp->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) newPos -= GetRight() * speed;
 	if (ExternalApp->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) newPos += GetRight() * speed;
+
+	//Move the camera Up (R) or Down (F)
+	if (ExternalApp->input->GetKey(SDL_SCANCODE_R) == KEY_REPEAT) newPos.y += speed;
+	if (ExternalApp->input->GetKey(SDL_SCANCODE_F) == KEY_REPEAT) newPos.y -= speed;
 }
 
 void ComponentCamera::Rotate(float dt)

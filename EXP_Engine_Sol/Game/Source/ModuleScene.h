@@ -31,7 +31,7 @@ public:
 	LineSegment pickingDebug;
 
 	//Guizmo
-	void DrawImGuizmo();
+	void DrawImGuizmo(ImVec2 windowPos, ImVec2 contentRegionMax, float offset);
 	ImGuizmo::OPERATION gizmoOperation = ImGuizmo::OPERATION::TRANSLATE;
 	ImGuizmo::MODE gizmoMode = ImGuizmo::MODE::WORLD;
 

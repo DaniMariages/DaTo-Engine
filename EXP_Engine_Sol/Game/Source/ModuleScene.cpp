@@ -34,6 +34,9 @@ bool ModuleScene::Init()
 	totalCameras.push_back(gameCamera);
 	totalCameras.push_back(App->camera->editorCamera);
 
+	gizmoOperation = ImGuizmo::OPERATION::TRANSLATE;
+	gizmoMode = ImGuizmo::MODE::WORLD;
+
 	return ret;
 }
 
@@ -208,12 +211,12 @@ void ModuleScene::SelectGameObject(const LineSegment& ray)
 	}
 }
 
-void ModuleScene::DrawImGuizmo()
+void ModuleScene::DrawImGuizmo(ImVec2 windowPos, ImVec2 contentRegionMax, float offset)
 {
 	ImGuizmo::BeginFrame();
-	if (gameObjectSelected == nullptr) return;
+	if (App->scene->gameObjectSelected == nullptr) return;
 
-	ComponentTransform* selected_transform = (ComponentTransform*)gameObjectSelected->GetComponent(typeComponent::Transform);
+	ComponentTransform* selected_transform = (ComponentTransform*)App->scene->gameObjectSelected->GetComponent(typeComponent::Transform);
 
 	float4x4 viewMatrix = App->camera->editorCamera->frustum.ViewMatrix();
 	viewMatrix.Transpose();
@@ -224,7 +227,7 @@ void ModuleScene::DrawImGuizmo()
 	float4x4 modelProjection = selected_transform->GetLocalTransform();
 	modelProjection.Transpose();
 
-	ImGuizmo::SetRect(0, 0, App->editor->sizeScene.x, App->editor->sizeScene.y);
+	ImGuizmo::SetRect(windowPos.x, windowPos.y + offset, contentRegionMax.x, contentRegionMax.y);
 
 	ImGuizmo::SetDrawlist();
 
@@ -241,6 +244,6 @@ void ModuleScene::DrawImGuizmo()
 		modelProjection = newMatrix.Transposed();
 
 		selected_transform->SetTransformMatrix(modelProjection);
-		gameObjectSelected->transform->UpdateTransform();
+		App->scene->gameObjectSelected->transform->UpdateTransform();
 	}
 }

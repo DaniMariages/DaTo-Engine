@@ -92,19 +92,22 @@ void ModuleEditor::DrawEditor()
 
 	if (ImGui::Begin("Scene"), true)
 	{
+		//Render the screen Scene (Editor camera)
 		ImVec2 size = ImGui::GetContentRegionAvail();
 		App->camera->editorCamera->SetAspectRatio(size.x / size.y);
 		ImGui::Image((ImTextureID)App->camera->editorCamera->TCB, size, ImVec2(0, 1), ImVec2(1, 0));
 
-		//Render the screen Scene (Editor camera)
-		sizeScene = ImGui::GetContentRegionAvail();
-		windowPos = ImGui::GetWindowPos();
+		//Info needed for ImGuizmo
+		ImVec2 windowPos = ImGui::GetWindowPos();
+		ImVec2 contentRegionMax = ImGui::GetContentRegionMax();
+		int offset = ImGui::GetFrameHeight() / 2.0f;
+
+		App->scene->DrawImGuizmo(windowPos, contentRegionMax, offset);
 
 		//Scene info needed for Mouse Picking function
+		ImVec2 sizeScene = ImGui::GetContentRegionAvail();
 		ImVec2 mousePosition = ImGui::GetMousePos();
 		ImVec2 windowSize = ImGui::GetWindowSize();
-		ImVec2 contentRegionMax = ImGui::GetContentRegionMax();
-		offset = ImGui::GetFrameHeight() / 2.0f;
 
 		//This function is here because we need the info of the screen
 		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
@@ -128,7 +131,6 @@ void ModuleEditor::DrawEditor()
 
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 
-	App->scene->DrawImGuizmo();
 	ImGui::Render();
 
 	glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
@@ -620,4 +622,3 @@ ImVec2 ModuleEditor::NormalizePoint(float x, float y, float w, float h, ImVec2 o
 
 	return normalizedPoint;
 }
-

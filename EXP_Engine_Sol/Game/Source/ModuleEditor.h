@@ -48,11 +48,6 @@ public:
 
 public: 
 
-	//Needed for Guizmos and Mouse picking
-	ImVec2 sizeScene;
-	ImVec2 windowPos;
-	int offset;
-
 	GameObject* childObject = nullptr;
 	std::vector<std::string> log_history;
 
