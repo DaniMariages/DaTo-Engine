@@ -131,8 +131,7 @@ bool ModuleRenderer3D::Init()
 	App->importer->ReadFile("Assets/Models/BakerHouse.fbx");
 	App->importer->ReadFile("Assets/Textures/BakerHouse.png");
 
-	App->scene->gameCamera->LoadBuffers();
-	App->camera->editorCamera->LoadBuffers();
+	OnResize(App->window->width, App->window->height);
 
 	return ret;
 }
@@ -218,7 +217,7 @@ void ModuleRenderer3D::OnResize(int width, int height)
 {
 	for (unsigned int i = 0; i < App->scene->totalCameras.size(); i++)
 	{
-		App->scene->totalCameras[i]->SetAspectRatio((float)width / (float)height);
+		App->scene->totalCameras[i]->LoadBuffers(width, height);
 	}
 }
 

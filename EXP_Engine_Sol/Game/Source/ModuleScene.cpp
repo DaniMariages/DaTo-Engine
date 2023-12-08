@@ -226,6 +226,8 @@ void ModuleScene::DrawImGuizmo()
 
 	ImGuizmo::SetRect(0, 0, App->editor->sizeScene.x, App->editor->sizeScene.y);
 
+	ImGuizmo::SetDrawlist();
+
 	float modelPtr[16];
 	memcpy(modelPtr, modelProjection.ptr(), 16 * sizeof(float));
 
