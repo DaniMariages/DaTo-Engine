@@ -292,6 +292,7 @@
     <ClInclude Include="Game\Source\GameObject.h" />
     <ClInclude Include="Game\Source\Globals.h" />
     <ClInclude Include="Game\Source\ImporterMesh.h" />
+    <ClInclude Include="Game\Source\ImporterScene.h" />
     <ClInclude Include="Game\Source\ImporterTexture.h" />
     <ClInclude Include="Game\Source\Json.h" />
     <ClInclude Include="Game\Source\Light.h" />
@@ -302,12 +303,17 @@
     <ClInclude Include="Game\Source\ModuleImport.h" />
     <ClInclude Include="Game\Source\ModuleInput.h" />
     <ClInclude Include="Game\Source\ModuleRenderer3D.h" />
+    <ClInclude Include="Game\Source\ModuleResource.h" />
     <ClInclude Include="Game\Source\ModuleScene.h" />
     <ClInclude Include="Game\Source\ModuleWindow.h" />
+    <ClInclude Include="Game\Source\PathNode.h" />
     <ClInclude Include="Game\Source\Primitive.h" />
     <ClInclude Include="Game\Source\Random.h" />
     <ClInclude Include="Game\Source\Resource.h" />
+    <ClInclude Include="Game\Source\ResourceFolder.h" />
+    <ClInclude Include="Game\Source\ResourceMaterial.h" />
     <ClInclude Include="Game\Source\ResourceMesh.h" />
+    <ClInclude Include="Game\Source\ResourceScene.h" />
     <ClInclude Include="Game\Source\ResourceTexture.h" />
     <ClInclude Include="Game\Source\Timer.h" />
     <ClInclude Include="resource.h" />
@@ -367,6 +373,7 @@
     <ClCompile Include="Game\Source\ComponentTransform.cpp" />
     <ClCompile Include="Game\Source\GameObject.cpp" />
     <ClCompile Include="Game\Source\ImporterMesh.cpp" />
+    <ClCompile Include="Game\Source\ImporterScene.cpp" />
     <ClCompile Include="Game\Source\ImporterTexture.cpp" />
     <ClCompile Include="Game\Source\Json.cpp" />
     <ClCompile Include="Game\Source\Light.cpp" />
@@ -378,12 +385,16 @@
     <ClCompile Include="Game\Source\ModuleImport.cpp" />
     <ClCompile Include="Game\Source\ModuleInput.cpp" />
     <ClCompile Include="Game\Source\ModuleRenderer3D.cpp" />
+    <ClCompile Include="Game\Source\ModuleResource.cpp" />
     <ClCompile Include="Game\Source\ModuleScene.cpp" />
     <ClCompile Include="Game\Source\ModuleWindow.cpp" />
     <ClCompile Include="Game\Source\Primitive.cpp" />
     <ClCompile Include="Game\Source\Random.cpp" />
     <ClCompile Include="Game\Source\Resource.cpp" />
+    <ClCompile Include="Game\Source\ResourceFolder.cpp" />
+    <ClCompile Include="Game\Source\ResourceMaterial.cpp" />
     <ClCompile Include="Game\Source\ResourceMesh.cpp" />
+    <ClCompile Include="Game\Source\ResourceScene.cpp" />
     <ClCompile Include="Game\Source\ResourceTexture.cpp" />
     <ClCompile Include="Game\Source\Timer.cpp" />
   </ItemGroup>

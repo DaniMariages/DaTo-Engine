@@ -16,6 +16,7 @@ class ModuleCamera3D;
 class ModuleImport;
 class ModuleScene;
 class ModuleFileSystem;
+class ModuleResource;
 
 class Application
 {
@@ -28,6 +29,7 @@ public:
 	ModuleImport* importer;
 	ModuleScene* scene;
 	ModuleFileSystem* fileSystem;
+	ModuleResource* resource;
 
 private:
 

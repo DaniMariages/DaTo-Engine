@@ -80,6 +80,71 @@ void Importer::MeshImporter::LoadMeshes(const aiMesh* Mesh, GameObject* gameObje
     //uint size = Importer::MeshImporter::Save(myMesh, &buffer);
 }
 
+void Importer::MeshImporter::LoadMeshes(ResourceMesh* rMesh, const aiMesh* Mesh, GameObject* gameObject, const char* file_path)
+{
+	ComponentMesh* compMesh = new ComponentMesh(gameObject);
+
+	for (unsigned int j = 0; j < Mesh->mNumVertices; j++)
+	{
+		Vertex vertex;
+		float3 vector;
+		vector.x = Mesh->mVertices[j].x;
+		vector.y = Mesh->mVertices[j].y;
+		vector.z = Mesh->mVertices[j].z;
+		vertex.Position = vector;
+
+		if (Mesh->HasNormals())
+		{
+			vertex.Normal.x = Mesh->mNormals[j].x;
+			vertex.Normal.y = Mesh->mNormals[j].y;
+			vertex.Normal.z = Mesh->mNormals[j].z;
+
+		}
+		if (Mesh->HasTextureCoords(0))
+		{
+			vertex.TexCoords.x = Mesh->mTextureCoords[0][j].x;
+			vertex.TexCoords.y = Mesh->mTextureCoords[0][j].y;
+		}
+		else
+		{
+			vertex.TexCoords.x = 0.0f;
+			vertex.TexCoords.y = 0.0f;
+		}
+
+		rMesh->vertices.push_back(vertex);
+	}
+
+	if (Mesh->HasFaces())
+	{
+		rMesh->indices.resize(Mesh->mNumFaces * 3);	//assume each face is a triangle
+
+		for (uint y = 0; y < Mesh->mNumFaces; y++)
+		{
+			if (Mesh->mFaces[y].mNumIndices != 3)
+			{
+				LOG("WARNING, geometry face with != 3 indices!");
+			}
+			else
+			{
+				memcpy(&rMesh->indices[y * 3], Mesh->mFaces[y].mIndices, 3 * sizeof(unsigned int));
+			}
+		}
+	}
+
+	compMesh->SetPath(std::string(file_path));
+	compMesh->SetMesh(rMesh);
+	compMesh->InitBoundingBoxes(rMesh);
+
+	rMesh->SetUpBuffers(rMesh);
+	gameObject->AddComponent(compMesh);
+	
+	//SetUpBuffers(myMesh);
+	//meshes.push_back(*myMesh);*/
+
+    ///*char* buffer = nullptr;
+    //uint size = Importer::MeshImporter::Save(myMesh, &buffer);
+}
+
 void Importer::MeshImporter::Load(ResourceMesh* Mesh, const char* buffer)
 {
     char* cursor = const_cast<char*>(buffer);

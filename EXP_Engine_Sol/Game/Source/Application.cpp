@@ -8,6 +8,7 @@
 #include "ModuleImport.h"
 #include "ModuleScene.h"
 #include "ModuleFileSystem.h"
+#include "ModuleResource.h"
 
 extern Application* ExternalApp = nullptr;
 Application::Application()
@@ -22,6 +23,7 @@ Application::Application()
 	importer = new ModuleImport(this);
 	scene = new ModuleScene(this);
 	fileSystem = new ModuleFileSystem(this);
+	resource = new ModuleResource(this);
 
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
@@ -29,6 +31,7 @@ Application::Application()
 
 	// Main Modules
 	AddModule(fileSystem);
+	AddModule(resource);
 	AddModule(importer);
 	AddModule(window);
 	AddModule(camera);

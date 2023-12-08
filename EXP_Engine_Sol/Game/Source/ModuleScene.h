@@ -35,8 +35,11 @@ public:
 	std::vector<GameObject*> gameObjects;
 	GameObject* gameObjectSelected = nullptr;
 
-
 	GameObject* gameCameraObject = nullptr;
 	ComponentCamera* gameCamera = nullptr;
 	std::vector<ComponentCamera*> totalCameras;
+
+	std::string sceneLibraryPath;
+	Timer GameTime;
+	uint UID;
 };

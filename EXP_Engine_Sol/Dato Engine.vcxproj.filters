@@ -759,9 +759,6 @@
     <ClInclude Include="Game\Source\ModuleFileSystem.h">
       <Filter>Source\Modules</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Source\Json.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Source\ImporterMesh.h">
       <Filter>Source\CFF</Filter>
     </ClInclude>
@@ -803,6 +800,27 @@
     </ClInclude>
     <ClInclude Include="Game\Source\ComponentTransform.h">
       <Filter>Source\GameObjects\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Source\Json.h">
+      <Filter>Source\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Source\PathNode.h">
+      <Filter>Source\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Source\ImporterScene.h">
+      <Filter>Source\CFF</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Source\ResourceScene.h">
+      <Filter>Source\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Source\ResourceFolder.h">
+      <Filter>Source\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Source\ResourceMaterial.h">
+      <Filter>Source\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Source\ModuleResource.h">
+      <Filter>Source\Modules</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -992,9 +1010,6 @@
     <ClCompile Include="Game\Source\ModuleFileSystem.cpp">
       <Filter>Source\Modules</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Source\Json.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Game\Source\ImporterMesh.cpp">
       <Filter>Source\CFF</Filter>
     </ClCompile>
@@ -1024,6 +1039,24 @@
     </ClCompile>
     <ClCompile Include="Game\Source\ComponentTransform.cpp">
       <Filter>Source\GameObjects\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Source\Json.cpp">
+      <Filter>Source\Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Source\ImporterScene.cpp">
+      <Filter>Source\CFF</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Source\ResourceScene.cpp">
+      <Filter>Source\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Source\ResourceFolder.cpp">
+      <Filter>Source\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Source\ResourceMaterial.cpp">
+      <Filter>Source\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Source\ModuleResource.cpp">
+      <Filter>Source\Modules</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

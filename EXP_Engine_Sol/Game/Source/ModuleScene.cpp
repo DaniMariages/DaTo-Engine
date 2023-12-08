@@ -9,6 +9,8 @@ ModuleScene::ModuleScene(Application* app, bool start_enabled) : Module(app, sta
 {
 	rootGameObject = CreateGameObject("Scene", nullptr);
 	gameCameraObject = CreateGameObject("MainCamera", rootGameObject);
+
+	GameTime.Stop();
 }
 
 // Destructor

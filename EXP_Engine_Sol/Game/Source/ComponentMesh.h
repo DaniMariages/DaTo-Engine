@@ -22,6 +22,7 @@ public:
 	void Disable() override;
 	void DrawInspector() override;
 
+	ResourceMesh* GetrMesh() const { return rMesh; };
 	mesh* GetMesh() const { return Mesh; };
 	std::string GetPath() const { return path; };
 

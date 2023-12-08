@@ -38,8 +38,6 @@ enum class typeOfGO
 struct Texture
 {
 	GLuint textID;
-	uint width;
-	uint height;
 	const char* path;
 };
 

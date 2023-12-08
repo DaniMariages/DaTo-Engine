@@ -256,3 +256,24 @@ std::vector<Component*> GameObject::GetComponents(typeComponent type)
 	return ret;
 }
 
+const uint GameObject::GetUID() const
+{
+	return UID;
+}
+
+void GameObject::SetUID(uint UID)
+{
+	this->UID = UID;
+}
+
+bool GameObject::IsRootObject()
+{
+	if (this == ExternalApp->scene->rootGameObject) return true;
+	else return false;
+}
+
+bool GameObject::IsSelected()
+{
+	if (this == ExternalApp->scene->gameObjectSelected) return true;
+	else return false;
+}

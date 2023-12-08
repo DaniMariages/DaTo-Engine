@@ -1,103 +1,60 @@
 #include "Module.h"
+#include "Globals.h"
 
-#include <filesystem>
-#include <functional>
-#include <string>
-#include <vector>
+struct SDL_RWops;
+int close_sdl_rwops(SDL_RWops* rw);
 
-struct FileInformation
-{
-	//File name and extension
-	std::string fileName;
-	std::string fileExtension;
-	std::string fileExtensionMinus;
+struct aiFileIO;
 
-	//File path
-	std::string path;
-	std::string filePath;
-};
-
-class Folder
-{
-public:
-	std::string folderName;
-	std::string folderPath;
-	std::vector<FileInformation> files;
-	std::vector<Folder> folders;
-
-	bool valid = false;
-};
-
-class WatchingFloder
-{
-public:
-	std::string folder;
-};
+class Config;
+struct PathNode;
 
 class ModuleFileSystem : public Module
 {
 public:
+
 	ModuleFileSystem(Application* app, bool start_enabled = true);
+
+	// Destructor
 	~ModuleFileSystem();
 
-	bool Awake();
-	bool Start();
-	update_status Update(float dt);
-	bool CleanUp();
+	// Called before render is available
+	//bool Init(Config& config) override;
 
-	std::string GetAssetsPath();
-	std::string GetLibraryPath();
-	std::string GetLibraryMeshPath();
-	std::string GetLibraryPrefabPath();
-	std::string GetLibraryTexturePath();
-	std::string GetLibraryScenePath();
-	std::string GetSettingsPath();
+	// Called before quitting
+	bool CleanUp() override;
 
-	// Get all the file information
-	FileInformation GetFileInformation(std::string filePath);
+	void CreateLibraryDirectories();
 
-	// Get the name without extension
-	std::string FileName(const char* filePath);
+	// Utility functions
+	bool AddPath(const char* path_or_zip);
+	bool Exists(const char* file) const;
+	bool CreateDir(const char* dir);
+	bool IsDirectory(const char* file) const;
+	const char* GetWriteDir() const;
+	void DiscoverFiles(const char* directory, std::vector<std::string>& file_list, std::vector<std::string>& dir_list) const;
+	void GetAllFilesWithExtension(const char* directory, const char* extension, std::vector<std::string>& file_list) const;
+	PathNode GetAllFiles(const char* directory, std::vector<std::string>* filter_ext = nullptr, std::vector<std::string>* ignore_ext = nullptr) const;
+	void GetRealDir(const char* path, std::string& output) const;
+	std::string GetPathRelativeToAssets(const char* originalPath) const;
 
-	// Get the file extension
-	std::string GetFileExtension(const char* filePath);
+	bool HasExtension(const char* path) const;
+	bool HasExtension(const char* path, std::string extension) const;
+	bool HasExtension(const char* path, std::vector<std::string> extensions) const;
 
-	// Get the Name with extension
-	std::string GetNameWithExtension(const char* filePath);
+	std::string NormalizePath(const char* path) const;
+	void SplitFilePath(const char* full_path, std::string* path, std::string* file = nullptr, std::string* extension = nullptr) const;
 
-	// Get the file path
-	std::string GetPath(const char* filePath);
+	// Open for Read/Write
+	unsigned int Load(const char* path, const char* file, char** buffer) const;
+	unsigned int Load(const char* file, char** buffer) const;
 
-	// Get the folder name
-	std::string GetFolderName(const char* filePath);
+	bool DuplicateFile(const char* file, const char* dstFolder, std::string& relativePath);
+	bool DuplicateFile(const char* srcFile, const char* dstFile);
 
-	// Get the parent folder
-	std::string GetParentFolder(const char* folderPath);
+	unsigned int Save(const char* file, const void* buffer, unsigned int size, bool append = false) const;
+	bool Remove(const char* file);
 
-private:
-
-	// Rename the file if exists
-	std::string ReName(const char* filename);
-
-	// Get the number of repeated name. Example: BakerHouse (1) -> 1
-	int GetFileNameNumber(const char* filename);
-
-	// Set a new number for a repeated name
-	std::string SetFileNameNumber(const char* filename, int number);
-
-	Folder GetFoldersRecursive(const char* path);
-	void UnwatchAllFolders();
-
-private:
-	std::string assetsPath;
-	std::string libraryPath;
-	std::string libraryMeshPath;
-	std::string libraryPrefabPath;
-	std::string libraryTexturePath;
-	std::string libraryScenePath;
-	std::string settingsPath;
-
-	std::string lookingPath;
-
-	std::vector<WatchingFloder> watchingFolders;
+	uint GetLastModTime(const char* filename);
+	std::string GetUniqueName(const char* path, const char* name) const;
 };

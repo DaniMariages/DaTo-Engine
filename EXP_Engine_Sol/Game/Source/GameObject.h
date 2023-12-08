@@ -40,6 +40,16 @@ public:
 	void EnableParent(); 
 	void DisableParent();
 
+	//Get and Set the Unique ID of a Game Object
+	const uint GetUID() const;
+	void SetUID(uint UID);
+
+	//Function to know if a Game Object is the Root Game Object
+	bool IsRootObject();
+
+	//Function to know if a Game Object is selected
+	bool IsSelected();
+
 	//Function to change the name of a game object
 	void ChangeName(const char* name);
 

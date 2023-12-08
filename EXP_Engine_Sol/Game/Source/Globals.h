@@ -26,7 +26,7 @@ enum update_status
 	UPDATE_ERROR
 };
 
-// Configuration -----------
+// Configuration --------------------------------
 #define SCREEN_WIDTH 1280
 #define SCREEN_HEIGHT 1024
 #define SCREEN_SIZE 1
@@ -37,12 +37,34 @@ enum update_status
 #define VSYNC true
 #define TITLE "DaTo Engine"
 
-// Colors ------------
+// Colors ---------------------------------------
 #define GREEN ImVec4(0.1f, 1.0f, 0.0f, 1.0f)
 #define YELLOW ImVec4(1.0f, 1.0f, 0.0f, 1.0f)
 #define BLUE ImVec4(0.0f, 0.0f, 1.0f, 1.0f)
 #define RED ImVec4(1.0f, 0.0f, 0.0f, 1.0f)
 #define WHITE ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
+
+// Library Folders ------------------------------
+#define LIBRARY_PATH "Library/"
+#define FOLDERS_PATH "Library/Folders/"
+#define MESHES_PATH "Library/Meshes/"
+#define MATERIALS_PATH "Library/Materials/"
+#define TEXTURES_PATH "Library/Textures/"
+#define SCENES_PATH "Library/Scenes/"
+#define MODELS_PATH "Library/Models/"
+
+// Assets Folders -------------------------------
+#define ASSETS_FOLDER "Assets/"
+#define MODELS_FOLDER "Assets/Models/"
+#define TEXTURES_FOLDER "Assets/Textures/"
+
+// Extensions -----------------------------------
+#define MESH_EXTENSION ".dtemesh"
+#define MATERIAL_EXTENSION	".dtemat"
+#define SCENE_EXTENSION	".dtescene"
+#define TEXTURE_EXTENSION ".dtetex"
+#define DTE_EXTENSION ".DTE"
+
 
 class Application;
 
