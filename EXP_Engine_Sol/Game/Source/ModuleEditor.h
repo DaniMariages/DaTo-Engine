@@ -76,12 +76,6 @@ public:
 	bool drawTextures = true;
 	bool drawAllBoxes = true;
 
-	//Views of the game object
-	bool top = false;
-	bool front = false;
-	bool side_1 = false;
-	bool side_2 = false;
-
 	//Bool of selected game object options
 	bool drawSelected = true;
 	bool drawSelectedVertex = false;

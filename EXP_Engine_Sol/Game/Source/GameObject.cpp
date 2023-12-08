@@ -11,6 +11,7 @@ GameObject::GameObject(std::string name, GameObject* parent)
 	Name = name;
 	Parent = parent;
 	drawTexture = true;
+	selectableWithMP = true;
 
 	//Only Scene Game Object has nullptr as a parent, so dont add a transform to it
 	if (parent != nullptr)

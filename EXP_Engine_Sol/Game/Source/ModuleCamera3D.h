@@ -16,6 +16,13 @@ public:
 	update_status Update(float dt);
 	bool CleanUp();
 
+	//Views of game object
+	void TopView();
+	void FrontView();
+	void Side_1View();
+	void Side_2View();
+	void BackView();
+
 	void MousePickingRay(float posX, float posY);
 
 public:

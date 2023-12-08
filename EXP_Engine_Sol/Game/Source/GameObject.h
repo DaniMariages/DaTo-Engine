@@ -15,6 +15,9 @@ public:
 	bool active;
 	bool drawTexture;
 
+	//Bool to know if game object is selectable with MousePicking
+	bool selectableWithMP;
+
 	GameObject* Parent;
 	std::vector<GameObject*> children;
 
