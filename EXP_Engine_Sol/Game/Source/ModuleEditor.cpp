@@ -238,7 +238,7 @@ void ModuleEditor::MainMenuBar()
 		if (ImGui::BeginMenu("About"))
 		{
 			ImGui::Text("DaTo Engine by Dani Mariages & Toni Romanos");
-			sprintf(label, "Github Repository");
+			sprintf_s(label, "Github Repository");
 			if (ImGui::Selectable(label, true))	RequestBrowser("https://github.com/DaniMariages/DaTo-Engine");
 			ImGui::EndMenu();
 		}
@@ -347,7 +347,7 @@ void ModuleEditor::Console()
 	{
 		ImGui::Begin("Console", &show_console);
 
-		for (int i = 0; i < log_history.size(); i++)
+		for (unsigned int i = 0; i < log_history.size(); i++)
 		{
 			ImGui::Text("%s", log_history[i].c_str());
 		}
@@ -512,9 +512,11 @@ void ModuleEditor::Inspector(GameObject* gameObject)
 					else gameObject->EnableParent();
 				}
 			}
-			if (ImGui::Checkbox("Normals", &drawSelectedFaces));
-			if (ImGui::Checkbox("Vertex", &drawSelectedVertex));
-			if (ImGui::Checkbox("Textures", &drawSelectedTexture))
+
+			ImGui::Checkbox("Normals", &drawSelectedFaces);
+			ImGui::Checkbox("Vertex", &drawSelectedVertex);
+			ImGui::Checkbox("Textures", &drawSelectedTexture);
+
 			{
 				if (gameObject->drawTexture) gameObject->DisableTexture();
 				else gameObject->EnableTexture();
@@ -560,7 +562,7 @@ void ModuleEditor::DrawSceneAlert()
 			if (ImGui::BeginPopupModal("ATENTION", NULL, ImGuiWindowFlags_AlwaysAutoResize))
 			{
 				ImGui::Text("This action cannot be undone!\nAre you sure?");
-				if (ImGui::Checkbox("Dont show me this again", &dontShowAgainPressed));
+				ImGui::Checkbox("Dont show me this again", &dontShowAgainPressed);
 
 				ImGui::Separator();
 
