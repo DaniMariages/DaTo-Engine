@@ -128,6 +128,7 @@ void ModuleEditor::DrawEditor()
 
 	Config();
 	Console();
+	DrawPausePlay();
 
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 
@@ -623,6 +624,28 @@ void ModuleEditor::MousePicking(ImVec2 mousePosition, ImVec2 sceneWindowPos, ImV
 		App->camera->MousePickingRay(normalizedPoint.x, normalizedPoint.y);
 	}
 
+}
+
+void ModuleEditor::DrawPausePlay() {
+	if (ImGui::Begin(" "))
+	{
+		ImGui::Text("                                    ");
+		ImGui::SameLine();
+		if (ImGui::Button("Play"))
+		{
+		}
+		ImGui::SameLine();
+
+		if (ImGui::Button("Pause"))
+		{
+		}
+		ImGui::SameLine();
+
+		if (ImGui::Button("Stop"))
+		{
+		}
+	}
+	ImGui::End();
 }
 
 ImVec2 ModuleEditor::NormalizePoint(float x, float y, float w, float h, ImVec2 originalPoint)

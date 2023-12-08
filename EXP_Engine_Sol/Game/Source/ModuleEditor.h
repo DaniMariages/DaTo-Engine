@@ -45,6 +45,7 @@ public:
 	void RequestBrowser(const char* path);
 	void UpdateFPS(const float aFPS);
 	void ModuleEditor::Console();
+	void DrawPausePlay();
 
 public: 
 
