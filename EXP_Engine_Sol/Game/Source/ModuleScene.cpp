@@ -136,8 +136,12 @@ void ModuleScene::SelectGameObject(const LineSegment& ray)
 				float closest;
 				float furthest;
 
-				if (ray.Intersects(tempMesh->gAABB, closest, furthest)) 
-					cMeshCandidates[closest] = tempMesh;
+				if (ray.Intersects(tempMesh->gAABB, closest, furthest))
+				{
+					//Sky box shouldn't can be selected
+					if (!InsideBBObject(ray.a, tempMesh->gAABB))
+						cMeshCandidates[closest] = tempMesh;
+				}
 			}
 		}
 	}
@@ -177,10 +181,10 @@ void ModuleScene::SelectGameObject(const LineSegment& ray)
 				Triangle triangle(aPoint, bPoint, cPoint);
 
 				// Check if ray intersect with the triangle
-				if (localRay.Intersects(triangle, nullptr, nullptr)) 
+				if (localRay.Intersects(triangle, nullptr, nullptr))
 				{
-					// If mesh parent is not null
-					if (mesh->parent != nullptr) 
+					// If mesh parent is not null and is selectable with mouse picking
+					if (mesh->parent != nullptr && mesh->parent->selectableWithMP)
 					{
 						// Game object selected will be mesh parent
 						gameObjectSelected = mesh->parent;
@@ -213,36 +217,45 @@ void ModuleScene::SelectGameObject(const LineSegment& ray)
 
 void ModuleScene::DrawImGuizmo(ImVec2 windowPos, ImVec2 contentRegionMax, float offset)
 {
-	ImGuizmo::BeginFrame();
-	if (App->scene->gameObjectSelected == nullptr) return;
-
-	ComponentTransform* selected_transform = (ComponentTransform*)App->scene->gameObjectSelected->GetComponent(typeComponent::Transform);
-
-	float4x4 viewMatrix = App->camera->editorCamera->frustum.ViewMatrix();
-	viewMatrix.Transpose();
-
-	float4x4 projectionMatrix = App->camera->editorCamera->frustum.ProjectionMatrix();
-	projectionMatrix.Transpose();
-
-	float4x4 modelProjection = selected_transform->GetLocalTransform();
-	modelProjection.Transpose();
-
-	ImGuizmo::SetRect(windowPos.x, windowPos.y + offset, contentRegionMax.x, contentRegionMax.y);
-	ImGuizmo::SetDrawlist();
-
-	float modelPtr[16];
-	memcpy(modelPtr, modelProjection.ptr(), 16 * sizeof(float));
-
-	ImGuizmo::MODE finalMode = (gizmoOperation == ImGuizmo::OPERATION::SCALE ? ImGuizmo::MODE::LOCAL : gizmoMode);
-	ImGuizmo::Manipulate(viewMatrix.ptr(), projectionMatrix.ptr(), gizmoOperation, finalMode, modelPtr);
-
-	if (ImGuizmo::IsUsing())
+	if (App->scene->gameObjectSelected != nullptr && App->scene->gameObjectSelected != App->scene->rootGameObject)
 	{
-		float4x4 newMatrix;
-		newMatrix.Set(modelPtr);
-		modelProjection = newMatrix.Transposed();
+		ImGuizmo::BeginFrame();
 
-		selected_transform->SetLocalTransform(modelProjection);
-		App->scene->gameObjectSelected->transform->UpdateTransform();
+		ComponentTransform* selected_transform = (ComponentTransform*)App->scene->gameObjectSelected->GetComponent(typeComponent::Transform);
+
+		float4x4 viewMatrix = App->camera->editorCamera->frustum.ViewMatrix();
+		viewMatrix.Transpose();
+
+		float4x4 projectionMatrix = App->camera->editorCamera->frustum.ProjectionMatrix();
+		projectionMatrix.Transpose();
+
+		float4x4 modelProjection = selected_transform->GetLocalTransform();
+		modelProjection.Transpose();
+
+		ImGuizmo::SetRect(windowPos.x, windowPos.y + offset, contentRegionMax.x, contentRegionMax.y);
+		ImGuizmo::SetDrawlist();
+
+		float modelPtr[16];
+		memcpy(modelPtr, modelProjection.ptr(), 16 * sizeof(float));
+
+		ImGuizmo::MODE finalMode = (gizmoOperation == ImGuizmo::OPERATION::SCALE ? ImGuizmo::MODE::LOCAL : gizmoMode);
+		ImGuizmo::Manipulate(viewMatrix.ptr(), projectionMatrix.ptr(), gizmoOperation, finalMode, modelPtr);
+
+		if (ImGuizmo::IsUsing())
+		{
+			float4x4 newMatrix;
+			newMatrix.Set(modelPtr);
+			modelProjection = newMatrix.Transposed();
+
+			selected_transform->SetLocalTransform(modelProjection);
+			App->scene->gameObjectSelected->transform->UpdateTransform();
+		}
 	}
+}
+
+bool ModuleScene::InsideBBObject(const float3& point, AABB& aabb)
+{
+	return point.x >= aabb.minPoint.x && point.x <= aabb.maxPoint.x
+		&& point.y >= aabb.minPoint.y && point.y <= aabb.maxPoint.y
+		&& point.z >= aabb.minPoint.z && point.z <= aabb.maxPoint.z;
 }

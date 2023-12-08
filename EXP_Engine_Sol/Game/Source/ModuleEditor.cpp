@@ -479,7 +479,7 @@ void ModuleEditor::Inspector(GameObject* gameObject)
 
 		ImGui::Separator();
 
-		ImGui::Text("Parent: ");
+		ImGui::Text("Parent:");
 		ImGui::SameLine();
 		if (App->scene->gameObjectSelected->Parent != nullptr)
 		{
@@ -491,6 +491,10 @@ void ModuleEditor::Inspector(GameObject* gameObject)
 		{
 			show_delete_scene_modal = true;
 		}
+
+		ImGui::SameLine();
+
+		ImGui::Checkbox("Mouse picking", &App->scene->gameObjectSelected->selectableWithMP);
 
 		ImGui::Separator();
 
@@ -522,8 +526,11 @@ void ModuleEditor::Inspector(GameObject* gameObject)
 			}
 			if (ImGui::Checkbox("Bounding Box", &drawSelectedBoxes))
 			{
-				ComponentMesh* tMesh = (ComponentMesh*)gameObject->GetComponent(typeComponent::Mesh);
-				tMesh->ToggleBB();
+				if (gameObject->HasComponent(typeComponent::Mesh))
+				{
+					ComponentMesh* tMesh = (ComponentMesh*)gameObject->GetComponent(typeComponent::Mesh);
+					tMesh->ToggleBB();
+				}
 			}
 
 			ImGui::TreePop();

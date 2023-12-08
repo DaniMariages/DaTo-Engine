@@ -35,6 +35,9 @@ public:
 	ImGuizmo::OPERATION gizmoOperation = ImGuizmo::OPERATION::TRANSLATE;
 	ImGuizmo::MODE gizmoMode = ImGuizmo::MODE::WORLD;
 
+	// This function check if a game object is inside another game object
+	bool InsideBBObject(const float3& point, AABB& aabb);
+
 public: 
 
 	GameObject* rootGameObject = nullptr;
