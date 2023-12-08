@@ -133,12 +133,7 @@ bool ModuleRenderer3D::Init()
 	App->importer->ReadFile("Assets/Models/BakerHouse.fbx");
 	App->importer->ReadFile("Assets/Textures/BakerHouse.png");
 
-	//Skybox
-	App->importer->ReadFile("Assets/Models/Skybox.fbx");
-	App->importer->ReadFile("Assets/Textures/Skybox.png");
-
-	// Projection matrix for
-	OnResize(SCREEN_WIDTH, SCREEN_HEIGHT);
+	OnResize(App->window->width, App->window->height);
 
 	return ret;
 }
@@ -222,8 +217,10 @@ bool ModuleRenderer3D::CleanUp()
 
 void ModuleRenderer3D::OnResize(int width, int height)
 {
-	App->camera->editorCamera->LoadBuffers(width, height);
-	App->scene->gameCamera->LoadBuffers(width, height);
+	for (unsigned int i = 0; i < App->scene->totalCameras.size(); i++)
+	{
+		App->scene->totalCameras[i]->LoadBuffers(width, height);
+	}
 }
 
 void ModuleRenderer3D::UseCheckerTexture() {
@@ -279,7 +276,7 @@ void ModuleRenderer3D::IterateDrawMesh()
 				ComponentTransform* tempTrans = (ComponentTransform*)App->scene->gameObjects[i]->GetComponent(typeComponent::Transform);
 				if (componentTex != nullptr && App->scene->gameObjects[i]->active && App->scene->gameObjects[i]->drawTexture && InsideCamera(App->scene->gameCamera, tempComponentMesh->gAABB))
 				{
-					DrawMesh(tempComponentMesh->GetMesh(), tempTrans->GetTransformMatrix(), componentTex->GetTexture()->textID);
+					DrawMesh(tempComponentMesh->GetMesh(), tempTrans->GetGlobalTransform(), componentTex->GetTexture()->textID);
 
 					if (App->editor->drawAllFaces == true)
 						DrawFaceNormals(tempComponentMesh->GetMesh(), tempTrans->GetPosition(), tempTrans->GetScale(), tempTrans->GetRotation());
@@ -289,7 +286,7 @@ void ModuleRenderer3D::IterateDrawMesh()
 				}
 				else if (App->scene->gameObjects[i]->active && InsideCamera(App->scene->gameCamera, tempComponentMesh->gAABB))
 				{
-					DrawMesh(tempComponentMesh->GetMesh(), tempTrans->GetTransformMatrix());
+					DrawMesh(tempComponentMesh->GetMesh(), tempTrans->GetGlobalTransform());
 
 					if (App->editor->drawAllFaces == true)
 						DrawFaceNormals(tempComponentMesh->GetMesh(), tempTrans->GetPosition(), tempTrans->GetScale(), tempTrans->GetRotation());

@@ -206,11 +206,15 @@ void ComponentCamera::LookAt(float3& Spot)
 
 void ComponentCamera::Move(float3& newPos, float speed)
 {
+	//FPS movement
 	if (ExternalApp->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) newPos += GetFront() * speed;
 	if (ExternalApp->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) newPos -= GetFront() * speed;
-
 	if (ExternalApp->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) newPos -= GetRight() * speed;
 	if (ExternalApp->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) newPos += GetRight() * speed;
+
+	//Move the camera Up (R) or Down (F)
+	if (ExternalApp->input->GetKey(SDL_SCANCODE_R) == KEY_REPEAT) newPos.y += speed;
+	if (ExternalApp->input->GetKey(SDL_SCANCODE_F) == KEY_REPEAT) newPos.y -= speed;
 }
 
 void ComponentCamera::Rotate(float dt)
@@ -276,7 +280,6 @@ void ComponentCamera::Focus(float3& center, float distance)
 
 void ComponentCamera::DrawInspector()
 {
-
 	if (ImGui::CollapsingHeader("Component Camera"))
 	{
 		ImGui::Checkbox("Frustum Culling", &frustumCulling);
@@ -306,49 +309,44 @@ void ComponentCamera::DrawInspector()
 	}
 }
 
-void ComponentCamera::OnUpdateTransform(const float4x4& global, const float4x4& parent_global)
-{
-	
-}
+void ComponentCamera::OnUpdateTransform(const float4x4& global, const float4x4& parent_global) {}
 
 void ComponentCamera::LoadBuffers(int width, int height)
 {
+	SetAspectRatio((float)width / (float)height);
+
 	glGenFramebuffers(1, &FBO);
 	glBindFramebuffer(GL_FRAMEBUFFER, FBO);
 
 	glGenTextures(1, &TCB);
 	glBindTexture(GL_TEXTURE_2D, TCB);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, SCREEN_WIDTH, SCREEN_HEIGHT, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, TCB, 0);
 
 	glGenRenderbuffers(1, &RBO);
 	glBindRenderbuffer(GL_RENDERBUFFER, RBO);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, SCREEN_WIDTH, SCREEN_HEIGHT);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
 
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, RBO);
-
-	SetAspectRatio((float)width / (float)height);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 void ComponentCamera::RenderBuffers(bool active)
 {
-	if (active) {
-
+	if (active) 
+	{
 		glBindFramebuffer(GL_FRAMEBUFFER, FBO);
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 	}
-	else {
-
+	else 
+	{
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 	}
 }
 

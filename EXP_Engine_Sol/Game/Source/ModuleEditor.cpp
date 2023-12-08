@@ -9,10 +9,6 @@
 #include "ModuleImport.h"
 #include "ModuleCamera3D.h"
 
-#include "../External/ImGui/imgui.h"
-#include "../External/ImGui/backends/imgui_impl_opengl3.h"
-#include "../External/ImGui/backends/imgui_impl_sdl2.h"
-
 #include "../External/Glew/include/glew.h"
 #include "../External/SDL/include/SDL_opengl.h"
 
@@ -78,22 +74,17 @@ void ModuleEditor::DrawEditor()
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplSDL2_NewFrame();
 	ImGui::NewFrame();
-
 	ImGui::DockSpaceOverViewport(NULL, ImGuiDockNodeFlags_PassthruCentralNode);
+	ImGuizmo::Enable(true);
+	ImGuizmo::BeginFrame();
 
 	aFPS = App->FPS();
 
 	UpdateFPS(aFPS);
-
 	MainMenuBar();
 
-	if (show_demo_window) {
-		ImGui::ShowDemoWindow(&show_demo_window);
-	}
-
-	if (show_metrics_window) {
-		ImGui::ShowMetricsWindow(&show_metrics_window);
-	}
+	if (show_demo_window) ImGui::ShowDemoWindow(&show_demo_window);
+	if (show_metrics_window) ImGui::ShowMetricsWindow(&show_metrics_window);
 
 	if (show_hierarchy_window) DrawHierarchy();
 	if (show_inspector_window) DrawInspector();
@@ -106,21 +97,26 @@ void ModuleEditor::DrawEditor()
 		App->camera->editorCamera->SetAspectRatio(size.x / size.y);
 		ImGui::Image((ImTextureID)App->camera->editorCamera->TCB, size, ImVec2(0, 1), ImVec2(1, 0));
 
-		//Scene info needed for Mouse Picking function
-		ImVec2 mousePosition = ImGui::GetMousePos();
+		//Info needed for ImGuizmo
 		ImVec2 windowPos = ImGui::GetWindowPos();
-		ImVec2 windowSize = ImGui::GetWindowSize();
 		ImVec2 contentRegionMax = ImGui::GetContentRegionMax();
-		float sceneFrameHeightOffset = ImGui::GetFrameHeight() / 2.0f;
+		int offset = ImGui::GetFrameHeight() / 2.0f;
+
+		App->scene->DrawImGuizmo(windowPos, contentRegionMax, offset);
+
+		//Scene info needed for Mouse Picking function
+		ImVec2 sizeScene = ImGui::GetContentRegionAvail();
+		ImVec2 mousePosition = ImGui::GetMousePos();
+		ImVec2 windowSize = ImGui::GetWindowSize();
 
 		//This function is here because we need the info of the screen
-		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN) 
-			MousePicking(mousePosition, windowPos, windowSize, sceneFrameHeightOffset);
+		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
+			MousePicking(mousePosition, windowPos, windowSize, offset);
 
 		ImGui::End();
 	}
 
-	if (ImGui::Begin("Game"), true) 
+	if (ImGui::Begin("Game"), true)
 	{
 		//Render the screen Game (Game camera)
 		ImVec2 size = ImGui::GetContentRegionAvail();
@@ -136,8 +132,8 @@ void ModuleEditor::DrawEditor()
 
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 
-	// Rendering
 	ImGui::Render();
+
 	glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
@@ -343,7 +339,7 @@ void ModuleEditor::Console()
 {
 	ImGuiStyle& style = ImGui::GetStyle();
 
-	if (show_console) 
+	if (show_console)
 	{
 		ImGui::Begin("Console", &show_console);
 

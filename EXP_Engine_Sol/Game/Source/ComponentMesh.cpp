@@ -56,7 +56,7 @@ void ComponentMesh::InitBoundingBoxes(mesh* Mesh)
 void ComponentMesh::UpdateBoundingBoxes()
 {
 	obb = aabb;
-	obb.Transform(parent->transform->GetTransformMatrix());
+	obb.Transform(parent->transform->GetGlobalTransform());
 
 	gAABB.SetNegativeInfinity();
 	gAABB.Enclose(obb);

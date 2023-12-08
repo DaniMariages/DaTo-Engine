@@ -43,8 +43,9 @@ public:
 	Quat GetRotation() const { return this->gRotation; };
 	float3 GetScale() const { return this->gScale; };
 
-	float4x4 GetTransformMatrix() const { return this->gTransform; };
-	float4x4 SetTransformMatrix(float4x4 transformMatrix);
+	float4x4 GetGlobalTransform() const { return this->gTransform; }
+	float4x4 GetLocalTransform() const { return this->transform; }
+	float4x4 SetLocalTransform(float4x4 transformMatrix);
 
 	void UpdateTransform();
 

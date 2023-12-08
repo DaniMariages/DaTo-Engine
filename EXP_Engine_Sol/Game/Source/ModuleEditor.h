@@ -4,8 +4,12 @@
 
 #include "Module.h"
 #include "Globals.h"
+#include "Primitive.h"
 
 #include "../External/ImGui/imgui.h"
+#include "../External/ImGui/backends/imgui_impl_opengl3.h"
+#include "../External/ImGui/backends/imgui_impl_sdl2.h"
+#include "../External/ImGuizmo/ImGuizmo.h"
 
 #include <vector>
 #include <string>
@@ -35,22 +39,23 @@ public:
 	void DrawSceneAlert();
 	void DrawPausePlay();
 
-	void MousePicking(ImVec2 mousePosition, ImVec2 sceneWindowPos, ImVec2 sceneWindowSize, float sceneFrameHeightOffset);
+	// Mouse picking
+	void MousePicking(ImVec2 mousePosition, ImVec2 windowPos, ImVec2 windowSize, float frameHeightOffset);
 	ImVec2 NormalizePoint(float x, float y, float w, float h, ImVec2 originalPoint);
 
 	void RequestBrowser(const char* path);
-
-	GameObject* childObject = nullptr;
-	std::vector<std::string> log_history;
-	float aFPS;
-
 	void UpdateFPS(const float aFPS);
 	void ModuleEditor::Console();
 
+public: 
+
+	GameObject* childObject = nullptr;
+	std::vector<std::string> log_history;
+
+	float aFPS;
 	char label[32];
 
 	bool show_console_window = true;
-	
 	bool show_demo_window = false;
 	bool show_metrics_window = false;
 	bool show_config_window = true;
@@ -65,26 +70,28 @@ public:
 	//Bool to show or not show the Atention PopUp
 	bool dontShowMeAgain = false;
 
+	//Bool of all game objects options
 	bool drawAll = true;
 	bool drawAllFaces = false;
 	bool drawAllVertex = false;
 	bool drawTextures = true;
 	bool drawAllBoxes = true;
 
+	//Views of the game object
 	bool top = false;
 	bool front = false;
 	bool side_1 = false;
 	bool side_2 = false;
 
-	bool shader = true;
-	bool cullface = true;
-
+	//Bool of selected game object options
 	bool drawSelected = true;
 	bool drawSelectedVertex = false;
 	bool drawSelectedFaces = false;
 	bool drawSelectedTexture = true;
 	bool drawSelectedBoxes = true;
 
+	bool shader = true;
+	bool cullface = true;
 	bool Wireframe = false;
 	bool lights = true;
 

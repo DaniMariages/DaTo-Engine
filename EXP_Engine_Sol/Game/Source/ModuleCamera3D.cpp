@@ -55,10 +55,6 @@ update_status ModuleCamera3D::Update(float dt)
 	//Camera Zoom (Mouse Wheel)
 	editorCamera->Zoom(newPos, speed * 20); //Speed is to low for Zoom
 
-	//Move the camera Up (R) or Down (F)
-	if (App->input->GetKey(SDL_SCANCODE_R) == KEY_REPEAT) newPos.y += speed;
-	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_REPEAT) newPos.y -= speed;
-
 	//Focus camera without moving it (on 0,0,0)
 	if (App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT)
 	{
