@@ -228,7 +228,6 @@ void ModuleScene::DrawImGuizmo(ImVec2 windowPos, ImVec2 contentRegionMax, float 
 	modelProjection.Transpose();
 
 	ImGuizmo::SetRect(windowPos.x, windowPos.y + offset, contentRegionMax.x, contentRegionMax.y);
-
 	ImGuizmo::SetDrawlist();
 
 	float modelPtr[16];
@@ -243,7 +242,7 @@ void ModuleScene::DrawImGuizmo(ImVec2 windowPos, ImVec2 contentRegionMax, float 
 		newMatrix.Set(modelPtr);
 		modelProjection = newMatrix.Transposed();
 
-		selected_transform->SetTransformMatrix(modelProjection);
+		selected_transform->SetLocalTransform(modelProjection);
 		App->scene->gameObjectSelected->transform->UpdateTransform();
 	}
 }
