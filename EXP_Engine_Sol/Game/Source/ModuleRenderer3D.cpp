@@ -131,6 +131,10 @@ bool ModuleRenderer3D::Init()
 	App->importer->ReadFile("Assets/Models/BakerHouse.fbx");
 	App->importer->ReadFile("Assets/Textures/BakerHouse.png");
 
+	//Skybox
+	App->importer->ReadFile("Assets/Models/Skybox.fbx");
+	App->importer->ReadFile("Assets/Textures/Skybox.png");
+
 	OnResize(App->window->width, App->window->height);
 
 	return ret;
