@@ -14,13 +14,15 @@ This engine is developed by:
 - Q --> Move up
 - E --> Move down
 - F --> Focus geometry
+- Left Control --> Center selected object
 - Left shift --> Duplicate movement speed
 - Right Click --> FPS camera
 - Left Alt + Left Click --> Orbital camera
-- Up Arrow --> Top view
+- Right Shift --> Top view
+- Up Arrow --> Front view
 - Right Arrow --> Right view
 - Left Arrow --> Left view
-- Down Arrow --> Front view
+- Down Arrow --> Back view
 - Scroll up --> Zoom in
 - Scroll down --> Zoom out
 #While selected (Guizmo):

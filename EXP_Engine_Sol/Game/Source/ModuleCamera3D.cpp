@@ -156,12 +156,12 @@ void ModuleCamera3D::FrontView()
 
 	if (App->scene->gameObjectSelected != nullptr)
 	{
-		editorCamera->SetPos(App->scene->gameObjectSelected->transform->GetPosition() + float3(0.0f, 0.0f, 10.0f));
+		editorCamera->SetPos(App->scene->gameObjectSelected->transform->GetPosition() + float3(0.0f, 0.0f, -10.0f));
 		editorCamera->LookAt(App->scene->gameObjectSelected->transform->GetPosition());
 	}
 	else
 	{
-		newPos = float3(0.0f, 0.0f, 10.0f);
+		newPos = float3(0.0f, 0.0f, -10.0f);
 		editorCamera->SetPos(newPos);
 		editorCamera->LookAt(float3(0, 0, 0));
 	}
@@ -212,7 +212,7 @@ void ModuleCamera3D::BackView()
 	}
 	else
 	{
-		newPos = float3(0.0f, 0.0f, -10.0f);
+		newPos = float3(0.0f, 0.0f, 10.0f);
 		editorCamera->SetPos(newPos);
 		editorCamera->LookAt(float3(0, 0, 0));
 	}
