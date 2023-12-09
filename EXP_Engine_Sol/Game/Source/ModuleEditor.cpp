@@ -626,24 +626,34 @@ void ModuleEditor::MousePicking(ImVec2 mousePosition, ImVec2 sceneWindowPos, ImV
 
 }
 
-void ModuleEditor::DrawPausePlay() {
-	if (ImGui::Begin(" "))
+void ModuleEditor::DrawPausePlay()
+{
+	if (ImGui::Begin(" ", NULL, ImGuiWindowFlags_NoNav | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoTitleBar))
 	{
-		ImGui::Text("                                    ");
-		ImGui::SameLine();
-		if (ImGui::Button("Play"))
-		{
-		}
-		ImGui::SameLine();
+		ImGui::SameLine(200.0f);
 
-		if (ImGui::Button("Pause"))
+		std::string playStop = App->scene->gameTime.IsRunning() ? "Pause" : "Play";
+		if (ImGui::Button(playStop.c_str()))
 		{
+			if (App->scene->gameTime.IsRunning()) App->scene->gameTime.Stop();
+			else if (!App->scene->gameTime.IsRunning()) App->scene->gameTime.Resume();
 		}
 		ImGui::SameLine();
 
 		if (ImGui::Button("Stop"))
 		{
+			if (App->scene->gameTime.Read() > 0) App->scene->gameTime.ReStart();
 		}
+		ImGui::SameLine();
+
+		if (ImGui::Button("Step"))
+		{
+
+		}
+
+		ImGui::SameLine();
+
+		ImGui::TextColored(GREEN, "Game time: %.2f", (App->scene->gameTime.Read() / 1000.0f));
 	}
 	ImGui::End();
 }

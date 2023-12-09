@@ -13,12 +13,16 @@ public:
 
 	void Start();
 	void Stop();
+	void ReStart();
+	void Resume();
+	void Pause();
+	bool IsRunning();
 
 	Uint32 Read();
 
 private:
 
-	bool	running;
+	bool	running = false;
 	Uint32	started_at;
 	Uint32	stopped_at;
 };

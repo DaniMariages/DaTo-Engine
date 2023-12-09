@@ -3,6 +3,7 @@
 #include "Module.h"
 #include "Globals.h"
 #include "GameObject.h"
+#include "Timer.h"
 
 #include "../External/MathGeoLib/include/Geometry/LineSegment.h"
 #include "../External/ImGui/imgui.h"
@@ -47,4 +48,7 @@ public:
 	GameObject* gameCameraObject = nullptr;
 	ComponentCamera* gameCamera = nullptr;
 	std::vector<ComponentCamera*> totalCameras;
+
+	//Timer
+	Timer gameTime;
 };

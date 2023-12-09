@@ -12,6 +12,9 @@ ModuleScene::ModuleScene(Application* app, bool start_enabled) : Module(app, sta
 	gameCameraObject = CreateGameObject("MainCamera", rootGameObject);
 
 	ImGuizmo::Enable(true);
+
+	gameTime.Stop();
+	gameTime.ReStart();
 }
 
 // Destructor
