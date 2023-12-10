@@ -79,6 +79,12 @@
     <Filter Include="External\ImGuizmo">
       <UniqueIdentifier>{935bea94-ad5d-48eb-ae2d-6153104d7fae}</UniqueIdentifier>
     </Filter>
+    <Filter Include="External\PCG">
+      <UniqueIdentifier>{332314f4-9a3f-4316-b10d-d041982b12d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="External\Parson">
+      <UniqueIdentifier>{0613b0c1-4fdf-4d15-bd35-59043b06652a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\External\DevIL\include\devil_cpp_wrapper.hpp">
@@ -744,6 +750,24 @@
     <ClInclude Include="Game\External\ImGuizmo\ImZoomSlider.h">
       <Filter>External\ImGuizmo</Filter>
     </ClInclude>
+    <ClInclude Include="Game\Source\Json.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Source\Random.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\External\PCG\pcg_extras.hpp">
+      <Filter>External\PCG</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\External\PCG\pcg_random.hpp">
+      <Filter>External\PCG</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\External\PCG\pcg_uint128.hpp">
+      <Filter>External\PCG</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\External\Parson\parson.h">
+      <Filter>External\Parson</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game\External\DevIL\include\luadevil.c">
@@ -940,6 +964,15 @@
     </ClCompile>
     <ClCompile Include="Game\External\ImGuizmo\ImSequencer.cpp">
       <Filter>External\ImGuizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Source\Json.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Source\Random.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\External\Parson\parson.c">
+      <Filter>External\Parson</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

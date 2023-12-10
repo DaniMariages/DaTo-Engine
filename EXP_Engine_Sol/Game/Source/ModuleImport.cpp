@@ -188,7 +188,32 @@ void ModuleImport::LoadMesh(const char* file_path)
 
 void ModuleImport::GetSceneInfo(aiNode* node, const aiScene* scene, const char* file_path, GameObject* gameObject)
 {
-	GameObject* tempObject{}; //Needed to know where add mesh
+	//Get the transform of the node
+	aiVector3D position, scale;
+	aiQuaternion rotation;
+
+	node->mTransformation.Decompose(scale, rotation, position);
+
+	//Data to fill with the transform
+	goTransform tempTrans;
+
+	//Set position
+	tempTrans.position.x = position.x;
+	tempTrans.position.y = position.y;
+	tempTrans.position.z = position.z;
+
+	//Set rotation
+	tempTrans.rotation.x = rotation.GetEuler().x;
+	tempTrans.rotation.y = rotation.GetEuler().y;
+	tempTrans.rotation.z = rotation.GetEuler().z;
+
+	//Set scale
+	tempTrans.scale.x = scale.x;
+	tempTrans.scale.y = scale.y;
+	tempTrans.scale.z = scale.z;
+
+	//Needed to know where add mesh
+	GameObject* tempObject{}; 
 	
 	if (gameObject == nullptr)
 	{

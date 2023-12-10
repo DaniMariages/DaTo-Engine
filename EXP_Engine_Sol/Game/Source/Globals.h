@@ -46,3 +46,13 @@ enum update_status
 #define WHITE ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
 
 class Application;
+
+#define RELEASE_ARRAY( x )	\
+	{						\
+		if( x != nullptr )	\
+		{					\
+           delete[] x;		\
+	       x = nullptr;		\
+		}					\
+	}
+

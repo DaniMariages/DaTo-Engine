@@ -6,6 +6,7 @@
 #include "ComponentMesh.h"
 #include "ComponentTexture.h"
 #include "ComponentTransform.h"
+#include "Json.h"
 
 #include "../External/Assimp/include/cimport.h"
 #include "../External/Assimp/include/scene.h"
@@ -58,6 +59,12 @@ struct mesh
 	unsigned int EBO = 0;
 };
 
+struct goTransform
+{
+	float3 position;
+	float3 rotation;
+	float3 scale;
+};
 
 class ModuleImport : public Module
 {
