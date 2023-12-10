@@ -20,12 +20,12 @@ public:
 	int ID;
 
 	//Bool to know if game object is selectable with MousePicking
-	bool selectableWithMP;
+	bool selectableWithMP = true;
 
 	bool selected = false;
 
-	bool active;
-	bool drawTexture;
+	bool active = true;
+	bool drawTexture = true;
 
 	Random random;
 
