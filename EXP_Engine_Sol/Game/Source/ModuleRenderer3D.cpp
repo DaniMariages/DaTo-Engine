@@ -133,7 +133,7 @@ bool ModuleRenderer3D::Init()
 	App->importer->ReadFile("Assets/Textures/BakerHouse.png");
 
 	//Street Environment
-	App->importer->ReadFile("Assets/Models/StreetEnvironment/StreetEnvironment.fbx");
+	//App->importer->ReadFile("Assets/Models/StreetEnvironment/StreetEnvironment.fbx");
 
 	//Skybox
 	App->importer->ReadFile("Assets/Models/Skybox.fbx");

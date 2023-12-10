@@ -359,7 +359,6 @@
     <ClCompile Include="Game\Source\ComponentTexture.cpp" />
     <ClCompile Include="Game\Source\ComponentTransform.cpp" />
     <ClCompile Include="Game\Source\GameObject.cpp" />
-    <ClCompile Include="Game\Source\glmath.cpp" />
     <ClCompile Include="Game\Source\Json.cpp" />
     <ClCompile Include="Game\Source\Light.cpp" />
     <ClCompile Include="Game\Source\log.cpp" />
