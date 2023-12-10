@@ -62,6 +62,8 @@ This engine is developed by:
 - All normals move with the model.
 - Skybox added.
 - Warning window before deleting a game object or scene, with a checkbox for "Do not show again".
+- Game Object can be renamed from Inspector.
+- If an object is repeated, the name will change to: Name + (number of repetitions).
 
 ## Libraries
 - [Assimp](<https://github.com/assimp/assimp.git>)
