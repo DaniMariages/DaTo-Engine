@@ -34,8 +34,6 @@ public:
 
 	uint SerializeConfig(char** buffer);
 
-	JsonConfig* GetJsonConfig(const char* path);
-
 	double GetNumber(const std::string name);
 	void SetNumber(const std::string name, const double number);
 

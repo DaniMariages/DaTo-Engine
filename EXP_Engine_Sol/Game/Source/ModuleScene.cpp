@@ -52,6 +52,8 @@ update_status ModuleScene::Update(float dt)
 		gizmoOperation = ImGuizmo::OPERATION::ROTATE;
 	else if (App->input->GetKey(SDL_SCANCODE_R) && !ImGui::IsMouseDown(ImGuiMouseButton_::ImGuiMouseButton_Right))
 		gizmoOperation = ImGuizmo::OPERATION::SCALE;
+	else if (App->input->GetKey(SDL_SCANCODE_T) && !ImGui::IsMouseDown(ImGuiMouseButton_::ImGuiMouseButton_Right))
+		gizmoOperation = ImGuizmo::OPERATION::UNIVERSAL;
 
 	return UPDATE_CONTINUE;
 }

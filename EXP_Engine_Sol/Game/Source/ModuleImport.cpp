@@ -177,9 +177,6 @@ void ModuleImport::LoadMesh(const char* file_path)
 			GetSceneInfo(scene->mRootNode, scene, file_path, App->scene->gameObjectSelected);
 		}
 			
-		//ComponentTransform* compTrans = new ComponentTransform(newGameObject);	//PROVISIONAL
-		//newGameObject->AddComponent(compTrans);
-
 		LOG("Scene loaded correctly");
 		aiReleaseImport(scene);
 	}
@@ -188,45 +185,64 @@ void ModuleImport::LoadMesh(const char* file_path)
 
 void ModuleImport::GetSceneInfo(aiNode* node, const aiScene* scene, const char* file_path, GameObject* gameObject)
 {
-	//Get the transform of the node
-	aiVector3D position, scale;
-	aiQuaternion rotation;
-
-	node->mTransformation.Decompose(scale, rotation, position);
-
-	//Data to fill with the transform
-	goTransform tempTrans;
-
-	//Set position
-	tempTrans.position.x = position.x;
-	tempTrans.position.y = position.y;
-	tempTrans.position.z = position.z;
-
-	//Set rotation
-	tempTrans.rotation.x = rotation.GetEuler().x;
-	tempTrans.rotation.y = rotation.GetEuler().y;
-	tempTrans.rotation.z = rotation.GetEuler().z;
-
-	//Set scale
-	tempTrans.scale.x = scale.x;
-	tempTrans.scale.y = scale.y;
-	tempTrans.scale.z = scale.z;
-
 	//Needed to know where add mesh
-	GameObject* tempObject{}; 
+	GameObject* tempObject{};
+
+	// MYTODO: BakerHouse initial transform its bad, so do this when load Street Environment
 	
+	////Get the transform of the node
+	//aiVector3D position, scale;
+	//aiQuaternion rotation;
+
+	//node->mTransformation.Decompose(scale, rotation, position);
+
+	////Data to fill with the transform
+	//goTransform tempTrans;
+
+	////Set position
+	//tempTrans.position.x = position.x;
+	//tempTrans.position.y = position.y;
+	//tempTrans.position.z = position.z;
+
+	////Set rotation
+	//tempTrans.rotation.x = rotation.GetEuler().x;
+	//tempTrans.rotation.y = rotation.GetEuler().y;
+	//tempTrans.rotation.z = rotation.GetEuler().z;
+
+	////Set scale
+	//tempTrans.scale.x = scale.x;
+	//tempTrans.scale.y = scale.y;
+	//tempTrans.scale.z = scale.z;
+
+	//If gameObject is null, means that is a scene child 
 	if (gameObject == nullptr)
 	{
+		//Create a new game object that is child of scene
 		tempObject = App->scene->CreateGameObject(name, App->scene->rootGameObject);
+
+		/*tempObject->transform->SetPosition(tempTrans.position);
+		tempObject->transform->SetEulerRotation(tempTrans.rotation);
+		tempObject->transform->SetScale(tempTrans.scale);*/
+
 		newGameObject = tempObject;
 	}
-	else tempObject = App->scene->CreateGameObject(node->mName.C_Str(), gameObject);
+	//else means that is a gameObject child
+	else
+	{
+		tempObject = App->scene->CreateGameObject(node->mName.C_Str(), gameObject);
+		/*tempObject->transform->SetPosition(tempTrans.position);
+		tempObject->transform->SetEulerRotation(tempTrans.rotation);
+		tempObject->transform->SetScale(tempTrans.scale);*/
 
+	}
+
+	//Process all the meshes of the node
 	for (unsigned int i = 0; i < node->mNumMeshes; i++)
 	{
 		ProcessMesh(scene->mMeshes[node->mMeshes[i]], file_path, tempObject);
 	}
 
+	//If node has children, process them
 	for (unsigned int i = 0; i < node->mNumChildren; i++)
 	{
 		GetSceneInfo(node->mChildren[i], scene, file_path, tempObject);
@@ -292,7 +308,6 @@ mesh ModuleImport::ProcessMesh(aiMesh* Mesh, const char* file_path, GameObject* 
 	App->renderer3D->SetUpBuffers(myMesh);
 	meshes.push_back(*myMesh);
 
-
 	return *myMesh;
 }
 
@@ -346,4 +361,16 @@ Texture* ModuleImport::LoadTexture(const char* file_path)
 		ilDeleteImages(1, &image);
 		return nullptr;
 	}
+}
+
+//MYTODO: This should be done with Resource
+void ModuleImport::SaveGameObject(GameObject* gameObject)
+{
+	JsonConfig jsonFile;
+	ArrayConfig jsonArray = jsonFile.SetArray("3D Models");
+
+	JsonConfig& node = jsonArray.AddNode();
+
+	node.SetString("Name", gameObject->Name);
+	node.SetNumber("ID", gameObject->ID);
 }
