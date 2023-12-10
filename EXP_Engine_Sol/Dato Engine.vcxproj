@@ -285,7 +285,6 @@
     <ClInclude Include="Game\Source\ComponentTexture.h" />
     <ClInclude Include="Game\Source\ComponentTransform.h" />
     <ClInclude Include="Game\Source\GameObject.h" />
-    <ClInclude Include="Game\Source\glmath.h" />
     <ClInclude Include="Game\Source\Globals.h" />
     <ClInclude Include="Game\Source\Light.h" />
     <ClInclude Include="Game\Source\Module.h" />
@@ -353,7 +352,6 @@
     <ClCompile Include="Game\Source\ComponentTexture.cpp" />
     <ClCompile Include="Game\Source\ComponentTransform.cpp" />
     <ClCompile Include="Game\Source\GameObject.cpp" />
-    <ClCompile Include="Game\Source\glmath.cpp" />
     <ClCompile Include="Game\Source\Light.cpp" />
     <ClCompile Include="Game\Source\log.cpp" />
     <ClCompile Include="Game\Source\Main.cpp" />
