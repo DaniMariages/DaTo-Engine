@@ -80,7 +80,7 @@ update_status ModuleCamera3D::Update(float dt)
 	{
 		if (App->scene->gameObjectSelected != nullptr)
 		{
-			editorCamera->Focus(App->scene->gameObjectSelected->transform->GetPosition(), 6.0f);
+			editorCamera->Focus(App->scene->gameObjectSelected->transform->GetPosition(), 100.0f);
 		}
 		else editorCamera->Focus(newPos, 6.0f);
 	}

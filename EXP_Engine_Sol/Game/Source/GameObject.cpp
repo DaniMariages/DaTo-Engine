@@ -12,6 +12,7 @@ GameObject::GameObject(std::string name, GameObject* parent)
 	Parent = parent;
 	drawTexture = true;
 	selectableWithMP = true;
+	ID = random.GenerateRandomInt();
 
 	//Only Scene Game Object has nullptr as a parent, so dont add a transform to it
 	if (parent != nullptr)

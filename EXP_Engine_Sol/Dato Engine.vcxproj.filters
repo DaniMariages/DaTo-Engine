@@ -76,17 +76,26 @@
     <Filter Include="External\ImGuizmo">
       <UniqueIdentifier>{935bea94-ad5d-48eb-ae2d-6153104d7fae}</UniqueIdentifier>
     </Filter>
+    <Filter Include="External\PCG">
+      <UniqueIdentifier>{332314f4-9a3f-4316-b10d-d041982b12d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="External\Parson">
+      <UniqueIdentifier>{0613b0c1-4fdf-4d15-bd35-59043b06652a}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Source\GameObjects">
       <UniqueIdentifier>{37263bf4-e696-4a16-88ef-4fabd4430b98}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source\GameObjects\Components">
-      <UniqueIdentifier>{d1639b71-b977-49bf-8e55-32c38ee1daf3}</UniqueIdentifier>
+      <UniqueIdentifier>{1f21ba28-8160-4963-8361-0101c80a5834}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source\Core">
-      <UniqueIdentifier>{5aefc0dc-4e8d-46fa-a6b7-8ea0cf67b0bf}</UniqueIdentifier>
+      <UniqueIdentifier>{0a5aed91-b03a-468d-bcb9-d47f7a7ab165}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source\Tools">
-      <UniqueIdentifier>{aee63785-885a-4462-8c7a-b473cdc7880f}</UniqueIdentifier>
+      <UniqueIdentifier>{2db8e2c4-9b49-4f44-aa08-df581f2ce1df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\CustomFileFormat">
+      <UniqueIdentifier>{f664b8cc-3a86-4bdb-b840-1adb279b5b2a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -717,6 +726,18 @@
     <ClInclude Include="Game\External\ImGuizmo\ImZoomSlider.h">
       <Filter>External\ImGuizmo</Filter>
     </ClInclude>
+    <ClInclude Include="Game\External\PCG\pcg_extras.hpp">
+      <Filter>External\PCG</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\External\PCG\pcg_random.hpp">
+      <Filter>External\PCG</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\External\PCG\pcg_uint128.hpp">
+      <Filter>External\PCG</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\External\Parson\parson.h">
+      <Filter>External\Parson</Filter>
+    </ClInclude>
     <ClInclude Include="Game\Source\Component.h">
       <Filter>Source\GameObjects\Components</Filter>
     </ClInclude>
@@ -738,17 +759,26 @@
     <ClInclude Include="Game\Source\Globals.h">
       <Filter>Source\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Source\Color.h">
-      <Filter>Source\Tools</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Source\Light.h">
       <Filter>Source\Tools</Filter>
     </ClInclude>
     <ClInclude Include="Game\Source\Primitive.h">
       <Filter>Source\Tools</Filter>
     </ClInclude>
+    <ClInclude Include="Game\Source\Random.h">
+      <Filter>Source\Tools</Filter>
+    </ClInclude>
     <ClInclude Include="Game\Source\Timer.h">
       <Filter>Source\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Source\glmath.h">
+      <Filter>Source\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Source\Color.h">
+      <Filter>Source\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Source\Json.h">
+      <Filter>Source\CustomFileFormat</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -911,6 +941,9 @@
     <ClCompile Include="Game\External\ImGuizmo\ImSequencer.cpp">
       <Filter>External\ImGuizmo</Filter>
     </ClCompile>
+    <ClCompile Include="Game\External\Parson\parson.c">
+      <Filter>External\Parson</Filter>
+    </ClCompile>
     <ClCompile Include="Game\Source\ComponentCamera.cpp">
       <Filter>Source\GameObjects\Components</Filter>
     </ClCompile>
@@ -929,9 +962,6 @@
     <ClCompile Include="Game\Source\Main.cpp">
       <Filter>Source\Core</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Source\Color.cpp">
-      <Filter>Source\Tools</Filter>
-    </ClCompile>
     <ClCompile Include="Game\Source\Light.cpp">
       <Filter>Source\Tools</Filter>
     </ClCompile>
@@ -941,8 +971,20 @@
     <ClCompile Include="Game\Source\Primitive.cpp">
       <Filter>Source\Tools</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Source\Random.cpp">
+      <Filter>Source\Tools</Filter>
+    </ClCompile>
     <ClCompile Include="Game\Source\Timer.cpp">
       <Filter>Source\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Source\Color.cpp">
+      <Filter>Source\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Source\glmath.cpp">
+      <Filter>Source\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Source\Json.cpp">
+      <Filter>Source\CustomFileFormat</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

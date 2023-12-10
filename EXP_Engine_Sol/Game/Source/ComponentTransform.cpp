@@ -107,6 +107,8 @@ void ComponentTransform::SetScale(float3 scale)
 float4x4 ComponentTransform::SetLocalTransform(float4x4 transformMatrix)
 {
 	return transform = transformMatrix;
+	UpdateMatrix();
+	UpdateTransform();
 }
 
 float3 ComponentTransform::GetUp()

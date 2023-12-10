@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "ComponentTransform.h"
+#include "Random.h"
 
 class Component;
 enum class typeComponent;
@@ -12,15 +13,23 @@ class GameObject
 public:
 	std::string Name;
 	std::vector<Component*> components;
-	bool active;
-	bool drawTexture;
+	GameObject* Parent;
+	std::vector<GameObject*> children;
+
+	//ID of each Game Object
+	int ID;
 
 	//Bool to know if game object is selectable with MousePicking
 	bool selectableWithMP;
 
-	GameObject* Parent;
-	std::vector<GameObject*> children;
+	bool selected = false;
 
+	bool active;
+	bool drawTexture;
+
+	Random random;
+
+public:
 	GameObject(std::string Name, GameObject* parent);
 	~GameObject();
 
@@ -54,6 +63,4 @@ public:
 	void EraseChild(GameObject* child);
 
 	ComponentTransform* transform = nullptr;
-
-	bool selected = false;
 };
