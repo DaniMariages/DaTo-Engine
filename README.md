@@ -86,6 +86,3 @@ This engine is developed by:
   - The Street Environment models were not positioned correctly.
 - Custom File Format, Serialization and Resources are not completed due to time constraints.
   - In return, every effort has been made to polish the rest of the engine as much as possible.
-
-### Known bugs: 
-- The Main Camera continues to render after being deleted, but this does not happen if it is hidden.
