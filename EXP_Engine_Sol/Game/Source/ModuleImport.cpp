@@ -190,29 +190,29 @@ void ModuleImport::GetSceneInfo(aiNode* node, const aiScene* scene, const char* 
 
 	// MYTODO: BakerHouse initial transform its bad, so do this when load Street Environment
 	
-	////Get the transform of the node
-	//aiVector3D position, scale;
-	//aiQuaternion rotation;
+	//Get the transform of the node
+	aiVector3D position, scale;
+	aiQuaternion rotation;
 
-	//node->mTransformation.Decompose(scale, rotation, position);
+	node->mTransformation.Decompose(scale, rotation, position);
 
-	////Data to fill with the transform
-	//goTransform tempTrans;
+	//Data to fill with the transform
+	goTransform tempTrans;
 
-	////Set position
-	//tempTrans.position.x = position.x;
-	//tempTrans.position.y = position.y;
-	//tempTrans.position.z = position.z;
+	//Set position
+	tempTrans.position.x = position.x;
+	tempTrans.position.y = position.y;
+	tempTrans.position.z = position.z;
 
-	////Set rotation
-	//tempTrans.rotation.x = rotation.GetEuler().x;
-	//tempTrans.rotation.y = rotation.GetEuler().y;
-	//tempTrans.rotation.z = rotation.GetEuler().z;
+	//Set rotation
+	tempTrans.rotation.x = rotation.GetEuler().x;
+	tempTrans.rotation.y = rotation.GetEuler().y;
+	tempTrans.rotation.z = rotation.GetEuler().z;
 
-	////Set scale
-	//tempTrans.scale.x = scale.x;
-	//tempTrans.scale.y = scale.y;
-	//tempTrans.scale.z = scale.z;
+	//Set scale
+	tempTrans.scale.x = scale.x;
+	tempTrans.scale.y = scale.y;
+	tempTrans.scale.z = scale.z;
 
 	//If gameObject is null, means that is a scene child 
 	if (gameObject == nullptr)
@@ -220,9 +220,9 @@ void ModuleImport::GetSceneInfo(aiNode* node, const aiScene* scene, const char* 
 		//Create a new game object that is child of scene
 		tempObject = App->scene->CreateGameObject(name, App->scene->rootGameObject);
 
-		/*tempObject->transform->SetPosition(tempTrans.position);
+		tempObject->transform->SetPosition(tempTrans.position);
 		tempObject->transform->SetEulerRotation(tempTrans.rotation);
-		tempObject->transform->SetScale(tempTrans.scale);*/
+		tempObject->transform->SetScale(tempTrans.scale);
 
 		newGameObject = tempObject;
 	}
@@ -230,9 +230,9 @@ void ModuleImport::GetSceneInfo(aiNode* node, const aiScene* scene, const char* 
 	else
 	{
 		tempObject = App->scene->CreateGameObject(node->mName.C_Str(), gameObject);
-		/*tempObject->transform->SetPosition(tempTrans.position);
+		tempObject->transform->SetPosition(tempTrans.position);
 		tempObject->transform->SetEulerRotation(tempTrans.rotation);
-		tempObject->transform->SetScale(tempTrans.scale);*/
+		tempObject->transform->SetScale(tempTrans.scale);
 
 	}
 
