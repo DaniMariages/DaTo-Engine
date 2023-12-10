@@ -61,6 +61,7 @@ This engine is developed by:
 - The editor has two windows, one with the scene (editor view) and another captured from a Game object witha camera component (Main Game Camera), each one has its own framebuffer and the user can visualize both at the same time.
 - All normals move with the model.
 - Skybox added.
+- Warning window before deleting a game object or scene, with a checkbox for "Do not show again".
 
 ## Libraries
 - [Assimp](<https://github.com/assimp/assimp.git>)
