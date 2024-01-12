@@ -285,9 +285,12 @@
     <ClInclude Include="Game\Source\Color.h" />
     <ClInclude Include="Game\Source\Component.h" />
     <ClInclude Include="Game\Source\ComponentCamera.h" />
+    <ClInclude Include="Game\Source\ComponentCanvas.h" />
+    <ClInclude Include="Game\Source\ComponentCharacter.h" />
     <ClInclude Include="Game\Source\ComponentMesh.h" />
     <ClInclude Include="Game\Source\ComponentTexture.h" />
     <ClInclude Include="Game\Source\ComponentTransform.h" />
+    <ClInclude Include="Game\Source\ComponentUI.h" />
     <ClInclude Include="Game\Source\GameObject.h" />
     <ClInclude Include="Game\Source\Globals.h" />
     <ClInclude Include="Game\Source\Json.h" />
@@ -355,9 +358,11 @@
     <ClCompile Include="Game\Source\Application.cpp" />
     <ClCompile Include="Game\Source\Color.cpp" />
     <ClCompile Include="Game\Source\ComponentCamera.cpp" />
+    <ClCompile Include="Game\Source\ComponentCanvas.cpp" />
     <ClCompile Include="Game\Source\ComponentMesh.cpp" />
     <ClCompile Include="Game\Source\ComponentTexture.cpp" />
     <ClCompile Include="Game\Source\ComponentTransform.cpp" />
+    <ClCompile Include="Game\Source\ComponentUI.cpp" />
     <ClCompile Include="Game\Source\GameObject.cpp" />
     <ClCompile Include="Game\Source\Json.cpp" />
     <ClCompile Include="Game\Source\Light.cpp" />
