@@ -3,6 +3,8 @@
 #include <vector>
 
 #include "ComponentTransform.h"
+#include "Component.h"
+#include "ComponentUI.h"
 #include "Random.h"
 
 class Component;
@@ -48,6 +50,8 @@ public:
 	void EnableParent(); 
 	void DisableParent();
 
+	void SetId();
+
 	//Function to change the name of a game object
 	void ChangeName(const char* name);
 
@@ -57,10 +61,16 @@ public:
 	Component* AddComponent(Component* component);
 	Component* GetComponent(typeComponent type);
 	bool HasComponent(typeComponent type);
+	Component* CreateComponent(typeComponent comp_type, bool active = true, uint width = 0, uint height = 0);
+	ComponentUI* CreateComponentUI(UI_type comp_type, uint width, uint height, ComponentCanvas* canvas, const char* str, uint x = 0, uint y = 0, bool active = true);
 
 	std::vector<Component*> GetComponents(typeComponent type);
 	GameObject* AddChildren(GameObject* children);
 	void EraseChild(GameObject* child);
 
 	ComponentTransform* transform = nullptr;
+
+private:
+
+	Random	id;
 };

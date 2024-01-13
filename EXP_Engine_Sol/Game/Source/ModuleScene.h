@@ -4,6 +4,7 @@
 #include "Globals.h"
 #include "GameObject.h"
 #include "Timer.h"
+#include "ComponentUI.h"
 
 #include "../External/MathGeoLib/include/Geometry/LineSegment.h"
 #include "../External/ImGui/imgui.h"
@@ -49,6 +50,7 @@ public:
 	GameObject* gameCameraObject = nullptr;
 	ComponentCamera* gameCamera = nullptr;
 	std::vector<ComponentCamera*> totalCameras;
+	bool is_game_mode = false;
 
 	//Timer
 	Timer gameTime;

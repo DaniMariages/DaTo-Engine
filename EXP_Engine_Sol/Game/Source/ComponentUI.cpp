@@ -390,34 +390,34 @@ void UIPanel::RegenerateVertexBuffers()
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float3) * 4, vertex, GL_STATIC_DRAW);
 }
 
-ComponentUI* ComponentUI::CreateComponentUI(UI_type ui_type, uint width, uint height, ComponentCanvas* canvas, const char* str, uint x, uint y, bool active)
-{
-	ComponentUI* comp = nullptr;
-
-	switch (ui_type)
-	{
-	case UI_Button:
-		comp = new ComponentButton(typeComponent::UI, active, this, ui_type, width, height, canvas, str, x, y);
-		break;
-	case UI_Label:
-		comp = new ComponentLabel(typeComponent::UI, active, this, ui_type, width, height, canvas, str, x, y);
-		break;
-	case UI_Character:
-		comp = new ComponentCharacter(typeComponent::UI, active, this, ui_type, width, height, canvas, str, x, y);
-		break;
-	case UI_InpuText:
-		break;
-	case UI_Checkbox:
-		comp = new ComponentCheckbox(typeComponent::UI, active, this, ui_type, width, height, canvas, str, x, y);
-		break;
-	case UI_Image:
-		comp = new ComponentImage(typeComponent::UI, active, this, ui_type, width, height, canvas, str, x, y);
-		break;
-	}
-
-	if (comp)
-		components.push_back(comp);
-
-	return comp;
-}
+//ComponentUI* ComponentUI::CreateComponentUI(UI_type ui_type, uint width, uint height, ComponentCanvas* canvas, const char* str, uint x, uint y, bool active)
+//{
+//	ComponentUI* comp = nullptr;
+//
+//	switch (ui_type)
+//	{
+//	case UI_Button:
+//		comp = new ComponentButton(typeComponent::UI, active, this, ui_type, width, height, canvas, str, x, y);
+//		break;
+//	case UI_Label:
+//		comp = new ComponentLabel(typeComponent::UI, active, this, ui_type, width, height, canvas, str, x, y);
+//		break;
+//	case UI_Character:
+//		comp = new ComponentCharacter(typeComponent::UI, active, this, ui_type, width, height, canvas, str, x, y);
+//		break;
+//	case UI_InpuText:
+//		break;
+//	case UI_Checkbox:
+//		comp = new ComponentCheckbox(typeComponent::UI, active, this, ui_type, width, height, canvas, str, x, y);
+//		break;
+//	case UI_Image:
+//		comp = new ComponentImage(typeComponent::UI, active, this, ui_type, width, height, canvas, str, x, y);
+//		break;
+//	}
+//
+//	if (comp)
+//		components.push_back(comp);
+//
+//	return comp;
+//}
 

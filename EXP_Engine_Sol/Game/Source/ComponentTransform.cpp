@@ -22,6 +22,22 @@ ComponentTransform::ComponentTransform(GameObject* parent) : Component(parent)
 	UpdateMatrix();
 };
 
+Component::Component(typeComponent comp_type, bool act, GameObject* obj)
+{
+	type = comp_type;
+	active = act;
+	parent = obj;
+}
+
+ComponentTransform::ComponentTransform(typeComponent comp_type, bool act, GameObject* obj) : Component(comp_type, act, obj)
+{
+	position = position = { 0,0,0 };
+	scale = scale = { 1,1,1 };
+	eulerRotation = { 0,0,0 };
+	rotation = rotation = Quat::identity;
+	transform = gTransform = float4x4::identity;
+}
+
 ComponentTransform::ComponentTransform(GameObject* parent, float3 _position, float3 _scale, Quat _rotation) : Component(parent)
 {
 	gPosition = _position;

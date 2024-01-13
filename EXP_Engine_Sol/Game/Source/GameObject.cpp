@@ -5,6 +5,11 @@
 #include "ComponentTexture.h"
 #include "ComponentMesh.h"
 #include "ComponentUI.h"
+#include "ComponentButton.h"
+#include "ComponentLabel.h"
+#include "ComponentImage.h"
+#include "ComponentCharacter.h"
+#include "ComponentCheckbox.h"
 
 #include <vector>
 
@@ -263,3 +268,68 @@ std::vector<Component*> GameObject::GetComponents(typeComponent type)
 	return ret;
 }
 
+ComponentUI* GameObject::CreateComponentUI(UI_type ui_type, uint width, uint height, ComponentCanvas* canvas, const char* str, uint x, uint y, bool active) {
+	ComponentUI* comp = nullptr;
+
+	switch (ui_type)
+	{
+	case UI_Button:
+		comp = new ComponentButton(typeComponent::UI, active, this, ui_type, width, height, canvas, str, x, y);
+		break;
+	case UI_Label:
+		comp = new ComponentLabel(typeComponent::UI, active, this, ui_type, width, height, canvas, str, x, y);
+		break;
+	case UI_Character:
+		comp = new ComponentCharacter(typeComponent::UI, active, this, ui_type, width, height, canvas, str, x, y);
+		break;
+	case UI_InpuText:
+		break;
+	case UI_Checkbox:
+		comp = new ComponentCheckbox(typeComponent::UI, active, this, ui_type, width, height, canvas, str, x, y);
+		break;
+	case UI_Image:
+		comp = new ComponentImage(typeComponent::UI, active, this, ui_type, width, height, canvas, str, x, y);
+		break;
+	}
+
+	if (comp)
+		components.push_back(comp);
+
+	return comp;
+}
+
+Component* GameObject::CreateComponent(typeComponent comp_type, bool act, uint width, uint height)
+{
+	Component* comp = nullptr;
+
+	switch (comp_type)
+	{
+	case typeComponent::Transform:
+		comp = new ComponentTransform(Parent);
+		break;
+	case typeComponent::Mesh:
+		comp = new ComponentMesh(Parent);
+		break;
+	case typeComponent::Material:
+		comp = new ComponentTexture(Parent);
+		break;
+	case typeComponent::Camera:
+		comp = new ComponentCamera(Parent);
+		break;
+	case typeComponent::Canvas:
+		comp = new ComponentCanvas(Parent);
+		break;
+	case typeComponent::UI:
+		break;
+	}
+
+	if (comp)
+		components.push_back(comp);
+
+	return comp;
+}
+
+void GameObject::SetId()
+{
+	id.GenerateRandomInt();
+}

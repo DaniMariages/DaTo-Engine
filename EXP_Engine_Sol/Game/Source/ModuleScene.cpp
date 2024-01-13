@@ -4,6 +4,7 @@
 #include "ModuleImport.h"
 #include "ModuleWindow.h"
 #include "ComponentUI.h"
+#include "GameObject.h"
 
 #include <map>
 
@@ -79,7 +80,7 @@ GameObject* ModuleScene::CreateGameObject(std::string Name, GameObject* parent)
 GameObject* ModuleScene::CreateUIElement(const char* name, UI_type type, uint width, uint height, ComponentCanvas* canvas, char* str, GameObject* parent, float3 position, float3 scale, Quat rotation)
 {
 	GameObject* object = new GameObject(name, parent);
-	ComponentTransform* trans = (ComponentTransform*)object->CreateComponent(COMPONENT_TRANSFORM);
+	ComponentTransform* trans = (ComponentTransform*)object->CreateComponent(typeComponent::Transform);
 
 	trans->SetGlobalPosition(position);
 	trans->SetGlobalRotation(rotation);
