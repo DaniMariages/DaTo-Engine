@@ -15,6 +15,7 @@ class ModuleEditor;
 class ModuleCamera3D;
 class ModuleImport;
 class ModuleScene;
+class ModuleFonts;
 
 class Application
 {
@@ -26,6 +27,7 @@ public:
 	ModuleEditor* editor;
 	ModuleImport* importer;
 	ModuleScene* scene;
+	ModuleFonts* fonts;
 
 private:
 

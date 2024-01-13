@@ -9,6 +9,7 @@ enum class typeComponent {
 	Mesh,
 	Material,
 	Camera,
+	Canvas,
 	UI,
 };
 

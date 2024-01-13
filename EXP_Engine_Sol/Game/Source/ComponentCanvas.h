@@ -7,6 +7,7 @@ class GameObject;
 class ComponentCanvas : public Component {
 public:
 	ComponentCanvas(typeComponent cType, bool act, GameObject* objs, uint w, uint h);
+	ComponentCanvas(GameObject* parent);
 	~ComponentCanvas() {};
 
 	void Update();

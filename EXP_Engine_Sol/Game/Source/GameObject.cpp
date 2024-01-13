@@ -4,6 +4,8 @@
 #include "ComponentTransform.h"
 #include "ComponentTexture.h"
 #include "ComponentMesh.h"
+#include "ComponentUI.h"
+
 #include <vector>
 
 GameObject::GameObject(std::string name, GameObject* parent)
@@ -156,6 +158,11 @@ Component* GameObject::AddComponent(Component* component)
 	case(typeComponent::Camera):
 		ret = new ComponentCamera(this);
 		LOG("Component Camera added to %s", component->parent->Name.c_str());
+		break;
+
+	case(typeComponent::Canvas):
+		ret = new ComponentCanvas(this);
+		LOG("Component Canvas added to %s", component->parent->Name.c_str());
 		break;
 	}
 

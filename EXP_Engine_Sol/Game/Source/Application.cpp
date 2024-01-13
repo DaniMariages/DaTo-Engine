@@ -7,6 +7,7 @@
 #include "ModuleEditor.h"
 #include "ModuleImport.h"
 #include "ModuleScene.h"
+#include "ModuleFonts.h"
 
 extern Application* ExternalApp = nullptr;
 Application::Application()
@@ -20,6 +21,7 @@ Application::Application()
 	editor = new ModuleEditor(this);
 	importer = new ModuleImport(this);
 	scene = new ModuleScene(this);
+	fonts = new ModuleFonts(this);
 
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
@@ -30,6 +32,7 @@ Application::Application()
 	AddModule(window);
 	AddModule(camera);
 	AddModule(input);
+	AddModule(fonts);
 
 	AddModule(scene);
 	

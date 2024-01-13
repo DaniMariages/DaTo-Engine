@@ -3,10 +3,8 @@
 #include "GameObject.h"
 #include "ComponentCamera.h"
 
-
 ComponentCanvas::ComponentCanvas(typeComponent ctype, bool act, GameObject* objs, uint w, uint h) : Component(parent)
 {
-
 	width = w;
 	height = h;
 

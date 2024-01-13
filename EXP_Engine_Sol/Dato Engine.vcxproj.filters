@@ -789,6 +789,18 @@
     <ClInclude Include="Game\Source\ComponentCharacter.h">
       <Filter>Source\GameObjects\Components\UI</Filter>
     </ClInclude>
+    <ClInclude Include="Game\Source\ModuleFonts.h">
+      <Filter>Source\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Source\ComponentButton.h">
+      <Filter>Source\GameObjects\Components\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Source\ComponentCheckbox.h">
+      <Filter>Source\GameObjects\Components\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Source\ComponentImage.h">
+      <Filter>Source\GameObjects\Components\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game\External\DevIL\include\luadevil.c">
@@ -996,6 +1008,21 @@
       <Filter>Source\GameObjects\Components\UI</Filter>
     </ClCompile>
     <ClCompile Include="Game\Source\ComponentUI.cpp">
+      <Filter>Source\GameObjects\Components\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Source\ModuleFonts.cpp">
+      <Filter>Source\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Source\ComponentCharacter.cpp">
+      <Filter>Source\GameObjects\Components\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Source\ComponentButton.cpp">
+      <Filter>Source\GameObjects\Components\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Source\ComponentCheckbox.cpp">
+      <Filter>Source\GameObjects\Components\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Source\ComponentImage.cpp">
       <Filter>Source\GameObjects\Components\UI</Filter>
     </ClCompile>
   </ItemGroup>

@@ -374,3 +374,45 @@ void ModuleImport::SaveGameObject(GameObject* gameObject)
 	node.SetString("Name", gameObject->Name);
 	node.SetNumber("ID", gameObject->ID);
 }
+
+uint ModuleImport::GetImageID(const char* path)
+{
+	uint imageID = 0;
+	bool ret = true;
+	ILuint devilID = 0;
+
+	ilGenImages(1, &devilID);
+	ilBindImage(devilID);
+	ilutRenderer(ILUT_OPENGL);
+
+	if (!ilLoadImage(path)) {
+		auto error = ilGetError();
+		LOG("Failed to load texture with path: %s. Error: %s", path, ilGetString(error));
+		ret = false;
+	}
+	else 
+	{
+		imageID = ilutGLBindTexImage();
+
+		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+		glBindTexture(GL_TEXTURE_2D, imageID);
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+		glTexImage2D(GL_TEXTURE_2D, 0, ilGetInteger(IL_IMAGE_BPP), ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT),
+			0, ilGetInteger(IL_IMAGE_FORMAT), GL_UNSIGNED_BYTE, ilGetData());
+
+		glBindTexture(GL_TEXTURE_2D, 0);
+
+		LOG("Loaded with path: %s succesfully!", path);
+	}
+
+	ilDeleteImages(1, &devilID);
+
+	return imageID;
+
+}

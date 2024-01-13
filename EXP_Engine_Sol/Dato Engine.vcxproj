@@ -284,9 +284,12 @@
     <ClInclude Include="Game\Source\Application.h" />
     <ClInclude Include="Game\Source\Color.h" />
     <ClInclude Include="Game\Source\Component.h" />
+    <ClInclude Include="Game\Source\ComponentButton.h" />
     <ClInclude Include="Game\Source\ComponentCamera.h" />
     <ClInclude Include="Game\Source\ComponentCanvas.h" />
     <ClInclude Include="Game\Source\ComponentCharacter.h" />
+    <ClInclude Include="Game\Source\ComponentCheckbox.h" />
+    <ClInclude Include="Game\Source\ComponentImage.h" />
     <ClInclude Include="Game\Source\ComponentMesh.h" />
     <ClInclude Include="Game\Source\ComponentTexture.h" />
     <ClInclude Include="Game\Source\ComponentTransform.h" />
@@ -298,6 +301,7 @@
     <ClInclude Include="Game\Source\Module.h" />
     <ClInclude Include="Game\Source\ModuleCamera3D.h" />
     <ClInclude Include="Game\Source\ModuleEditor.h" />
+    <ClInclude Include="Game\Source\ModuleFonts.h" />
     <ClInclude Include="Game\Source\ModuleImport.h" />
     <ClInclude Include="Game\Source\ModuleInput.h" />
     <ClInclude Include="Game\Source\ModuleRenderer3D.h" />
@@ -357,8 +361,12 @@
     <ClCompile Include="Game\External\Parson\parson.c" />
     <ClCompile Include="Game\Source\Application.cpp" />
     <ClCompile Include="Game\Source\Color.cpp" />
+    <ClCompile Include="Game\Source\ComponentButton.cpp" />
     <ClCompile Include="Game\Source\ComponentCamera.cpp" />
     <ClCompile Include="Game\Source\ComponentCanvas.cpp" />
+    <ClCompile Include="Game\Source\ComponentCharacter.cpp" />
+    <ClCompile Include="Game\Source\ComponentCheckbox.cpp" />
+    <ClCompile Include="Game\Source\ComponentImage.cpp" />
     <ClCompile Include="Game\Source\ComponentMesh.cpp" />
     <ClCompile Include="Game\Source\ComponentTexture.cpp" />
     <ClCompile Include="Game\Source\ComponentTransform.cpp" />
@@ -370,6 +378,7 @@
     <ClCompile Include="Game\Source\Main.cpp" />
     <ClCompile Include="Game\Source\ModuleCamera3D.cpp" />
     <ClCompile Include="Game\Source\ModuleEditor.cpp" />
+    <ClCompile Include="Game\Source\ModuleFonts.cpp" />
     <ClCompile Include="Game\Source\ModuleImport.cpp" />
     <ClCompile Include="Game\Source\ModuleInput.cpp" />
     <ClCompile Include="Game\Source\ModuleRenderer3D.cpp" />

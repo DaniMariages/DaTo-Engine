@@ -81,6 +81,9 @@ public:
 
 	void ReadFile(const char* file_path);
 
+	//Needed to UI
+	uint GetImageID(const char* path);
+
 	//Function that check if the name exists in game objects, if exists, call ReName.
 	std::string GetUniqueName(std::string Name);
 

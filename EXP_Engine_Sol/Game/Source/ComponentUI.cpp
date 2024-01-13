@@ -1,9 +1,17 @@
 #include "Application.h"
 #include "ModuleEditor.h"
 #include "GameObject.h"
+#include "Component.h"
 #include "ComponentCamera.h"
 #include "ComponentMesh.h"
 #include "ComponentUI.h"
+#include "ComponentCamera.h"
+#include "ComponentCanvas.h"
+#include "ComponentButton.h"
+#include "ComponentLabel.h"
+#include "ComponentImage.h"
+#include "ComponentCharacter.h"
+#include "ComponentCheckbox.h"
 
 ComponentUI::ComponentUI(typeComponent comp_type, bool act, GameObject* obj, UI_type type, uint w, uint h, ComponentCanvas* canvas, const char* str, uint x, uint y) : Component(parent)
 {
@@ -33,48 +41,48 @@ ComponentUI::ComponentUI(typeComponent comp_type, bool act, GameObject* obj, UI_
 
 	if (type != UI_Label)
 	{
-		panel_in_scene.vertex[0] = float3(compTrans->GetPosition().x, compTrans->GetPosition().y + height, compTrans->GetPosition().z);
-		panel_in_scene.vertex[1] = float3(compTrans->GetPosition().x + width, compTrans->GetPosition().y + height, compTrans->GetPosition().z);
-		panel_in_scene.vertex[3] = float3(compTrans->GetPosition().x + width, compTrans->GetPosition().y, compTrans->GetPosition().z);
-		panel_in_scene.vertex[2] = float3(compTrans->GetPosition().x, compTrans->GetPosition().y, compTrans->GetPosition().z);
+		panelInScene.vertex[0] = float3(compTrans->GetPosition().x, compTrans->GetPosition().y + height, compTrans->GetPosition().z);
+		panelInScene.vertex[1] = float3(compTrans->GetPosition().x + width, compTrans->GetPosition().y + height, compTrans->GetPosition().z);
+		panelInScene.vertex[3] = float3(compTrans->GetPosition().x + width, compTrans->GetPosition().y, compTrans->GetPosition().z);
+		panelInScene.vertex[2] = float3(compTrans->GetPosition().x, compTrans->GetPosition().y, compTrans->GetPosition().z);
 
-		panel_in_game.vertex[0] = float3(pos_x, pos_y + height, compTrans->GetPosition().z);
-		panel_in_game.vertex[1] = float3(pos_x + width, pos_y + height, compTrans->GetPosition().z);
-		panel_in_game.vertex[3] = float3(pos_x + width, pos_y, compTrans->GetPosition().z);
-		panel_in_game.vertex[2] = float3(pos_x, pos_y, compTrans->GetPosition().z);
+		panelInGame.vertex[0] = float3(pos_x, pos_y + height, compTrans->GetPosition().z);
+		panelInGame.vertex[1] = float3(pos_x + width, pos_y + height, compTrans->GetPosition().z);
+		panelInGame.vertex[3] = float3(pos_x + width, pos_y, compTrans->GetPosition().z);
+		panelInGame.vertex[2] = float3(pos_x, pos_y, compTrans->GetPosition().z);
 
 		float2* UV_coord = new float2[4];
 
 		if (type == UI_Character)
 		{
-			panel_in_scene.uv[0] = float2(0, 1);
-			panel_in_scene.uv[1] = float2(1, 1);
-			panel_in_scene.uv[3] = float2(1, 0);
-			panel_in_scene.uv[2] = float2(0, 0);
+			panelInScene.uv[0] = float2(0, 1);
+			panelInScene.uv[1] = float2(1, 1);
+			panelInScene.uv[3] = float2(1, 0);
+			panelInScene.uv[2] = float2(0, 0);
 
-			panel_in_game.uv[0] = float2(0, 1);
-			panel_in_game.uv[1] = float2(1, 1);
-			panel_in_game.uv[3] = float2(1, 0);
-			panel_in_game.uv[2] = float2(0, 0);
+			panelInGame.uv[0] = float2(0, 1);
+			panelInGame.uv[1] = float2(1, 1);
+			panelInGame.uv[3] = float2(1, 0);
+			panelInGame.uv[2] = float2(0, 0);
 		}
 		else
 		{
-			panel_in_game.uv[2] = float2(0, 1);
-			panel_in_game.uv[3] = float2(1, 1);
-			panel_in_game.uv[1] = float2(1, 0);
-			panel_in_game.uv[0] = float2(0, 0);
+			panelInGame.uv[2] = float2(0, 1);
+			panelInGame.uv[3] = float2(1, 1);
+			panelInGame.uv[1] = float2(1, 0);
+			panelInGame.uv[0] = float2(0, 0);
 
-			panel_in_scene.uv[2] = float2(0, 1);
-			panel_in_scene.uv[3] = float2(1, 1);
-			panel_in_scene.uv[1] = float2(1, 0);
-			panel_in_scene.uv[0] = float2(0, 0);
+			panelInScene.uv[2] = float2(0, 1);
+			panelInScene.uv[3] = float2(1, 1);
+			panelInScene.uv[1] = float2(1, 0);
+			panelInScene.uv[0] = float2(0, 0);
 		}
 
-		panel_in_scene.GenerateBuffers();
-		panel_in_game.GenerateBuffers();
+		panelInScene.GenerateBuffers();
+		panelInGame.GenerateBuffers();
 	}
-
 }
+
 ComponentUI::~ComponentUI()
 {
 
@@ -102,20 +110,21 @@ void ComponentUI::Move()
 	ComponentTransform* comp_trans = (ComponentTransform*)parent->GetComponent(typeComponent::Transform);
 	float2 move = float2(ExternalApp->input->GetMouseXMotion() * ExternalApp->DT() * 20, ExternalApp->input->GetMouseYMotion() * ExternalApp->DT() * 20);
 
-	panel_in_scene.vertex[0] = float3(comp_trans->GetPosition().x + move.x, comp_trans->GetPosition().y + height + move.y, comp_trans->GetPosition().z);
-	panel_in_scene.vertex[1] = float3(comp_trans->GetPosition().x + width + move.x, comp_trans->GetPosition().y + height + move.y, comp_trans->GetPosition().z);
-	panel_in_scene.vertex[3] = float3(comp_trans->GetPosition().x + width + move.x, comp_trans->GetPosition().y + move.y, comp_trans->GetPosition().z);
-	panel_in_scene.vertex[2] = float3(comp_trans->GetPosition().x + move.x, comp_trans->GetPosition().y + move.y, comp_trans->GetPosition().z);
+	panelInScene.vertex[0] = float3(comp_trans->GetPosition().x + move.x, comp_trans->GetPosition().y + height + move.y, comp_trans->GetPosition().z);
+	panelInScene.vertex[1] = float3(comp_trans->GetPosition().x + width + move.x, comp_trans->GetPosition().y + height + move.y, comp_trans->GetPosition().z);
+	panelInScene.vertex[3] = float3(comp_trans->GetPosition().x + width + move.x, comp_trans->GetPosition().y + move.y, comp_trans->GetPosition().z);
+	panelInScene.vertex[2] = float3(comp_trans->GetPosition().x + move.x, comp_trans->GetPosition().y + move.y, comp_trans->GetPosition().z);
 
 	pos_x += move.x;
 	pos_y += move.y;
-	panel_in_game.vertex[0] = float3(pos_x, pos_y + height, comp_trans->GetPosition().z);
-	panel_in_game.vertex[1] = float3(pos_x + width, pos_y + height, comp_trans->GetPosition().z);
-	panel_in_game.vertex[3] = float3(pos_x + width, pos_y, comp_trans->GetPosition().z);
-	panel_in_game.vertex[2] = float3(pos_x, pos_y, comp_trans->GetPosition().z);
 
-	panel_in_scene.RegenerateVertexBuffers();
-	panel_in_game.RegenerateVertexBuffers();
+	panelInGame.vertex[0] = float3(pos_x, pos_y + height, comp_trans->GetPosition().z);
+	panelInGame.vertex[1] = float3(pos_x + width, pos_y + height, comp_trans->GetPosition().z);
+	panelInGame.vertex[3] = float3(pos_x + width, pos_y, comp_trans->GetPosition().z);
+	panelInGame.vertex[2] = float3(pos_x, pos_y, comp_trans->GetPosition().z);
+
+	panelInScene.RegenerateVertexBuffers();
+	panelInGame.RegenerateVertexBuffers();
 }
 
 void ComponentUI::DebugDraw()
@@ -218,18 +227,18 @@ void ComponentUI::UpdateTransform()
 	pos_y = comp_trans->GetPosition().y;
 	comp_trans->GetGlobalTransform();
 
-	panel_in_scene.vertex[0] = float3(comp_trans->GetPosition().x, comp_trans->GetPosition().y + height, comp_trans->GetPosition().z);
-	panel_in_scene.vertex[1] = float3(comp_trans->GetPosition().x + width, comp_trans->GetPosition().y + height, comp_trans->GetPosition().z);
-	panel_in_scene.vertex[3] = float3(comp_trans->GetPosition().x + width, comp_trans->GetPosition().y, comp_trans->GetPosition().z);
-	panel_in_scene.vertex[2] = float3(comp_trans->GetPosition().x, comp_trans->GetPosition().y, comp_trans->GetPosition().z);
+	panelInScene.vertex[0] = float3(comp_trans->GetPosition().x, comp_trans->GetPosition().y + height, comp_trans->GetPosition().z);
+	panelInScene.vertex[1] = float3(comp_trans->GetPosition().x + width, comp_trans->GetPosition().y + height, comp_trans->GetPosition().z);
+	panelInScene.vertex[3] = float3(comp_trans->GetPosition().x + width, comp_trans->GetPosition().y, comp_trans->GetPosition().z);
+	panelInScene.vertex[2] = float3(comp_trans->GetPosition().x, comp_trans->GetPosition().y, comp_trans->GetPosition().z);
 
-	panel_in_game.vertex[0] = float3(pos_x, pos_y + height, comp_trans->GetPosition().z);
-	panel_in_game.vertex[1] = float3(pos_x + width, pos_y + height, comp_trans->GetPosition().z);
-	panel_in_game.vertex[3] = float3(pos_x + width, pos_y, comp_trans->GetPosition().z);
-	panel_in_game.vertex[2] = float3(pos_x, pos_y, comp_trans->GetPosition().z);
+	panelInGame.vertex[0] = float3(pos_x, pos_y + height, comp_trans->GetPosition().z);
+	panelInGame.vertex[1] = float3(pos_x + width, pos_y + height, comp_trans->GetPosition().z);
+	panelInGame.vertex[3] = float3(pos_x + width, pos_y, comp_trans->GetPosition().z);
+	panelInGame.vertex[2] = float3(pos_x, pos_y, comp_trans->GetPosition().z);
 
-	panel_in_scene.RegenerateVertexBuffers();
-	panel_in_game.RegenerateVertexBuffers();
+	panelInScene.RegenerateVertexBuffers();
+	panelInGame.RegenerateVertexBuffers();
 }
 
 void ComponentUI::Update()
@@ -380,3 +389,35 @@ void UIPanel::RegenerateVertexBuffers()
 	glBindBuffer(GL_ARRAY_BUFFER, buffer[0]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float3) * 4, vertex, GL_STATIC_DRAW);
 }
+
+ComponentUI* ComponentUI::CreateComponentUI(UI_type ui_type, uint width, uint height, ComponentCanvas* canvas, const char* str, uint x, uint y, bool active)
+{
+	ComponentUI* comp = nullptr;
+
+	switch (ui_type)
+	{
+	case UI_Button:
+		comp = new ComponentButton(typeComponent::UI, active, this, ui_type, width, height, canvas, str, x, y);
+		break;
+	case UI_Label:
+		comp = new ComponentLabel(typeComponent::UI, active, this, ui_type, width, height, canvas, str, x, y);
+		break;
+	case UI_Character:
+		comp = new ComponentCharacter(typeComponent::UI, active, this, ui_type, width, height, canvas, str, x, y);
+		break;
+	case UI_InpuText:
+		break;
+	case UI_Checkbox:
+		comp = new ComponentCheckbox(typeComponent::UI, active, this, ui_type, width, height, canvas, str, x, y);
+		break;
+	case UI_Image:
+		comp = new ComponentImage(typeComponent::UI, active, this, ui_type, width, height, canvas, str, x, y);
+		break;
+	}
+
+	if (comp)
+		components.push_back(comp);
+
+	return comp;
+}
+

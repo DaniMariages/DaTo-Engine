@@ -3,9 +3,6 @@
 #include "ComponentCanvas.h"
 #include "../External/MathGeoLib/include/MathGeoLib.h"
 
-class ResourceMesh;
-class ResourceTexture;
-
 struct UIPanel {
 	float3 vertex[4];
 	float2 uv[4];
@@ -26,7 +23,6 @@ enum UI_type {
 	UI_Character,
 	UI_Button,
 	UI_MAX
-
 };
 
 enum UI_state {
@@ -37,10 +33,9 @@ enum UI_state {
 	UI_Release
 };
 
-class ComponentUI :public Component {
+class ComponentUI : public Component {
 public:
-	ComponentUI(typeComponent comp_type, bool act, GameObject* obj, UI_type type, uint w, uint h, ComponentCanvas* canvas, const char* str, uint x, uint y);
-
+	ComponentUI(typeComponent ctype, bool act, GameObject* obj, UI_type type, uint w, uint h, ComponentCanvas* canvas, const char* str, uint x, uint y);
 	~ComponentUI();
 
 	virtual bool OnHover() { return true; };
@@ -61,6 +56,8 @@ public:
 
 	bool Fade();
 
+	ComponentUI* CreateComponentUI(UI_type comp_type, uint width, uint height, ComponentCanvas* canvas, const char* str, uint x = 0, uint y = 0, bool active = true);
+
 public:
 	bool dragable = false;
 
@@ -73,7 +70,7 @@ protected:
 	UI_state state = UI_Idle;
 	float4 fill_color;
 
-	UIPanel panel_in_scene;
-	UIPanel panel_in_game;
+	UIPanel panelInScene;
+	UIPanel panelInGame;
 	ComponentCanvas* canvas = nullptr;
 };
