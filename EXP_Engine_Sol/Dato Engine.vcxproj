@@ -290,6 +290,7 @@
     <ClInclude Include="Game\Source\ComponentCharacter.h" />
     <ClInclude Include="Game\Source\ComponentCheckbox.h" />
     <ClInclude Include="Game\Source\ComponentImage.h" />
+    <ClInclude Include="Game\Source\ComponentLabel.h" />
     <ClInclude Include="Game\Source\ComponentMesh.h" />
     <ClInclude Include="Game\Source\ComponentTexture.h" />
     <ClInclude Include="Game\Source\ComponentTransform.h" />
@@ -367,6 +368,7 @@
     <ClCompile Include="Game\Source\ComponentCharacter.cpp" />
     <ClCompile Include="Game\Source\ComponentCheckbox.cpp" />
     <ClCompile Include="Game\Source\ComponentImage.cpp" />
+    <ClCompile Include="Game\Source\ComponentLabel.cpp" />
     <ClCompile Include="Game\Source\ComponentMesh.cpp" />
     <ClCompile Include="Game\Source\ComponentTexture.cpp" />
     <ClCompile Include="Game\Source\ComponentTransform.cpp" />

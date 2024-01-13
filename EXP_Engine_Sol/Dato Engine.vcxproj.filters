@@ -801,6 +801,9 @@
     <ClInclude Include="Game\Source\ComponentImage.h">
       <Filter>Source\GameObjects\Components\UI</Filter>
     </ClInclude>
+    <ClInclude Include="Game\Source\ComponentLabel.h">
+      <Filter>Source\GameObjects\Components\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game\External\DevIL\include\luadevil.c">
@@ -1023,6 +1026,9 @@
       <Filter>Source\GameObjects\Components\UI</Filter>
     </ClCompile>
     <ClCompile Include="Game\Source\ComponentImage.cpp">
+      <Filter>Source\GameObjects\Components\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Source\ComponentLabel.cpp">
       <Filter>Source\GameObjects\Components\UI</Filter>
     </ClCompile>
   </ItemGroup>

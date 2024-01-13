@@ -6,7 +6,6 @@
 #include "Random.h"
 
 class Component;
-class ComponentCanvas;
 enum class typeComponent;
 
 class GameObject

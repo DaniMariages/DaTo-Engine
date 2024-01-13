@@ -1,8 +1,6 @@
 #pragma once
 #include "ComponentUI.h"
 
-class ResourceTexture;
-
 class ComponentCheckbox : public ComponentUI
 {
 public:
