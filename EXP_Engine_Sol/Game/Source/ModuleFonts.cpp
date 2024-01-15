@@ -6,6 +6,14 @@
 
 #pragma comment(lib, "Game/External/FreeType/libx86/freetype.lib")
 
+ModuleFonts::ModuleFonts(Application* app, bool start_enabled) : Module(app, start_enabled)
+{
+
+}
+
+ModuleFonts::~ModuleFonts()
+{}
+
 bool ModuleFonts::Init()
 {
 	LOG("Init True Type Font library");

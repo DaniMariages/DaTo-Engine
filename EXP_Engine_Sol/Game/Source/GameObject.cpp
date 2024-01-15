@@ -10,6 +10,7 @@
 #include "ComponentImage.h"
 #include "ComponentCharacter.h"
 #include "ComponentCheckbox.h"
+#include "ComponentCanvas.h"
 
 #include <vector>
 
@@ -165,10 +166,10 @@ Component* GameObject::AddComponent(Component* component)
 		LOG("Component Camera added to %s", component->parent->Name.c_str());
 		break;
 
-	case(typeComponent::Canvas):
+	/*case(typeComponent::Canvas):
 		ret = new ComponentCanvas(this);
 		LOG("Component Canvas added to %s", component->parent->Name.c_str());
-		break;
+		break;*/
 	}
 
 	components.push_back(component);
@@ -289,37 +290,6 @@ ComponentUI* GameObject::CreateComponentUI(UI_type ui_type, uint width, uint hei
 		break;
 	case UI_Image:
 		comp = new ComponentImage(typeComponent::UI, active, this, ui_type, width, height, canvas, str, x, y);
-		break;
-	}
-
-	if (comp)
-		components.push_back(comp);
-
-	return comp;
-}
-
-Component* GameObject::CreateComponent(typeComponent comp_type, bool act, uint width, uint height)
-{
-	Component* comp = nullptr;
-
-	switch (comp_type)
-	{
-	case typeComponent::Transform:
-		comp = new ComponentTransform(Parent);
-		break;
-	case typeComponent::Mesh:
-		comp = new ComponentMesh(Parent);
-		break;
-	case typeComponent::Material:
-		comp = new ComponentTexture(Parent);
-		break;
-	case typeComponent::Camera:
-		comp = new ComponentCamera(Parent);
-		break;
-	case typeComponent::Canvas:
-		comp = new ComponentCanvas(Parent);
-		break;
-	case typeComponent::UI:
 		break;
 	}
 

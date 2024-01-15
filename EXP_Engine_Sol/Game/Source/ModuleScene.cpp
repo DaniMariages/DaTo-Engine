@@ -80,7 +80,8 @@ GameObject* ModuleScene::CreateGameObject(std::string Name, GameObject* parent)
 GameObject* ModuleScene::CreateUIElement(const char* name, UI_type type, uint width, uint height, ComponentCanvas* canvas, char* str, GameObject* parent, float3 position, float3 scale, Quat rotation)
 {
 	GameObject* object = new GameObject(name, parent);
-	ComponentTransform* trans = (ComponentTransform*)object->CreateComponent(typeComponent::Transform);
+	ComponentTransform* trans = new ComponentTransform(object);
+	object->AddComponent(trans);
 
 	trans->SetGlobalPosition(position);
 	trans->SetGlobalRotation(rotation);
