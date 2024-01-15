@@ -4,7 +4,7 @@
 #include "../External/FreeType/include/freetype/ftglyph.h"
 #include "../External/Glew/include/glew.h"
 
-#pragma comment(lib, "FreeType/libx86/freetype.lib")
+#pragma comment(lib, "Game/External/FreeType/libx86/freetype.lib")
 
 bool ModuleFonts::Init()
 {
