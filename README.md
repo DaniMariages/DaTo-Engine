@@ -1,4 +1,4 @@
-# DaTo Engine.
+
 DaTo Engine is a videogame engine developed for the MOTORS DE VIDEOJOCS course at CITM.
 
 This engine is developed by:
