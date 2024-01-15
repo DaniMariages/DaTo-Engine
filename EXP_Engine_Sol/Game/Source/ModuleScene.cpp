@@ -12,6 +12,7 @@ ModuleScene::ModuleScene(Application* app, bool start_enabled) : Module(app, sta
 {
 	rootGameObject = CreateGameObject("Scene", nullptr);
 	gameCameraObject = CreateGameObject("MainCamera", rootGameObject);
+	canvas = CreateGameObject("Canvas", rootGameObject);
 
 	ImGuizmo::Enable(true);
 
@@ -31,6 +32,9 @@ bool ModuleScene::Init()
 
 	gameCamera = new ComponentCamera(gameCameraObject);
 	gameCameraObject->AddComponent(gameCamera);
+
+	compCanvas = new ComponentCanvas(canvas);
+	canvas->AddComponent(compCanvas);
 
 	//Set the game camera starter position
 	gameCameraObject->transform->SetPosition(float3(0.0f, 5.0f, -20.0f));
@@ -71,7 +75,8 @@ bool ModuleScene::CleanUp()
 GameObject* ModuleScene::CreateGameObject(std::string Name, GameObject* parent)
 {
 	GameObject* newGameObject = new GameObject(Name, parent);
-	if (parent != nullptr) parent->AddChildren(newGameObject);
+	if (parent != nullptr)
+		parent->AddChildren(newGameObject);
 	gameObjects.push_back(newGameObject);
 
 	return newGameObject;
@@ -79,7 +84,7 @@ GameObject* ModuleScene::CreateGameObject(std::string Name, GameObject* parent)
 
 GameObject* ModuleScene::CreateUIElement(const char* name, UI_type type, uint width, uint height, ComponentCanvas* canvas, char* str, GameObject* parent, float3 position, float3 scale, Quat rotation)
 {
-	GameObject* object = new GameObject(name, parent);
+	GameObject* object = CreateGameObject(name, parent);
 	ComponentTransform* trans = new ComponentTransform(object);
 	object->AddComponent(trans);
 
@@ -89,9 +94,9 @@ GameObject* ModuleScene::CreateUIElement(const char* name, UI_type type, uint wi
 	trans->SetEulerRotation(rotation.ToEulerXYZ() * RADTODEG);
 	object->CreateComponentUI(type, width, height, canvas, str);
 	object->SetId();
+
 	return object;
 }
-
 
 void ModuleScene::DeleteGameObject(GameObject* gameObject)
 {

@@ -52,6 +52,9 @@ public:
 	std::vector<ComponentCamera*> totalCameras;
 	bool is_game_mode = false;
 
+	GameObject* canvas = nullptr;
+	ComponentCanvas* compCanvas = nullptr;
+
 	//Timer
 	Timer gameTime;
 };

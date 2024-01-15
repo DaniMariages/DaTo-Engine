@@ -59,7 +59,8 @@ void ComponentTransform::SetGlobalPosition(float3 position)
 	float3 parentPosition = float3::zero;
 	float3 newPos;
 
-	if (parent->Parent != nullptr) parentPosition = parent->Parent->transform->GetPosition();
+	if (parent->Parent != nullptr) 
+		parentPosition = parent->Parent->transform->GetPosition();
 	newPos = position - parentPosition;
 	SetPosition(newPos);
 }

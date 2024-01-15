@@ -18,9 +18,6 @@ ComponentCanvas::ComponentCanvas(GameObject* parent) : Component(parent)
 	width = 0; 
 	height = 0;
 
-	ComponentTransform* compTrans = (ComponentTransform*)parent->GetComponent(typeComponent::Transform);
-	compTrans->SetGlobalPosition(float3(0, 0, 200));
-	compTrans->GetGlobalTransform();
 }
 
 void ComponentCanvas::Update()
