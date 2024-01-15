@@ -1,10 +1,9 @@
 
-DaTo Engine is a videogame engine developed for the MOTORS DE VIDEOJOCS course at CITM.
+DaTo Engine is a videogame engine developed for the "Motors i videojocs" subject at CITM.
 
-This engine is developed by:
+Developed by:
 - Dani Mariages - [DaniMariages](<https://github.com/DaniMariages>)
 - Toni Romanos - [Toto-RR](<https://github.com/Toto-RR>)
-- Github repository: [DaTo Engine](<https://github.com/DaniMariages/DaTo-Engine>)
 
 ## Keybinds:
 - Left Control --> Center selected object
