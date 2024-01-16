@@ -58,6 +58,22 @@ update_status ModuleScene::Update(float dt)
 		Demo = false;
 	}
 
+	if (App->input->GetKey(SDL_SCANCODE_SPACE))
+	{
+		if (App->scene->canvas != nullptr)
+		{
+			App->scene->canvas->DisableParent();
+			App->scene->DeleteGameObject(App->scene->canvas);
+			Game = true;
+		}
+	}
+
+	if (Game)
+	{
+		GameScene();
+		Game = false;
+	}
+
 	if (App->input->GetKey(SDL_SCANCODE_W) && !ImGui::IsMouseDown(ImGuiMouseButton_::ImGuiMouseButton_Right))
 		gizmoOperation = ImGuizmo::OPERATION::TRANSLATE;
 	else if (App->input->GetKey(SDL_SCANCODE_E) && !ImGui::IsMouseDown(ImGuiMouseButton_::ImGuiMouseButton_Right))
@@ -300,9 +316,25 @@ void ModuleScene::DemoScene()
 	transform->SetPosition(float3(72, 3, 0));
 	transform->SetScale(float3(66, 0.5, 0));
 
-	compUI->CreateGameObjectUI(App->scene->canvas, UI_Type::IMAGE, (uint)canvUI->widthPanel, (uint)canvUI->heigthPanel, 0, 0, "Assets/Textures/background.png", nullptr, 1, nullptr, 0, 0, (uint)canvUI->widthPanel, (uint)canvUI->heigthPanel);
+	compUI->CreateGameObjectUI(App->scene->canvas, UI_Type::IMAGE, (uint)canvUI->widthPanel, (uint)canvUI->heigthPanel, 0, 0, "Assets/Textures/background.png", nullptr, 0, nullptr, 0, 0, (uint)canvUI->widthPanel, (uint)canvUI->heigthPanel);
 	transform = dynamic_cast<ComponentTransform*>(App->scene->gameObjects[App->scene->gameObjects.size() - 1]->GetComponent(typeComponent::Transform));
 	transform->SetPosition(float3(App->editor->GetWindowSize().x, App->editor->GetWindowSize().y, 0));
 
 	transform->SetScale(float3(210, 7, 0));
+}
+
+void ModuleScene::GameScene()
+{
+	ComponentUI* compUI = new ComponentUI(UI_Type::DEF, App->scene->rootGameObject, 0, 0, 0, 0, nullptr);
+	ComponentTransform* transform;
+
+	compUI->CreateGameObjectUI(App->scene->rootGameObject, UI_Type::CANV, App->editor->GetWindowSize().x, App->editor->GetWindowSize().y, 200, 200, nullptr, nullptr);
+
+	ComponentCanvas* canvUI = new ComponentCanvas(App->scene->canvas, App->editor->GetWindowSize().x, App->editor->GetWindowSize().y, 0, 0);
+
+	compUI->CreateGameObjectUI(App->scene->canvas, UI_Type::IMAGE, (uint)canvUI->widthPanel, (uint)canvUI->heigthPanel, 0, 0, "Assets/Textures/crosshair.png", nullptr, 0, nullptr, 0, 0, (uint)canvUI->widthPanel, (uint)canvUI->heigthPanel);
+	transform = dynamic_cast<ComponentTransform*>(App->scene->gameObjects[App->scene->gameObjects.size() - 1]->GetComponent(typeComponent::Transform));
+	transform->SetPosition(float3(87, 3, 0));
+
+	transform->SetScale(float3(34, 1, 1));
 }

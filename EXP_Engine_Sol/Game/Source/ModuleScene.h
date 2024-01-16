@@ -43,6 +43,7 @@ public:
 
 	//User interface
 	void DemoScene();
+	void GameScene();
 	void OpenPauseMenu();
 
 public: 
@@ -59,6 +60,7 @@ public:
 	ComponentCanvas* compCanvas = nullptr;
 
 	bool Demo = false;
+	bool Game = false;
 
 	//Timer
 	Timer gameTime;
