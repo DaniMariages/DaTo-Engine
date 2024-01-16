@@ -5,38 +5,6 @@ Developed by:
 - Dani Mariages - [DaniMariages](<https://github.com/DaniMariages>)
 - Toni Romanos - [Toto-RR](<https://github.com/Toto-RR>)
 
-## Keybinds:
-- Left Control --> Center selected object
-- Left shift --> Duplicate movement speed
-- Right Click --> FPS camera
-- Left Alt + Left Click --> Orbital camera
-- Right Shift --> Top view
-- Up Arrow --> Front view
-- Right Arrow --> Right view
-- Left Arrow --> Left view
-- Down Arrow --> Back view
-- Scroll up --> Zoom in
-- Scroll down --> Zoom out
-  
-### FPS movement:
-- W --> Move forward
-- A --> Move left
-- S --> Move backwards
-- D --> Move right
-- R --> Move up
-- F --> Move down
-  
-### While selected (Guizmo):
-- W --> Position
-- R --> Scale
-- E --> Rotate
-- T --> Universal
-  
-### Additional functionalities
-- Top, sides, back and front view (Reworked).
-- Quick options when you right click on the Game Objects displayed in the Hierarchy
-- Reparent game objects one is selected and dragged to another one
-
 ## Features v0.1
 - Loading models and textures with Assimp and DevIL.
 - Render models and textures with OpenGL.
@@ -64,7 +32,12 @@ Developed by:
 - Game Object can be renamed from Inspector.
 - If an object is repeated, the name will change to: Name + (number of repetitions).
 
-## Libraries
+### Additional functionalities
+- Top, sides, back and front view (Reworked).
+- Quick options when you right click on the Game Objects displayed in the Hierarchy
+- Reparent game objects one is selected and dragged to another one
+
+## Libraries used
 - [Assimp](<https://github.com/assimp/assimp.git>)
 - [DevIL](<https://openil.sourceforge.net>)
 - [Glew](<https://glew.sourceforge.net>)
@@ -77,6 +50,34 @@ Developed by:
 ## Photos and references
 
 ![CapturaReadme](https://github.com/DaniMariages/DaTo-Engine/assets/99719601/fbd3d4fb-65b5-4bae-8e8a-eecb906d76ed)
+
+### Keybinds:
+- Left Control --> Center selected object
+- Left shift --> Duplicate movement speed
+- Right Click --> FPS camera
+- Left Alt + Left Click --> Orbital camera
+- Right Shift --> Top view
+- Up Arrow --> Front view
+- Right Arrow --> Right view
+- Left Arrow --> Left view
+- Down Arrow --> Back view
+- Scroll up --> Zoom in
+- Scroll down --> Zoom out
+  
+### FPS movement:
+- W --> Move forward
+- A --> Move left
+- S --> Move backwards
+- D --> Move right
+- R --> Move up
+- F --> Move down
+  
+### While selected (Guizmo):
+- W --> Position
+- R --> Scale
+- E --> Rotate
+- T --> Universal
+
 
 ## Known bugs, missing features and others
 ### Missing features:
