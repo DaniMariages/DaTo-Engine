@@ -8,18 +8,6 @@
 
 class GameObject;
 
-enum functions
-{
-	PASS_SCENE,
-	DEFAULT,
-	MAX
-};
-
-struct actions
-{
-	vector<string> nameOfFunctions = { "Pass scene", "None" };
-};
-
 class ComponentButton : public ComponentUI
 {
 public:
@@ -30,13 +18,11 @@ public:
 
 	bool isPressed;
 
-	functions actualFunction;
-
 public:
 	ComponentButton(UI_Type type, GameObject* gameObject, uint width, uint heigt, uint PosX, uint PosY, const char* imagePath);
 	~ComponentButton();
 
-	bool OnClick(int* action);
+	bool OnClick();
 
 	bool OnIdle(ComponentUI* UI_Element);
 	bool OnHover(ComponentUI* UI_Element);

@@ -810,9 +810,6 @@
     <ClInclude Include="Game\External\mmgr\nommgr.h">
       <Filter>External\mmgr</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Source\ComponentCheck.h">
-      <Filter>Source\GameObjects\Components\UserInterface</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game\External\DevIL\include\luadevil.c">
@@ -1039,9 +1036,6 @@
     </ClCompile>
     <ClCompile Include="Game\External\mmgr\mmgr.cpp">
       <Filter>External\mmgr</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Source\ComponentCheck.cpp">
-      <Filter>Source\GameObjects\Components\UserInterface</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

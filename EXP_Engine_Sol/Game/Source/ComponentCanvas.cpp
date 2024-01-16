@@ -12,20 +12,17 @@ ComponentCanvas::ComponentCanvas(GameObject* gameObject, float width, float heig
 
 	widthPanel = width;
 	heigthPanel = heigth;
-
 	posX = PosX;
 	posY = PosY;
 
 	gameObject->transform->SetPosition(float3((float)posX, (float)posY, 0));
 	gameObject->transform->SetScale(float3((float)widthPanel, (float)heigthPanel, 1));
 	gameObject->transform->SetRotation(Quat(0, 0, 0, 0));
-
 	gameObject->transform->UpdateTransform();
 
 	comp_transform = (ComponentTransform*)parent->GetComponent(typeComponent::Transform);
 	comp_transform->SetScale(float3(widthPanel, heigthPanel, 1));
 	comp_transform->SetRotation(Quat(0, 0, 0, 1));
-
 	type = typeComponent::Canvas;
 
 }
@@ -36,7 +33,6 @@ ComponentCanvas::ComponentCanvas(GameObject* _parent) : Component(_parent)
 
 	widthPanel = ExternalApp->editor->GetWindowSize().x;
 	heigthPanel = ExternalApp->editor->GetWindowSize().y;
-
 	posX = 30;
 	posY = 30;
 
@@ -50,7 +46,6 @@ ComponentCanvas::ComponentCanvas(GameObject* _parent) : Component(_parent)
 ComponentCanvas::~ComponentCanvas()
 {
 	parent = nullptr;
-
 	comp_transform = nullptr;
 }
 

@@ -22,13 +22,10 @@ public:
 	string text;
 	string actualText;
 	string newText;
-
 	Font* font;
 
-	bool hasBeenModified;
-
+	bool modified;
 	FONTS actualFonts;
-
 	Timer timeWait;
 
 public:
@@ -36,12 +33,8 @@ public:
 	~InputText();
 
 	void ShowInfo(ComponentUI* compUI, string actText, string newText, GameObject* gm, FONTS* actFont, uint width, uint heigth, uint _posX, uint _posY);
-
 	void DoText();
-
 	void OnClick(ComponentUI* UI_Element);
-
 	void Update(ComponentUI* UI_Element);
-
 	void RecreateText(string new_Text, GameObject* gm, uint width, uint heigth, uint _posX, uint _posY);
 };

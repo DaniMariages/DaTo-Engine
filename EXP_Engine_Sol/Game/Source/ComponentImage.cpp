@@ -18,9 +18,7 @@
 ComponentImage::ComponentImage(UI_Type type, GameObject* gameObject, uint width, uint heigt, uint PosX, uint PosY, const char* imagePath) : ComponentUI(type, gameObject, width, heigt, PosX, PosY, imagePath)
 {
 	parent = gameObject;
-
 	image_Path = new Texture();
-
 	scaleToCanvas = false;
 }
 
@@ -38,16 +36,11 @@ void ComponentImage::ShowInfo()
 	if (compTex->GetTexture() != nullptr)
 	{
 		if (compTex->GetTexture()->textID != 0)
-		{
 			image_Path = compTex->GetTexture();
-		}
 
 		color[3] = 0;
 	}
-	else
-	{
-		color[3] = 255;
-	}
+	else color[3] = 255;
 
 	if (scaleToCanvas)
 	{
@@ -59,24 +52,18 @@ void ComponentImage::ShowInfo()
 	if (ImGui::TreeNode("Image"))
 	{
 		ImGui::Checkbox("Active", &parent->active);
-
 		ImGui::Text("Actual Image:");
 
 		if (compTex->GetTexture() != nullptr)
 		{
 			if (compTex->GetTexture()->textID != 0)
-			{
 				ImGui::Image((void*)compTex->GetTexture()->textID, ImVec2(compTex->GetTexture()->width, compTex->GetTexture()->height));
-			}
 			else
-			{
 				ImGui::Text("No image selected in Texture Component");
-			}
 		}
 
 		ImGui::Separator();
 		ImGui::Checkbox("Scale image to canvas", &scaleToCanvas);
-
 		ImGui::TreePop();
 	}
 }
