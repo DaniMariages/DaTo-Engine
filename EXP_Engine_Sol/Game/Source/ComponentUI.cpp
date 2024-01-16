@@ -9,7 +9,6 @@
 #include "ComponentCanvas.h"
 #include "ComponentInputText.h"
 
-
 ComponentUI::ComponentUI(UI_Type uiType, GameObject* gameObject, uint width, uint heigth, uint PosX, uint PosY, const char* imagePath) : 
 	Component(gameObject)
 {
@@ -29,11 +28,6 @@ ComponentUI::ComponentUI(UI_Type uiType, GameObject* gameObject, uint width, uin
 
 	//Checker
 	CheckSelected = false;
-	//active = new ComponentTexture();
-	//Importer::ImporterTexture::Load(active, "Assets/Textures/Ckeck-checkedbox.png");
-
-	//disabled = new ComponentTexture();
-	//Importer::ImporterTexture::Load(disabled, "Assets/Textures/Unchecked-checkbox.png");
 
 	//Input Text
 	IsTextEditing = false;
@@ -114,12 +108,7 @@ ComponentUI::ComponentUI(GameObject* _parent) : Component(_parent)
 
 	//Checker
 	CheckSelected = false;
-	//active = new ComponentTexture();
-	//Importer::ImporterTexture::Load(active, "Assets/Textures/Ckeck-checkedbox.png");
-
-	//disabled = new ComponentTexture();
-	//Importer::ImporterTexture::Load(disabled, "Assets/Textures/Unchecked-checkbox.png");
-
+	
 	//Input Text
 	IsTextEditing = false;
 
@@ -134,25 +123,12 @@ ComponentUI::ComponentUI(GameObject* _parent) : Component(_parent)
 	PlaneInGame = new UIPlane;
 
 	parent = _parent;
-
 	widthPanel = 1;
 	heigthPanel = 1;
 
 	positionX = 0;
 	positionY = 0;
-
 	texture = nullptr;
-
-	//if (imagePath != nullptr)
-	//{
-	//	texture = new Texture();
-	//	ExternalApp->importer->LoadTextureUI(texture, imagePath);
-
-	//	if (texture != nullptr)
-	//	{
-	//		PlaneInGame->textureID = PlaneInScene->textureID = texture->textID;
-	//	}
-	//}
 
 	if (_parent != nullptr)
 	{
@@ -189,14 +165,10 @@ ComponentUI::~ComponentUI()
 	InputTextComp = nullptr;
 
 	font = nullptr;
-
 	active = nullptr;
-
 	disabled = nullptr;
-
 	PlaneInScene = nullptr;
 	PlaneInGame = nullptr;
-
 	parent = nullptr;
 }
 
@@ -223,9 +195,7 @@ void ComponentUI::Update()
 	{
 		ComponentTexture* compTex = (ComponentTexture*)parent->GetComponent(typeComponent::Material);
 		if (actualText == "")
-		{
 			compTex->SetTexture(texture);
-		}
 
 		InputText* inputText = (InputText*)this;
 		//inputText->Update(this);
@@ -258,7 +228,6 @@ ComponentUI* ComponentUI::CreateGameObjectUI(GameObject* parent, UI_Type type, u
 		comp_UI->AsRootHeigthPanel = Orinigalheight;
 
 		ComponentButton but_UI = ComponentButton(type, Button, width, heigth, posX, posY, imagePath);
-		but_UI.actualFunction = (functions)buttonFuntion;
 		comp_UI->parent = Button;
 		comp_UI->actualButtonAction = buttonFuntion;
 		comp_UI->positionX = but_UI.positionX;
@@ -272,21 +241,17 @@ ComponentUI* ComponentUI::CreateGameObjectUI(GameObject* parent, UI_Type type, u
 		compTex->texColor.a = 255;
 
 		if (comp_UI->texture != nullptr)
-		{
 			compTex->SetTexture(comp_UI->texture);
-		}
 	}
 	break;
 	case UI_Type::TEXT:
 	{
 		GameObject* Text = ExternalApp->scene->CreateGameObject("Text", parent);
-
 		ComponentUI* compUI = new ComponentUI(type, Text, width, heigth, posX, posY, imagePath);
 		comp_UI = compUI;
 
 		ComponentText* compText = new ComponentText(Text);
 		Text->AddComponent(compText);
-
 		comp_UI->AsRootPositionX = OrinigalPosX; 
 		comp_UI->AsRootPositionY = OrinigalPosY; 
 		comp_UI->AsRootWidthPanel = OrinigalWidth; 
@@ -309,41 +274,7 @@ ComponentUI* ComponentUI::CreateGameObjectUI(GameObject* parent, UI_Type type, u
 		compTex->texColor.a = 255;
 
 		if (comp_UI->texture != nullptr)
-		{
 			compTex->SetTexture(comp_UI->texture);
-		}
-	}
-	break;
-	case UI_Type::INPUT_TEXT:
-	{
-		/*GameObject* Text = ExternalApp->scene->CreateGameObject("Input Text", parent);
-
-		ComponentUI* compUI = new ComponentUI(type, parent, width, heigth, posX, posY, imagePath);
-		
-
-		comp_UI = (ComponentUI*)Text->AddComponent(typeComponent::UI, type, width, heigth, posX, posY, imagePath);
-		InputText text_UI = InputText(type, Text, width, heigth, posX, posY, "");
-		comp_UI->AsRootPositionX = OrinigalPosX; comp_UI->AsRootPositionY = OrinigalPosY; comp_UI->AsRootWidthPanel = OrinigalWidth; comp_UI->AsRootHeigthPanel = Orinigalheight;
-		comp_UI->InputTextComp = &text_UI;
-		comp_UI->parent = Text;
-		comp_UI->textCH = text_UI.text;
-		comp_UI->font = text_UI.font;
-		comp_UI->actualText = text_UI.actualText;
-		comp_UI->newText = text_UI.newText;
-		comp_UI->actualFonts = text_UI.actualFonts;
-		comp_UI->positionX = text_UI.positionX;
-		comp_UI->positionY = text_UI.positionY;
-
-		ComponentMaterial* mat = (ComponentMaterial*)(Text->AddComponent(ComponentType::MATERIAL));
-		mat->colorTexture.r = 255;
-		mat->colorTexture.g = 255;
-		mat->colorTexture.b = 255;
-		mat->colorTexture.a = 255;
-
-		if (comp_UI->texture != nullptr)
-		{
-			mat->texture = comp_UI->texture;
-		}*/
 	}
 	break;
 	case UI_Type::IMAGE:
@@ -438,15 +369,7 @@ void ComponentUI::RegenerateBuffers(uint buffer[], float3 vertex[]) {
 void ComponentUI::MousePicker()
 {
 	ImVec2 mousePosInViewport = ExternalApp->editor->GetMousePosInViewport();
-	/*
-	mousePosInViewport.x = ExternalApp->input->GetMouseX() - ImGui::GetCursorScreenPos().x;
-	mousePosInViewport.y = ExternalApp->input->GetMouseY() - ImGui::GetCursorScreenPos().y;*/
-
 	float2 originPoint = float2(mousePosInViewport.x, mousePosInViewport.y);
-
-	/*originPoint.x = (originPoint.x) * 2;
-	originPoint.y = -(originPoint.y) * 2;*/
-
 	float2 mouse_pos = float2(originPoint.x, originPoint.y);
 
 	switch (actualMouseState)
@@ -530,7 +453,7 @@ void ComponentUI::MoveComponent()
 
 	if (mouse_pos.x >= 0 && mouse_pos.y >= 0 && mouse_pos.x < ExternalApp->editor->GetWindowSize().x && mouse_pos.y < ExternalApp->editor->GetWindowSize().y)
 	{
-		ComponentTransform* transform = dynamic_cast<ComponentTransform*>(parent->GetComponent(typeComponent::Transform));
+		ComponentTransform* transform = (ComponentTransform*)parent->GetComponent(typeComponent::Transform);
 
 		float3 gPos;
 		float3 gSca;
@@ -552,10 +475,6 @@ void ComponentUI::MoveComponent()
 			0
 		));
 
-		//transform->mPosition.x += dx * 0.001;
-		//transform->mPosition.y += dy * 0.001;
-		//transform->mPosition.z = 0;
-
 		if (comp_UI->parent->children.size() > 0)
 		{
 			comp_UI->AsRootPositionX += dx * 0.00001;
@@ -575,6 +494,5 @@ void ComponentUI::MoveComponent()
 		}
 
 		transform->UpdateTransform();
-
 	}
 }

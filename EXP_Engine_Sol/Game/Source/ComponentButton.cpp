@@ -17,10 +17,8 @@
 ComponentButton::ComponentButton(UI_Type type, GameObject* gameObject, uint width, uint heigt, uint PosX, uint PosY, const char* imagePath) : ComponentUI(type, gameObject, width, heigt, PosX, PosY, imagePath)
 {
 	parent = gameObject;
-
 	positionX = PosX;
 	positionY = PosY;
-
 	widthPanel = width;
 	heigthPanel = heigt;
 
@@ -66,17 +64,9 @@ bool ComponentButton::OnHover(ComponentUI* UI_Element)
 	return true;
 }
 
-bool ComponentButton::OnClick(int* action)
+bool ComponentButton::OnClick()
 {
-	switch ((functions)*action)
-	{
-	case functions::PASS_SCENE:
-		PassScene();
-		break;
-	default:
-		break;
-	}
-
+	PassScene();
 	return isPressed;
 }
 
@@ -108,63 +98,15 @@ void ComponentButton::ShowInfo(int* action)
 		color[1] = col[1];
 		color[2] = col[2];
 		color[3] = col[3];
-
-
-		if (ImGui::Button("Action"))
-		{
-			ImGui::OpenPopup("Action");
-		}
-
-		switch ((functions)*action)
-		{
-		case functions::PASS_SCENE:
-			ImGui::Text("Actual action: Pass Scene");
-			break;
-		case functions::DEFAULT:
-			ImGui::Text("Actual action: None");
-			break;
-		default:
-			ImGui::Text("Actual action: None");
-			break;
-		}
-
-		actions* namesOfActions = new actions;
-
-		if (ImGui::BeginPopup("Action"))
-		{
-			for (int j = 0; j < (functions::MAX); j++)
-			{
-				if (ImGui::MenuItem((namesOfActions->nameOfFunctions[j] + std::string("##%s") + to_string(j).c_str()).c_str()))
-				{
-					switch (j)
-					{
-					case (int)functions::PASS_SCENE:
-						actualFunction = PASS_SCENE;
-						*action = 0;
-						break;
-					case (int)functions::DEFAULT:
-						actualFunction = DEFAULT;
-						*action = 1;
-						break;
-					default:
-						break;
-					}
-				}
-			}
-
-			ImGui::EndPopup();
-		}
-
-		ImGui::TreePop();
 	}
 }
 
 void ComponentButton::PassScene()
 {
-	LOG("PASANDOE SCENE");
+	LOG("PASS SCENE");
 }
 
 void ComponentButton::CreatePauseMenu()
 {
-	//MYTODO: HACER UN MENU DE PAUSE
+	LOG("PAUSE MENU")
 }
