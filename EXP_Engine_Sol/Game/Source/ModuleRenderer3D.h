@@ -64,6 +64,11 @@ public:
 	//Debug the ray of editor camera
 	void RenderRay();
 
+	//Render the User Interface
+	void RenderCanvas(GameObject* canvasObject, ComponentCanvas* canvas);
+	void RenderUI(GameObject* parent, ComponentUI* uiElement, bool isGameMode, ComponentTexture* texture = nullptr);
+
+
 public:
 
 	Light lights[MAX_LIGHTS];

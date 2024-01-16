@@ -61,6 +61,8 @@ ComponentUI::ComponentUI(UI_Type type, GameObject* gameObject, uint width, uint 
 		texture = new Texture();
 		ExternalApp->importer->LoadTextureUI(texture, imagePath);
 
+		texture = ExternalApp->importer->LoadTexture(imagePath);
+
 		if (texture != nullptr)
 		{
 			PlaneInGame->textureID = PlaneInScene->textureID = texture->textID;
@@ -212,7 +214,7 @@ void ComponentUI::Enable()
 
 void ComponentUI::Update()
 {
-	MousePicker();
+	//MousePicker();
 
 	if (ui_Type == INPUT_TEXT)
 	{
@@ -308,11 +310,10 @@ ComponentUI* ComponentUI::CreateGameObjectUI(GameObject* parent, UI_Type type, u
 	{
 	case UI_Type::BUTTON:
 	{
-		GameObject* Button = new GameObject("Button", parent);
-		ComponentTransform* transform = (ComponentTransform*)Button->GetComponent(typeComponent::Transform);
-		Button->AddComponent(transform);
+		GameObject* Button = ExternalApp->scene->CreateGameObject("Button", parent);
 
 		ComponentUI* compUI = new ComponentUI(type, Button, width, heigth, posX, posY, imagePath);
+		comp_UI = compUI;
 		Button->AddComponent(compUI);
 
 		comp_UI->AsRootPositionX = OrinigalPosX; 
@@ -342,14 +343,18 @@ ComponentUI* ComponentUI::CreateGameObjectUI(GameObject* parent, UI_Type type, u
 	break;
 	case UI_Type::TEXT:
 	{
-		GameObject* Text = new GameObject("Text", parent);
-		ComponentTransform* transform = (ComponentTransform*)Text->GetComponent(typeComponent::Transform);
-		Text->AddComponent(transform);
+		GameObject* Text = ExternalApp->scene->CreateGameObject("Text", parent);
+
+		ComponentUI* compUI = new ComponentUI(type, Text, width, heigth, posX, posY, imagePath);
+		comp_UI = compUI;
 
 		ComponentText* compText = new ComponentText(Text);
 		Text->AddComponent(compText);
 
-		comp_UI->AsRootPositionX = OrinigalPosX; comp_UI->AsRootPositionY = OrinigalPosY; comp_UI->AsRootWidthPanel = OrinigalWidth; comp_UI->AsRootHeigthPanel = Orinigalheight;
+		comp_UI->AsRootPositionX = OrinigalPosX; 
+		comp_UI->AsRootPositionY = OrinigalPosY; 
+		comp_UI->AsRootWidthPanel = OrinigalWidth; 
+		comp_UI->AsRootHeigthPanel = Orinigalheight;
 		comp_UI->textComp = compText;
 		comp_UI->parent = Text;
 		comp_UI->textCH = compText->text;
@@ -404,9 +409,10 @@ ComponentUI* ComponentUI::CreateGameObjectUI(GameObject* parent, UI_Type type, u
 	break;
 	case UI_Type::IMAGE:
 	{
-		GameObject* Image = new GameObject("Image", parent);
-		ComponentTransform* transform = (ComponentTransform*)Image->GetComponent(typeComponent::Transform);
-		Image->AddComponent(transform);
+		GameObject* Image = ExternalApp->scene->CreateGameObject("Image", parent);
+
+		ComponentUI* compUI = new ComponentUI(type, Image, width, heigth, posX, posY, imagePath);
+		comp_UI = compUI;
 
 		ComponentImage* compImage = new ComponentImage(type, Image, width, heigth, posX, posY, imagePath);
 		Image->AddComponent(compImage);
@@ -416,7 +422,6 @@ ComponentUI* ComponentUI::CreateGameObjectUI(GameObject* parent, UI_Type type, u
 		comp_UI->AsRootWidthPanel = OrinigalWidth; 
 		comp_UI->AsRootHeigthPanel = Orinigalheight;
 		comp_UI->parent = Image;
-		comp_UI = (ComponentUI*)Image;
 
 		ComponentTexture* compTex = new ComponentTexture(Image);
 		Image->AddComponent(compTex);
@@ -461,11 +466,11 @@ ComponentUI* ComponentUI::CreateGameObjectUI(GameObject* parent, UI_Type type, u
 	break;
 	case UI_Type::CANV:
 	{
-		GameObject* Canvas = new GameObject("Canvas", parent);
-		Canvas->transform->SetPosition(float3((float)posX, (float)posY, 0));
+		ExternalApp->scene->canvas = ExternalApp->scene->CreateGameObject("Canvas", parent);
+		ExternalApp->scene->canvas->transform->SetPosition(float3((float)posX, (float)posY, 0));
 
-		ImVec2 windowSize = ImGui::GetWindowSize();
-		ComponentCanvas* canv_UI = new ComponentCanvas(Canvas, 150, 150, 150, 150);
+		ComponentCanvas* canv_UI = new ComponentCanvas(ExternalApp->scene->canvas, ExternalApp->editor->GetWindowSize().x, ExternalApp->editor->GetWindowSize().y, 150, 150);
+		ExternalApp->scene->canvas->AddComponent(canv_UI);
 	}
 	break;
 	default:
@@ -520,9 +525,9 @@ void ComponentUI::RegenerateBuffers(uint buffer[], float3 vertex[]) {
 
 void ComponentUI::MousePicker()
 {
-	ImVec2 mousePosInViewport;
+	ImVec2 mousePosInViewport = ImGui::GetCursorScreenPos();/*
 	mousePosInViewport.x = ExternalApp->input->GetMouseX() - ImGui::GetCursorScreenPos().x;
-	mousePosInViewport.y = ExternalApp->input->GetMouseY() - ImGui::GetCursorScreenPos().y;
+	mousePosInViewport.y = ExternalApp->input->GetMouseY() - ImGui::GetCursorScreenPos().y;*/
 
 	float2 originPoint = float2(mousePosInViewport.x, mousePosInViewport.y);
 
@@ -568,7 +573,7 @@ bool ComponentUI::MouseIsInside(float2 mouse)
 	{
 		if (ExternalApp->scene->gameCamera != nullptr && parent->active)
 		{
-			if (AsRootPositionX >= 0 && AsRootPositionY >= 0 && mouse.x >= 0 && mouse.y >= 0 && mouse.x < ExternalApp->editor->GameWindowSize.x && mouse.y < ExternalApp->editor->GameWindowSize.y)
+			if (AsRootPositionX >= 0 && AsRootPositionY >= 0 && mouse.x >= 0 && mouse.y >= 0 && mouse.x < ExternalApp->editor->GetWindowSize().x && mouse.y < ExternalApp->editor->GetWindowSize().y)
 			{
 				if (mouse.x >= AsRootPositionX && mouse.x <= AsRootPositionX + AsRootWidthPanel && mouse.y >= AsRootPositionY && mouse.y <= AsRootPositionY + AsRootHeigthPanel)
 				{
@@ -579,7 +584,7 @@ bool ComponentUI::MouseIsInside(float2 mouse)
 
 		if (ui_Type == INPUT_TEXT)
 		{
-			if (AsRootPositionX >= 0 && AsRootPositionY >= 0 && mouse.x >= 0 && mouse.y >= 0 && mouse.x < ExternalApp->editor->GameWindowSize.x && mouse.y < ExternalApp->editor->GameWindowSize.y)
+			if (AsRootPositionX >= 0 && AsRootPositionY >= 0 && mouse.x >= 0 && mouse.y >= 0 && mouse.x < ExternalApp->editor->GetWindowSize().x && mouse.y < ExternalApp->editor->GetWindowSize().y)
 			{
 				if (mouse.x <= AsRootPositionX || mouse.x >= AsRootPositionX + AsRootWidthPanel || mouse.y <= AsRootPositionY || mouse.y >= AsRootPositionY + AsRootHeigthPanel)
 				{
@@ -610,7 +615,7 @@ void ComponentUI::MoveComponent()
 
 	float2 mouse_pos = float2(originPoint.x, originPoint.y);
 
-	if (mouse_pos.x >= 0 && mouse_pos.y >= 0 && mouse_pos.x < ExternalApp->editor->GameWindowSize.x && mouse_pos.y < ExternalApp->editor->GameWindowSize.y)
+	if (mouse_pos.x >= 0 && mouse_pos.y >= 0 && mouse_pos.x < ExternalApp->editor->GetWindowSize().x && mouse_pos.y < ExternalApp->editor->GetWindowSize().y)
 	{
 		ComponentTransform* transform = dynamic_cast<ComponentTransform*>(parent->GetComponent(typeComponent::Transform));
 

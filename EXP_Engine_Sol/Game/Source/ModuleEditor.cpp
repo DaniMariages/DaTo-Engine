@@ -119,20 +119,19 @@ void ModuleEditor::DrawEditor()
 
 	if (ImGui::Begin("Game"), true)
 	{
-		//Render the screen Game (Game camera)
-		ImVec2 size = ImGui::GetContentRegionAvail();
-		App->scene->gameCamera->SetAspectRatio(size.x / size.y);
-		ImGui::Image((ImTextureID)App->scene->gameCamera->TCB, size, ImVec2(0, 1), ImVec2(1, 0));
-
-		GameWindowSize = ImVec2(ImGui::GetWindowWidth(), ImGui::GetWindowHeight());
+		GameWindowSize = ImGui::GetContentRegionAvail();
 		GameWindowPos = ImGui::GetWindowPos();
 
 		if (App->scene->gameCamera != nullptr)
 		{
 			mousePosInViewport.x = App->input->GetMouseX() - ImGui::GetCursorScreenPos().x;
 			mousePosInViewport.y = App->input->GetMouseY() - ImGui::GetCursorScreenPos().y;
-
 		}
+
+		//Render the screen Game (Game camera)
+		ImVec2 size = ImGui::GetContentRegionAvail();
+		App->scene->gameCamera->SetAspectRatio(size.x / size.y);
+		ImGui::Image((ImTextureID)App->scene->gameCamera->TCB, GetWindowSize(), ImVec2(0, 1), ImVec2(1, 0));
 
 		ImGui::End();
 	}
@@ -677,4 +676,10 @@ ImVec2 ModuleEditor::NormalizePoint(float x, float y, float w, float h, ImVec2 o
 	normalizedPoint.y = (originalPoint.y - y) / ((y + h) - y);
 
 	return normalizedPoint;
+}
+
+ImVec2 ModuleEditor::GetWindowSize()
+{
+	if(&GameWindowSize != nullptr)
+		return GameWindowSize;
 }

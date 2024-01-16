@@ -47,6 +47,8 @@ public:
 	void ModuleEditor::Console();
 	void DrawPausePlay();
 
+	ImVec2 GetWindowSize();
+
 public: 
 
 	GameObject* childObject = nullptr;

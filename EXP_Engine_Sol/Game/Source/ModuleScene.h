@@ -3,6 +3,7 @@
 #include "Module.h"
 #include "Globals.h"
 #include "GameObject.h"
+#include "ComponentUI.h"
 #include "Timer.h"
 
 #include "../External/MathGeoLib/include/Geometry/LineSegment.h"
@@ -40,6 +41,10 @@ public:
 	// This function check if a game object is inside another game object
 	bool InsideBBObject(const float3& point, AABB& aabb);
 
+	//User interface
+	void DemoScene();
+	void OpenPauseMenu();
+
 public: 
 
 	GameObject* rootGameObject = nullptr;
@@ -52,6 +57,8 @@ public:
 
 	GameObject* canvas = nullptr;
 	ComponentCanvas* compCanvas = nullptr;
+
+	bool Demo = false;
 
 	//Timer
 	Timer gameTime;

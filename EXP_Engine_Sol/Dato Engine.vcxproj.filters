@@ -100,6 +100,9 @@
     <Filter Include="Source\GameObjects\Components\UserInterface">
       <UniqueIdentifier>{43c1f406-1eaa-441b-8a1e-33eafdab3122}</UniqueIdentifier>
     </Filter>
+    <Filter Include="External\mmgr">
+      <UniqueIdentifier>{f1d437c7-7442-42be-ab8a-294a8b058f87}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\External\DevIL\include\devil_cpp_wrapper.hpp">
@@ -801,6 +804,12 @@
     <ClInclude Include="Game\Source\ComponentInputText.h">
       <Filter>Source\GameObjects\Components\UserInterface</Filter>
     </ClInclude>
+    <ClInclude Include="Game\External\mmgr\mmgr.h">
+      <Filter>External\mmgr</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\External\mmgr\nommgr.h">
+      <Filter>External\mmgr</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game\External\DevIL\include\luadevil.c">
@@ -1024,6 +1033,9 @@
     </ClCompile>
     <ClCompile Include="Game\Source\ComponentInputText.cpp">
       <Filter>Source\GameObjects\Components\UserInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\External\mmgr\mmgr.cpp">
+      <Filter>External\mmgr</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

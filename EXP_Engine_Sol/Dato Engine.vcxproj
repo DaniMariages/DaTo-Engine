@@ -198,6 +198,8 @@
     <ClInclude Include="Game\External\MathGeoLib\include\Math\sse_mathfun.h" />
     <ClInclude Include="Game\External\MathGeoLib\include\Math\TransformOps.h" />
     <ClInclude Include="Game\External\MathGeoLib\include\Time\Clock.h" />
+    <ClInclude Include="Game\External\mmgr\mmgr.h" />
+    <ClInclude Include="Game\External\mmgr\nommgr.h" />
     <ClInclude Include="Game\External\Parson\parson.h" />
     <ClInclude Include="Game\External\PCG\pcg_extras.hpp" />
     <ClInclude Include="Game\External\PCG\pcg_random.hpp" />
@@ -358,6 +360,7 @@
     <ClCompile Include="Game\External\MathGeoLib\include\Math\SSEMath.cpp" />
     <ClCompile Include="Game\External\MathGeoLib\include\Math\TransformOps.cpp" />
     <ClCompile Include="Game\External\MathGeoLib\include\Time\Clock.cpp" />
+    <ClCompile Include="Game\External\mmgr\mmgr.cpp" />
     <ClCompile Include="Game\External\Parson\parson.c" />
     <ClCompile Include="Game\Source\Application.cpp" />
     <ClCompile Include="Game\Source\Color.cpp" />

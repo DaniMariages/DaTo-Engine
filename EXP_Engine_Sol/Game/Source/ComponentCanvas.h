@@ -1,5 +1,7 @@
 #pragma once
 #include "Component.h"
+#include "Application.h"
+#include "ModuleEditor.h"
 #include "ComponentTransform.h"
 #include "Color.h"
 

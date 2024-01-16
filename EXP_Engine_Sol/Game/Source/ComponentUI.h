@@ -6,6 +6,7 @@
 #include "ModuleScene.h"
 #include "ModuleInput.h"
 #include "ModuleEditor.h"
+#include "ModuleImport.h"
 #include "ComponentTexture.h"
 
 class GameObject;
@@ -14,7 +15,8 @@ class InputText;
 enum FONTS;
 enum _functions;
 
-struct UIPlane {
+struct UIPlane 
+{
 	float3 vertex[4];
 	float2 uv[4];
 	uint buffer[3];
