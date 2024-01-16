@@ -26,6 +26,7 @@ public:
 
 	bool active = true;
 	bool drawTexture = true;
+	bool isText = false;
 
 	Random random;
 

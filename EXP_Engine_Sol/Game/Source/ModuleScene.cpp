@@ -30,10 +30,10 @@ bool ModuleScene::Init()
 	bool ret = true;
 
 	compCanvas = new ComponentCanvas(canvas);
-	canvas->AddComponent(typeComponent::Canvas);
+	canvas->AddComponent(compCanvas);
 
 	gameCamera = new ComponentCamera(gameCameraObject);
-	gameCameraObject->AddComponent(typeComponent::Camera);
+	gameCameraObject->AddComponent(gameCamera);
 
 	//Set the game camera starter position
 	gameCameraObject->transform->SetPosition(float3(0.0f, 5.0f, -20.0f));

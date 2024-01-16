@@ -315,7 +315,11 @@ ComponentUI* ComponentUI::CreateGameObjectUI(GameObject* parent, UI_Type type, u
 		ComponentUI* compUI = new ComponentUI(type, Button, width, heigth, posX, posY, imagePath);
 		Button->AddComponent(compUI);
 
-		comp_UI->AsRootPositionX = OrinigalPosX; comp_UI->AsRootPositionY = OrinigalPosY; comp_UI->AsRootWidthPanel = OrinigalWidth; comp_UI->AsRootHeigthPanel = Orinigalheight;
+		comp_UI->AsRootPositionX = OrinigalPosX; 
+		comp_UI->AsRootPositionY = OrinigalPosY; 
+		comp_UI->AsRootWidthPanel = OrinigalWidth; 
+		comp_UI->AsRootHeigthPanel = Orinigalheight;
+
 		ComponentButton but_UI = ComponentButton(type, Button, width, heigth, posX, posY, imagePath);
 		but_UI.actualFunction = (functions)buttonFuntion;
 		comp_UI->parent = Button;

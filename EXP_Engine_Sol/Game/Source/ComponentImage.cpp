@@ -51,7 +51,7 @@ void ComponentImage::ShowInfo()
 
 	if (scaleToCanvas)
 	{
-		ComponentCanvas* canv = (ComponentCanvas*)ExternalApp->scene->Canvas->GetComponent(typeComponent::Canvas);
+		ComponentCanvas* canv = (ComponentCanvas*)ExternalApp->scene->canvas->GetComponent(typeComponent::Canvas);
 		widthPanel = canv->widthPanel;
 		heigthPanel = canv->heigthPanel;
 	}

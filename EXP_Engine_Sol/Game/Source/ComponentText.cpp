@@ -42,6 +42,28 @@ ComponentText::ComponentText(UI_Type type, GameObject* gameObject, uint width, u
 	DoText();
 }
 
+ComponentText::ComponentText(GameObject* _parent) : ComponentUI(_parent)
+{
+	parent = _parent;
+	parent->isText = true;
+	actualFonts = ARIAL;
+
+	text = "ComponentText";
+	font = ExternalApp->fonts->actualFont;
+
+	hasBeenModified = false;
+	widthPanel = 150;
+	heigthPanel = 150;
+
+	positionX = 300;
+	positionY = 300; 
+
+	actualText = "ComponentText";
+	newText = "ComponentText";
+
+	DoText();
+}
+
 ComponentText::~ComponentText()
 {
 	parent = nullptr;

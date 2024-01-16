@@ -21,8 +21,8 @@
 
 InputText::InputText(UI_Type type, GameObject* gameObject, uint width, uint heigt, uint PosX, uint PosY, const char* Text) : ComponentUI(type, gameObject, width, heigt, PosX, PosY, Text)
 {
-	gmAtached = gameObject;
-	gmAtached->isText = true;
+	parent = gameObject;
+	parent->isText = true;
 	actualFonts = ARIAL;
 
 	text = Text;

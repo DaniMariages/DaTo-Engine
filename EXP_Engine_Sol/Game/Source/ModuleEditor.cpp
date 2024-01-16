@@ -63,6 +63,7 @@ bool ModuleEditor::Init()
 		style.Colors[ImGuiCol_WindowBg].w = 1.0f;
 	}
 
+	
 	ImGui_ImplSDL2_InitForOpenGL(App->window->window, App->renderer3D->context);
 	ImGui_ImplOpenGL3_Init();
 
@@ -123,14 +124,18 @@ void ModuleEditor::DrawEditor()
 		App->scene->gameCamera->SetAspectRatio(size.x / size.y);
 		ImGui::Image((ImTextureID)App->scene->gameCamera->TCB, size, ImVec2(0, 1), ImVec2(1, 0));
 
+		GameWindowSize = ImVec2(ImGui::GetWindowWidth(), ImGui::GetWindowHeight());
+		GameWindowPos = ImGui::GetWindowPos();
+
+		if (App->scene->gameCamera != nullptr)
+		{
+			mousePosInViewport.x = App->input->GetMouseX() - ImGui::GetCursorScreenPos().x;
+			mousePosInViewport.y = App->input->GetMouseY() - ImGui::GetCursorScreenPos().y;
+
+		}
+
 		ImGui::End();
 	}
-
-	GameWindowSize = ImVec2(ImGui::GetWindowWidth(), ImGui::GetWindowHeight());
-	GameWindowPos = ImGui::GetWindowPos();
-	mousePosInViewport.x = App->input->GetMouseX() - ImGui::GetCursorScreenPos().x;
-	mousePosInViewport.y = App->input->GetMouseY() - ImGui::GetCursorScreenPos().y;
-
 
 	Config();
 	Console();

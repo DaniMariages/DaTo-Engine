@@ -7,7 +7,7 @@
 
 #include "ComponentTransform.h"
 
-ComponentCanvas::ComponentCanvas(GameObject* gameObject, float width, float heigth, uint PosX, uint PosY) : Component(gameObject)
+ComponentCanvas::ComponentCanvas(GameObject* gameObject, float width, float heigth, unsigned int PosX, unsigned int PosY) : Component(gameObject)
 {
 	parent = gameObject;
 
@@ -53,8 +53,8 @@ void ComponentCanvas::Enable()
 
 void ComponentCanvas::Update()
 {
-	ImVec2 windowSize = ImGui::GetWindowSize();
-	comp_transform->SetScale(float3(windowSize.x, windowSize.y, 1));
+	/*ImVec2 windowSize = ImGui::GetWindowSize();
+	comp_transform->SetScale(float3(windowSize.x, windowSize.y, 1));*/
 }
 
 void ComponentCanvas::Disable()
