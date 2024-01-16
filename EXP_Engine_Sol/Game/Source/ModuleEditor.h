@@ -47,6 +47,9 @@ public:
 	void ModuleEditor::Console();
 	void DrawPausePlay();
 
+	ImVec2 GetWindowSize();
+	ImVec2 GetMousePosInViewport();
+
 public: 
 
 	GameObject* childObject = nullptr;
@@ -93,6 +96,14 @@ public:
 	bool borderless = false;
 
 	bool IoConfirmer = false;
+	bool isRunning = false;
+	bool Vsync = false;
+
+
+	ImVec2 GameWindowSize;
+	ImVec2 GameWindowPos;
+	ImVec2 mousePosInViewport;
+
 };
 
 #endif //MODULE_EDITOR

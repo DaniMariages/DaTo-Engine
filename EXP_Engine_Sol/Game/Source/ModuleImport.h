@@ -57,6 +57,7 @@ struct mesh
 	std::vector<unsigned int> indices;
 	unsigned int VBO = 0;
 	unsigned int EBO = 0;
+	unsigned int VN = 0;
 };
 
 struct goTransform
@@ -84,6 +85,11 @@ public:
 	//Function that check if the name exists in game objects, if exists, call ReName.
 	std::string GetUniqueName(std::string Name);
 
+	//Needed to User Interface
+	void LoadTextureUI(Texture* texture = nullptr, const char* buffer = nullptr, uint size = 0);
+
+	Texture* LoadTexture(const char* file_path);
+
 private:
 	
 	//Get the name of game object from the file path.
@@ -95,7 +101,6 @@ private:
 	typeFile ReadExtension(std::string file_path);
 
 	void LoadMesh(const char* file_path);
-	Texture* LoadTexture(const char* file_path);
 
 	mesh ProcessMesh(aiMesh* Mesh, const char* file_path, GameObject* gameObject);
 	void GetSceneInfo(aiNode* node, const aiScene* scene, const char* file_path, GameObject* gameObject);

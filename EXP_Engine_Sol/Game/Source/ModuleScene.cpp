@@ -3,6 +3,8 @@
 #include "ModuleCamera3D.h"
 #include "ModuleImport.h"
 #include "ModuleWindow.h"
+#include "ModuleFont.h"
+#include "ComponentCanvas.h"
 
 #include <map>
 
@@ -12,6 +14,8 @@ ModuleScene::ModuleScene(Application* app, bool start_enabled) : Module(app, sta
 	gameCameraObject = CreateGameObject("MainCamera", rootGameObject);
 
 	ImGuizmo::Enable(true);
+
+	Demo = true;
 
 	gameTime.Stop();
 	gameTime.ReStart();
@@ -26,6 +30,8 @@ bool ModuleScene::Init()
 {
 	LOG("Creating Module Scene");
 	bool ret = true;
+
+	App->fonts->actualFont = App->fonts->FontLoader(120, "./Fonts/Elianto.otf");
 
 	gameCamera = new ComponentCamera(gameCameraObject);
 	gameCameraObject->AddComponent(gameCamera);
@@ -46,6 +52,28 @@ bool ModuleScene::Init()
 // PreUpdate: clear buffer
 update_status ModuleScene::Update(float dt)
 {
+	if (Demo) 
+	{
+		IntroScene();
+		Demo = false;
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_SPACE))
+	{
+		if (App->scene->canvas != nullptr)
+		{
+			App->scene->canvas->DisableParent();
+			App->scene->DeleteGameObject(App->scene->canvas);
+			Game = true;
+		}
+	}
+
+	if (Game)
+	{
+		GameScene();
+		Game = false;
+	}
+
 	if (App->input->GetKey(SDL_SCANCODE_W) && !ImGui::IsMouseDown(ImGuiMouseButton_::ImGuiMouseButton_Right))
 		gizmoOperation = ImGuizmo::OPERATION::TRANSLATE;
 	else if (App->input->GetKey(SDL_SCANCODE_E) && !ImGui::IsMouseDown(ImGuiMouseButton_::ImGuiMouseButton_Right))
@@ -263,4 +291,50 @@ bool ModuleScene::InsideBBObject(const float3& point, AABB& aabb)
 	return point.x >= aabb.minPoint.x && point.x <= aabb.maxPoint.x
 		&& point.y >= aabb.minPoint.y && point.y <= aabb.maxPoint.y
 		&& point.z >= aabb.minPoint.z && point.z <= aabb.maxPoint.z;
+}
+
+void ModuleScene::IntroScene()
+{
+	ComponentUI* compUI = new ComponentUI(UI_Type::DEF, ExternalApp->scene->rootGameObject, 0, 0, 0, 0, nullptr);
+	ComponentTransform* compTrans;
+
+	compUI->CreateGameObjectUI(ExternalApp->scene->rootGameObject, UI_Type::CANV, App->editor->GetWindowSize().x, App->editor->GetWindowSize().y, 200, 200, nullptr, nullptr);
+
+	ComponentCanvas* canvUI = new ComponentCanvas(App->scene->canvas, App->editor->GetWindowSize().x, App->editor->GetWindowSize().y, 0, 0);
+
+	compUI->CreateGameObjectUI(App->scene->canvas, UI_Type::INPUT_TEXT, 20, 20, 0, 0, "Assets/Textures/Input_Text_Empty.png", "", 1, nullptr, (canvUI->widthPanel / 2) - (canvUI->widthPanel / 10), (canvUI->heigthPanel / 2) + (canvUI->heigthPanel / 3.6), 160, 80);
+	compTrans = dynamic_cast<ComponentTransform*>(App->scene->gameObjects[App->scene->gameObjects.size() - 1]->GetComponent(typeComponent::Transform));
+	compTrans->SetPosition(float3((float)((canvUI->widthPanel / 2) - (canvUI->widthPanel / 10)), (float)((canvUI->heigthPanel / 2) + (canvUI->heigthPanel / 3.6)), 0));
+
+	compUI->CreateGameObjectUI(App->scene->canvas, UI_Type::IMAGE, 1, 1, 0, 0, "Assets/Textures/start.png", nullptr, 0, nullptr, (canvUI->widthPanel / 2) - (canvUI->widthPanel / 6), (canvUI->heigthPanel / 2) + (canvUI->heigthPanel / 20), 160, 80);
+	compTrans = dynamic_cast<ComponentTransform*>(App->scene->gameObjects[App->scene->gameObjects.size() - 1]->GetComponent(typeComponent::Transform));
+	compTrans->SetPosition(float3(86, 3, 0));
+	compTrans->SetScale(float3(40, 0.5, 0));
+
+	compUI->CreateGameObjectUI(App->scene->canvas, UI_Type::BUTTON, 1, 1, 0, 0, "Assets/Textures/main_button.png", nullptr, 0, nullptr, (canvUI->widthPanel / 2) - (canvUI->widthPanel / 6), (canvUI->heigthPanel / 2) + (canvUI->heigthPanel / 20), 160, 80);
+	compTrans = dynamic_cast<ComponentTransform*>(App->scene->gameObjects[App->scene->gameObjects.size() - 1]->GetComponent(typeComponent::Transform));
+	compTrans->SetPosition(float3(72, 3, 0));
+	compTrans->SetScale(float3(66, 0.5, 0));
+
+	compUI->CreateGameObjectUI(App->scene->canvas, UI_Type::IMAGE, (uint)canvUI->widthPanel, (uint)canvUI->heigthPanel, 0, 0, "Assets/Textures/background.png", nullptr, 0, nullptr, 0, 0, (uint)canvUI->widthPanel, (uint)canvUI->heigthPanel);
+	compTrans = dynamic_cast<ComponentTransform*>(App->scene->gameObjects[App->scene->gameObjects.size() - 1]->GetComponent(typeComponent::Transform));
+	compTrans->SetPosition(float3(App->editor->GetWindowSize().x, App->editor->GetWindowSize().y, 0));
+
+	compTrans->SetScale(float3(210, 7, 0));
+}
+
+void ModuleScene::GameScene()
+{
+	ComponentUI* compUI = new ComponentUI(UI_Type::DEF, App->scene->rootGameObject, 0, 0, 0, 0, nullptr);
+	ComponentTransform* transform;
+
+	compUI->CreateGameObjectUI(App->scene->rootGameObject, UI_Type::CANV, App->editor->GetWindowSize().x, App->editor->GetWindowSize().y, 200, 200, nullptr, nullptr);
+
+	ComponentCanvas* canvUI = new ComponentCanvas(App->scene->canvas, App->editor->GetWindowSize().x, App->editor->GetWindowSize().y, 0, 0);
+
+	compUI->CreateGameObjectUI(App->scene->canvas, UI_Type::IMAGE, (uint)canvUI->widthPanel, (uint)canvUI->heigthPanel, 0, 0, "Assets/Textures/crosshair.png", nullptr, 0, nullptr, 0, 0, (uint)canvUI->widthPanel, (uint)canvUI->heigthPanel);
+	transform = dynamic_cast<ComponentTransform*>(App->scene->gameObjects[App->scene->gameObjects.size() - 1]->GetComponent(typeComponent::Transform));
+	transform->SetPosition(float3(87, 3, 0));
+
+	transform->SetScale(float3(34, 1, 1));
 }

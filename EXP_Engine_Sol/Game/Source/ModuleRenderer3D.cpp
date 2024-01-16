@@ -4,6 +4,7 @@
 #include "ModuleWindow.h"
 #include "ModuleCamera3D.h"
 #include "ModuleInput.h"
+#include "ComponentCanvas.h"
 
 #include "../External/SDL/include/SDL_opengl.h"
 
@@ -161,6 +162,23 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 	for (uint n = 0; n < App->scene->gameObjects.size(); n++)
 		App->scene->gameObjects[n]->Update();
 
+	for (unsigned int i = 0; i < App->scene->gameObjects.size(); i++)
+	{
+		ComponentTexture* compTex = (ComponentTexture*)App->scene->gameObjects[i]->GetComponent(typeComponent::Material);
+		ComponentCanvas* compCanv = (ComponentCanvas*)App->scene->gameObjects[i]->GetComponent(typeComponent::Canvas);
+		ComponentUI* compUI = (ComponentUI*)App->scene->gameObjects[i]->GetComponent(typeComponent::UI);
+
+		if (compCanv != nullptr)
+		{
+			RenderCanvas(App->scene->gameObjects[i], compCanv);
+		}
+
+		if (compUI != nullptr)
+		{
+			RenderUI(App->scene->gameObjects[i], compUI, false, compTex);
+		}
+	}
+
 	return UPDATE_CONTINUE;
 }
 
@@ -191,6 +209,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 
 	//-------------------------------
 
+	//Draw Game Camera
 	App->scene->gameCamera->RenderBuffers(true);
 	App->scene->gameCamera->Update();
 
@@ -198,6 +217,45 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	{
 		//Draw the models in Game Camera
 		IterateDrawMesh();
+
+		//Draw the UI in Game Camera
+		for (int i = 1; i < App->scene->gameObjects.size(); i++)
+		{
+			if (App->scene->gameObjects[i]->active)
+			{
+				ComponentTexture* objectTexture = dynamic_cast<ComponentTexture*>(App->scene->gameObjects[i]->GetComponent(typeComponent::Material));
+				ComponentUI* objectUI = dynamic_cast<ComponentUI*>(App->scene->gameObjects[i]->GetComponent(typeComponent::UI));
+				ComponentCanvas* canvas_UI = dynamic_cast<ComponentCanvas*>(App->scene->gameObjects[i]->GetComponent(typeComponent::Canvas));
+
+				/*if (App->scene->pause != nullptr)
+				{
+					for (int j = 0; j < app->scene->pause->childrens.size(); j++)
+					{
+						if (App->scene->AllGameObjectManagers[i] == app->scene->pause->childrens[j])
+						{
+							app->scene->pause->childrens[j]->isActive = app->scene->openPauseMenu;
+
+							if (objectTexture != nullptr)
+							{
+								objectTexture->colorTexture.a = 0.5;
+							}
+						}
+					}
+				}*/
+
+				if (canvas_UI != nullptr)
+				{
+					RenderCanvas(App->scene->gameObjects[i], canvas_UI);
+				}
+				else
+				{
+					if (objectUI != nullptr)
+					{
+						RenderUI(App->scene->gameObjects[i], objectUI, true, objectTexture);
+					}
+				}
+			}
+		}
 	}
 
 	App->scene->gameCamera->RenderBuffers(false);
@@ -545,6 +603,157 @@ bool ModuleRenderer3D::InsideCamera(const ComponentCamera* camera, const AABB& a
 		}
 	}
 	return true;
+}
+
+void ModuleRenderer3D::RenderCanvas(GameObject* canvasObject, ComponentCanvas* canvas)
+{
+	if (App->scene->canvas != nullptr)
+	{
+		ComponentTransform* compTrans = (ComponentTransform*)canvasObject->GetComponent(typeComponent::Transform);
+		ComponentCanvas* compCanvas = (ComponentCanvas*)App->scene->canvas->GetComponent(typeComponent::Canvas);
+
+		compCanvas->Draw();
+		compTrans->UpdateTransform();
+	}
+}
+
+void ModuleRenderer3D::RenderUI(GameObject* parent, ComponentUI* uiElement, bool isGameMode, ComponentTexture* texture)
+{
+	UIPlane* ui_Plane = nullptr;
+
+	ComponentTransform* transform = dynamic_cast<ComponentTransform*>(parent->GetComponent(typeComponent::Transform));
+
+	//Put plane cases! if game or editor
+
+	if (!isGameMode)
+	{
+		ui_Plane = uiElement->PlaneInScene;
+		glPushMatrix();
+		glMultMatrixf((float*)parent->transform->GetGlobalTransform().Transposed().ptr());
+	}
+
+	if (isGameMode)
+	{
+		ui_Plane = uiElement->PlaneInScene;
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		glOrtho(0.0, App->editor->GetWindowSize().x, App->editor->GetWindowSize().y, 0.0, 0, -1.0);
+
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+
+		glPushMatrix();
+		glMultMatrixf((float*)parent->transform->GetGlobalTransform().Transposed().ptr());
+	}
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_ALPHA_TEST);
+	glAlphaFunc(GL_GREATER, 0.0f);
+
+	glColor4f(uiElement->color[0], uiElement->color[1], uiElement->color[2], uiElement->color[3]);
+
+	if (texture != nullptr)
+	{
+		glColor4f(texture->texColor.r, texture->texColor.g, texture->texColor.b, texture->texColor.a);
+	}
+
+	glEnable(GL_TEXTURE_2D);
+
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+
+	if (uiElement->textCH == "")
+	{
+		if (texture != nullptr)
+		{
+			if (texture->GetTexture())
+			{
+				if (texture->GetTexture()->textID != 0)
+				{
+					if (texture->GetTexture()->textID != 0)
+					{
+						glBindTexture(GL_TEXTURE_2D, texture->GetTexture()->textID);
+					}
+					else if (uiElement->texture != nullptr)
+					{
+						if (uiElement->texture->textID != 0)
+						{
+							glBindTexture(GL_TEXTURE_2D, uiElement->texture->textID);
+						}
+					}
+				}
+			}
+		}
+
+		glBindBuffer(GL_ARRAY_BUFFER, ui_Plane->buffer[0]);
+		glVertexPointer(3, GL_FLOAT, 0, NULL);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+		glBindBuffer(GL_ARRAY_BUFFER, ui_Plane->buffer[2]);
+		glTexCoordPointer(2, GL_FLOAT, 0, NULL);
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ui_Plane->buffer[1]);
+
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, NULL);
+	}
+	else
+	{
+		//ComponentText* text = UI_Element->textComp;
+		const char* letters = uiElement->textCH.c_str();
+
+		std::vector<Component*> objectPanels = parent->GetComponents(typeComponent::Mesh);
+
+		for (int j = 0; j < objectPanels.size(); j++)
+		{
+			if (uiElement->font->AllCharacters.at(letters[j]).textID != 0)
+			{
+				auto test = uiElement->font->AllCharacters.at(letters[j]);
+				glBindTexture(GL_TEXTURE_2D, test.textID);
+			}
+
+			ComponentMesh* panel = dynamic_cast<ComponentMesh*>(objectPanels.at(j));
+
+			if (panel != nullptr)
+			{
+				if (panel->active)
+				{
+					if (panel->GetMesh() != nullptr)
+					{
+						glBindBuffer(GL_ARRAY_BUFFER, panel->GetMesh()->VBO);
+						glVertexPointer(3, GL_FLOAT, 0, NULL);
+						glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+						glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+						glBindBuffer(GL_ARRAY_BUFFER, panel->GetMesh()->VN);
+						glTexCoordPointer(2, GL_FLOAT, 0, NULL);
+
+						glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, panel->GetMesh()->EBO);
+
+						glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, NULL);
+					}
+				}
+			}
+		}
+	}
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+	glDisableClientState(GL_VERTEX_ARRAY);
+
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glDisable(GL_ALPHA_TEST);
+
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+
+	//if (!isGameMode)
+	glPopMatrix();
+
+	transform->UpdateTransform();
 }
 
 void ModuleRenderer3D::ImportCube()

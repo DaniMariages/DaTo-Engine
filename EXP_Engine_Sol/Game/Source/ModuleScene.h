@@ -3,6 +3,7 @@
 #include "Module.h"
 #include "Globals.h"
 #include "GameObject.h"
+#include "ComponentUI.h"
 #include "Timer.h"
 
 #include "../External/MathGeoLib/include/Geometry/LineSegment.h"
@@ -13,6 +14,7 @@
 #include <vector>
 
 class ComponentCamera;
+class ComponentCanvas;
 
 class ModuleScene : public Module
 {
@@ -39,6 +41,11 @@ public:
 	// This function check if a game object is inside another game object
 	bool InsideBBObject(const float3& point, AABB& aabb);
 
+	//User interface
+	void IntroScene();
+	void GameScene();
+	void OpenPauseMenu();
+
 public: 
 
 	GameObject* rootGameObject = nullptr;
@@ -48,6 +55,12 @@ public:
 	GameObject* gameCameraObject = nullptr;
 	ComponentCamera* gameCamera = nullptr;
 	std::vector<ComponentCamera*> totalCameras;
+
+	GameObject* canvas = nullptr;
+	ComponentCanvas* compCanvas = nullptr;
+
+	bool Demo = false;
+	bool Game = false;
 
 	//Timer
 	Timer gameTime;

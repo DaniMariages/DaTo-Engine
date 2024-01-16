@@ -15,7 +15,6 @@ public:
 	void Stop();
 	void ReStart();
 	void Resume();
-	void Pause();
 	bool IsRunning();
 
 	Uint32 Read();

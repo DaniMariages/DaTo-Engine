@@ -374,3 +374,34 @@ void ModuleImport::SaveGameObject(GameObject* gameObject)
 	node.SetString("Name", gameObject->Name);
 	node.SetNumber("ID", gameObject->ID);
 }
+
+void ModuleImport::LoadTextureUI(Texture* texture, const char* buffer, uint size)
+{
+	ILboolean success;
+	ILuint Devil_Texure;
+	uint TextID;
+
+	ilGenImages(1, &Devil_Texure);
+	ilBindImage(Devil_Texure);
+	success = ilLoadImage(buffer);
+	TextID = ilutGLBindTexImage();
+
+	ilDeleteImages(1, &Devil_Texure);
+
+	if (success)
+	{
+		if (!success || TextID == NULL)
+		{
+			LOG("DEVIL can't load Image");
+		}
+		else
+		{
+			LOG("DEVIL load Image!");
+		}
+	}
+
+	texture->path = buffer;
+	texture->textID = TextID;
+	texture->width = ilGetInteger(IL_IMAGE_WIDTH);
+	texture->height = ilGetInteger(IL_IMAGE_HEIGHT);
+}

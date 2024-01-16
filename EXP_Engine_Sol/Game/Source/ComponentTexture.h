@@ -3,6 +3,7 @@
 #include "Globals.h"
 #include "ModuleImport.h"
 #include "../External/MathGeoLib/include/MathGeoLib.h"
+#include "Color.h"
 
 struct Texture;
 
@@ -23,4 +24,5 @@ public:
 	Texture* GetTexture();
 	void SetTexture(Texture* texture);
 
+	Color texColor;
 };
