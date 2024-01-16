@@ -48,6 +48,7 @@ public:
 	void DrawPausePlay();
 
 	ImVec2 GetWindowSize();
+	ImVec2 GetMousePosInViewport();
 
 public: 
 
@@ -96,6 +97,7 @@ public:
 
 	bool IoConfirmer = false;
 
+private:
 	ImVec2 GameWindowSize;
 	ImVec2 GameWindowPos;
 	ImVec2 mousePosInViewport;

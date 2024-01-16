@@ -9,7 +9,7 @@
 #include "ComponentCanvas.h"
 
 
-ComponentUI::ComponentUI(UI_Type type, GameObject* gameObject, uint width, uint heigth, uint PosX, uint PosY, const char* imagePath) : 
+ComponentUI::ComponentUI(UI_Type uiType, GameObject* gameObject, uint width, uint heigth, uint PosX, uint PosY, const char* imagePath) : 
 	Component(gameObject)
 {
 	//Text Component
@@ -23,6 +23,8 @@ ComponentUI::ComponentUI(UI_Type type, GameObject* gameObject, uint width, uint 
 
 	//Button
 	actualButtonAction = 1;
+
+	type = typeComponent::UI;
 
 	//Checker
 	CheckSelected = false;
@@ -40,7 +42,7 @@ ComponentUI::ComponentUI(UI_Type type, GameObject* gameObject, uint width, uint 
 	isSelected = false;
 	isBeeingClicked = false;
 
-	ui_Type = type;
+	ui_Type = uiType;
 	actualMouseState = MouseState::IDLE_UI;
 
 	PlaneInScene = new UIPlane;
@@ -214,7 +216,7 @@ void ComponentUI::Enable()
 
 void ComponentUI::Update()
 {
-	//MousePicker();
+	MousePicker();
 
 	if (ui_Type == INPUT_TEXT)
 	{
@@ -380,8 +382,11 @@ ComponentUI* ComponentUI::CreateGameObjectUI(GameObject* parent, UI_Type type, u
 	break;
 	case UI_Type::INPUT_TEXT:
 	{
-		/*GameObject* Text = new GameObject("Input Text", gm);
-		ComponentTransform* transform = (ComponentTransform*)Text->GetComponent(typeComponent::Transform);
+		/*GameObject* Text = ExternalApp->scene->CreateGameObject("Input Text", parent);
+
+		ComponentUI* compUI = new ComponentUI(type, parent, width, heigth, posX, posY, imagePath);
+		
+
 		comp_UI = (ComponentUI*)Text->AddComponent(typeComponent::UI, type, width, heigth, posX, posY, imagePath);
 		InputText text_UI = InputText(type, Text, width, heigth, posX, posY, "");
 		comp_UI->AsRootPositionX = OrinigalPosX; comp_UI->AsRootPositionY = OrinigalPosY; comp_UI->AsRootWidthPanel = OrinigalWidth; comp_UI->AsRootHeigthPanel = Orinigalheight;
@@ -525,7 +530,8 @@ void ComponentUI::RegenerateBuffers(uint buffer[], float3 vertex[]) {
 
 void ComponentUI::MousePicker()
 {
-	ImVec2 mousePosInViewport = ImGui::GetCursorScreenPos();/*
+	ImVec2 mousePosInViewport = ExternalApp->editor->GetMousePosInViewport();
+	/*
 	mousePosInViewport.x = ExternalApp->input->GetMouseX() - ImGui::GetCursorScreenPos().x;
 	mousePosInViewport.y = ExternalApp->input->GetMouseY() - ImGui::GetCursorScreenPos().y;*/
 
@@ -611,7 +617,7 @@ void ComponentUI::MoveComponent()
 	mousePosInViewport.x = ExternalApp->input->GetMouseX() - ImGui::GetCursorScreenPos().x;
 	mousePosInViewport.y = ExternalApp->input->GetMouseY() - ImGui::GetCursorScreenPos().y;
 
-	float2 originPoint = float2(ExternalApp->editor->mousePosInViewport.x, ExternalApp->editor->mousePosInViewport.y);
+	float2 originPoint = float2(ExternalApp->editor->GetMousePosInViewport().x, ExternalApp->editor->GetMousePosInViewport().y);
 
 	float2 mouse_pos = float2(originPoint.x, originPoint.y);
 

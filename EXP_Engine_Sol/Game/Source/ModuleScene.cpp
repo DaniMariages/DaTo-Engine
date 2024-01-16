@@ -282,9 +282,9 @@ void ModuleScene::DemoScene()
 	ComponentUI* compUI = new ComponentUI(UI_Type::DEF, App->scene->rootGameObject, 0, 0, 0, 0, nullptr);
 	ComponentTransform* transform;
 
-	compUI->CreateGameObjectUI(App->scene->rootGameObject, UI_Type::CANV, App->editor->GameWindowSize.x, App->editor->GameWindowSize.y, 0, 0, nullptr, nullptr);
+	compUI->CreateGameObjectUI(App->scene->rootGameObject, UI_Type::CANV, App->editor->GetWindowSize().x, App->editor->GetWindowSize().y, 0, 0, nullptr, nullptr);
 
-	ComponentCanvas* canvUI = new ComponentCanvas(App->scene->canvas, App->editor->GameWindowSize.x, App->editor->GameWindowSize.y, 0, 0);
+	ComponentCanvas* canvUI = new ComponentCanvas(App->scene->canvas, App->editor->GetWindowSize().x, App->editor->GetWindowSize().y, 0, 0);
 
 	compUI->CreateGameObjectUI(App->scene->canvas, UI_Type::TEXT, 25, 25, 0, 0, nullptr, "START", 1, nullptr, (canvUI->widthPanel / 2) - (canvUI->widthPanel / 8), (canvUI->heigthPanel / 2) + (canvUI->heigthPanel / 9), 25, 25);
 	transform = dynamic_cast<ComponentTransform*>(App->scene->gameObjects[App->scene->gameObjects.size() - 1]->GetComponent(typeComponent::Transform));

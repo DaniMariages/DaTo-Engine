@@ -680,6 +680,10 @@ ImVec2 ModuleEditor::NormalizePoint(float x, float y, float w, float h, ImVec2 o
 
 ImVec2 ModuleEditor::GetWindowSize()
 {
-	if(&GameWindowSize != nullptr)
-		return GameWindowSize;
+	return GameWindowSize;
+}
+
+ImVec2 ModuleEditor::GetMousePosInViewport()
+{
+	return mousePosInViewport;
 }

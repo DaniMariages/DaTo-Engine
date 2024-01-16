@@ -173,7 +173,7 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 			RenderCanvas(App->scene->gameObjects[i], compCanv);
 		}
 
-		if (compCanv != nullptr)
+		if (compUI != nullptr)
 		{
 			RenderUI(App->scene->gameObjects[i], compUI, false, compTex);
 		}
@@ -637,7 +637,7 @@ void ModuleRenderer3D::RenderUI(GameObject* parent, ComponentUI* uiElement, bool
 		ui_Plane = uiElement->PlaneInScene;
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
-		glOrtho(0.0, App->editor->GameWindowSize.x, App->editor->GameWindowSize.y, 0.0, 0, -1.0);
+		glOrtho(0.0, App->editor->GetWindowSize().x, App->editor->GetWindowSize().y, 0.0, 0, -1.0);
 
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
