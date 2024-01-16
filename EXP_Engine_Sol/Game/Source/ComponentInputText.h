@@ -14,7 +14,7 @@ class GameObject;
 class InputText : public ComponentUI
 {
 public:
-	GameObject* gmAtached;
+	GameObject* parent;
 
 	uint widthPanel;
 	uint heigthPanel;

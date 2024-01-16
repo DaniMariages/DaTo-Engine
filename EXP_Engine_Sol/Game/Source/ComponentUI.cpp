@@ -7,6 +7,8 @@
 #include "ComponentButton.h"
 #include "ComponentImage.h"
 #include "ComponentCanvas.h"
+#include "ComponentCheck.h"
+#include "ComponentInputText.h"
 
 
 ComponentUI::ComponentUI(UI_Type uiType, GameObject* gameObject, uint width, uint heigth, uint PosX, uint PosY, const char* imagePath) : 
@@ -230,28 +232,28 @@ void ComponentUI::Update()
 		//inputText->Update(this);
 	}
 
-	/*if (->editor->isRunning)
+	if (ExternalApp->editor->isRunning)
 	{
 		switch (actualMouseState)
 		{
 		case IDLE_UI:
 			if (ui_Type == BUTTON) {
-				ButtonUI* button = (ButtonUI*)this;
+				ComponentButton* button = (ComponentButton*)this;
 				button->OnIdle(this);
 			}
 			break;
 			if (ui_Type == CHECKER) {
-				CheckerUI* checker = (CheckerUI*)this;
+				ComponentCheck* checker = (ComponentCheck*)this;
 				checker->OnIdle(this);
 			}
 			break;
 		case HOVER_UI:
 			if (ui_Type == BUTTON) {
-				ButtonUI* button = (ButtonUI*)this;
+				ComponentButton* button = (ComponentButton*)this;
 				button->OnHover(this);
 			}
 			if (ui_Type == CHECKER) {
-				CheckerUI* checker = (CheckerUI*)this;
+				ComponentCheck* checker = (ComponentCheck*)this;
 				checker->OnHover(this);
 			}
 			break;
@@ -263,17 +265,17 @@ void ComponentUI::Update()
 			}
 			if (ui_Type == BUTTON)
 			{
-				ButtonUI* button = (ButtonUI*)this;
+				ComponentButton* button = (ComponentButton*)this;
 				button->OnClick(&actualButtonAction);
 			}
 			if (ui_Type == CHECKER)
 			{
-				CheckerUI* checker = (CheckerUI*)this;
+				ComponentCheck* checker = (ComponentCheck*)this;
 				checker->OnClick(this);
 			}
 			break;
 		case CLICKED_UI:
-			if (app->scene->draggable)
+			if (ExternalApp->scene->draggable)
 			{
 				MoveComponent();
 			}
@@ -283,12 +285,12 @@ void ComponentUI::Update()
 
 			if (ui_Type == BUTTON)
 			{
-				ButtonUI* button = (ButtonUI*)this;
+				ComponentButton* button = (ComponentButton*)this;
 				button->OnIdle(this);
 				isDragabble = false;
 			}
 			if (ui_Type == CHECKER) {
-				CheckerUI* checker = (CheckerUI*)this;
+				ComponentCheck* checker = (ComponentCheck*)this;
 				checker->OnIdle(this);
 				isDragabble = false;
 			}
@@ -296,7 +298,7 @@ void ComponentUI::Update()
 		default:
 			break;
 		}
-	}*/
+	}
 }
 
 void ComponentUI::Disable()
@@ -444,29 +446,36 @@ ComponentUI* ComponentUI::CreateGameObjectUI(GameObject* parent, UI_Type type, u
 	break;
 	case UI_Type::CHECKER:
 	{
-		//GameObject* Checker = new GameObject("Checker", gm);
-		//ComponentTransform* transform = dynamic_cast<ComponentTransform*>(Checker->GetComponentGameObject(ComponentType::TRANSFORM));
-		//comp_UI = dynamic_cast<ComponentUI*>(Checker->AddComponent(ComponentType::UI, type, width, heigth, posX, posY, imagePathDisabled));
-		//CheckerUI check_UI = CheckerUI(type, Checker, width, heigth, posX, posY, imagePath, imagePathDisabled);
-		//comp_UI->AsRootPositionX = OrinigalPosX; comp_UI->AsRootPositionY = OrinigalPosY; comp_UI->AsRootWidthPanel = OrinigalWidth; comp_UI->AsRootHeigthPanel = Orinigalheight;
-		//comp_UI->actualChecker = (_functions)buttonFuntion;
-		//comp_UI->positionX = check_UI.positionX;
-		//comp_UI->positionY = check_UI.positionY;
-		//comp_UI->widthPanel = check_UI.widthPanel;
-		//comp_UI->heigthPanel = check_UI.heigthPanel;
-		////comp_UI->active = check_UI.textureActive;
-		////comp_UI->disabled = check_UI.textureDisabled;
+		GameObject* Checker = ExternalApp->scene->CreateGameObject("Checker", parent);
 
-		//ComponentMaterial* mat = (ComponentMaterial*)(Checker->AddComponent(ComponentType::MATERIAL));
-		//mat->colorTexture.r = 255;
-		//mat->colorTexture.g = 255;
-		//mat->colorTexture.b = 255;
-		//mat->colorTexture.a = 255;
+		ComponentUI* compUI = new ComponentUI(type, Checker, width, heigth, posX, posY, imagePath);
+		comp_UI = compUI;
 
-		//if (comp_UI->texture != nullptr)
-		//{
-		//	mat->texture = comp_UI->texture;
-		//}
+		ComponentCheck check_UI = ComponentCheck(type, Checker, width, heigth, posX, posY, imagePath, imagePathDisabled);
+		Checker->AddComponent(&check_UI);
+
+		comp_UI->AsRootPositionX = OrinigalPosX; 
+		comp_UI->AsRootPositionY = OrinigalPosY; 
+		comp_UI->AsRootWidthPanel = OrinigalWidth; 
+		comp_UI->AsRootHeigthPanel = Orinigalheight;
+		comp_UI->actualChecker = (_functions)buttonFuntion;
+		comp_UI->positionX = check_UI.positionX;
+		comp_UI->positionY = check_UI.positionY;
+		comp_UI->widthPanel = check_UI.widthPanel;
+		comp_UI->heigthPanel = check_UI.heigthPanel;
+
+		ComponentTexture* compTex = new ComponentTexture(Checker);
+		Checker->AddComponent(compTex);
+
+		compTex->texColor.r = 255;
+		compTex->texColor.g = 255;
+		compTex->texColor.b = 255;
+		compTex->texColor.a = 255;
+
+		if (comp_UI->texture != nullptr)
+		{
+			compTex->SetTexture(comp_UI->texture);
+		}
 	}
 	break;
 	case UI_Type::CANV:
@@ -579,7 +588,7 @@ bool ComponentUI::MouseIsInside(float2 mouse)
 	{
 		if (ExternalApp->scene->gameCamera != nullptr && parent->active)
 		{
-			if (AsRootPositionX >= 0 && AsRootPositionY >= 0 && mouse.x >= 0 && mouse.y >= 0 && mouse.x < ExternalApp->editor->GetWindowSize().x && mouse.y < ExternalApp->editor->GetWindowSize().y)
+			if (AsRootPositionX >= 0 && AsRootPositionY >= 0 && mouse.x >= 0 && mouse.y >= 0 && mouse.x < ExternalApp->editor->GameWindowSize.x && mouse.y < ExternalApp->editor->GameWindowSize.y)
 			{
 				if (mouse.x >= AsRootPositionX && mouse.x <= AsRootPositionX + AsRootWidthPanel && mouse.y >= AsRootPositionY && mouse.y <= AsRootPositionY + AsRootHeigthPanel)
 				{

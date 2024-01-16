@@ -59,6 +59,7 @@ public:
 	ComponentCanvas* compCanvas = nullptr;
 
 	bool Demo = false;
+	bool draggable = false;
 
 	//Timer
 	Timer gameTime;

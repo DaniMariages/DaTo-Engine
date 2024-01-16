@@ -12,7 +12,7 @@ class GameObject;
 class ComponentImage : public ComponentUI
 {
 public:
-	GameObject* gmAtached;
+	GameObject* parent;
 
 	uint widthPanel;
 	uint heigthPanel;
