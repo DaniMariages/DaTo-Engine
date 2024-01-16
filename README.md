@@ -32,10 +32,10 @@ Developed by:
 - Game Object can be renamed from Inspector.
 - If an object is repeated, the name will change to: Name + (number of repetitions).
 
-## Features v0.5 (UI)
--UI elements addition.
--Crosshair.
--Main menu.
+## Features v1.0 (UI)
+- UI elements addition.
+- Crosshair.
+- Main menu.
 
 ### Additional functionalities
 - Top, sides, back and front view (Reworked).
