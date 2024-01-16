@@ -69,7 +69,6 @@ public:
 	float4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
 
 	//Text Component
-	ComponentText* textComp;
 	InputText* InputTextComp;
 	string textCH;
 	Font* font;

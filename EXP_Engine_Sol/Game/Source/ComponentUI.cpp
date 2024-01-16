@@ -13,7 +13,6 @@ ComponentUI::ComponentUI(UI_Type uiType, GameObject* gameObject, uint width, uin
 	Component(gameObject)
 {
 	//Text Component
-	textComp = nullptr;
 	InputTextComp = nullptr;
 	textCH = "";
 	font = ExternalApp->fonts->actualFont;
@@ -95,7 +94,6 @@ ComponentUI::ComponentUI(UI_Type uiType, GameObject* gameObject, uint width, uin
 ComponentUI::ComponentUI(GameObject* _parent) : Component(_parent)
 {
 	//Text Component
-	textComp = nullptr;
 	InputTextComp = nullptr;
 	textCH = "";
 	font = ExternalApp->fonts->actualFont;
@@ -256,7 +254,6 @@ ComponentUI* ComponentUI::CreateGameObjectUI(GameObject* parent, UI_Type type, u
 		comp_UI->AsRootPositionY = OrinigalPosY; 
 		comp_UI->AsRootWidthPanel = OrinigalWidth; 
 		comp_UI->AsRootHeigthPanel = Orinigalheight;
-		comp_UI->textComp = compText;
 		comp_UI->parent = Text;
 		comp_UI->textCH = compText->text;
 		comp_UI->font = compText->font;

@@ -295,10 +295,10 @@ bool ModuleScene::InsideBBObject(const float3& point, AABB& aabb)
 
 void ModuleScene::IntroScene()
 {
-	ComponentUI* compUI = new ComponentUI(UI_Type::DEF, App->scene->rootGameObject, 0, 0, 0, 0, nullptr);
+	ComponentUI* compUI = new ComponentUI(UI_Type::DEF, ExternalApp->scene->rootGameObject, 0, 0, 0, 0, nullptr);
 	ComponentTransform* compTrans;
 
-	compUI->CreateGameObjectUI(App->scene->rootGameObject, UI_Type::CANV, App->editor->GetWindowSize().x, App->editor->GetWindowSize().y, 200, 200, nullptr, nullptr);
+	compUI->CreateGameObjectUI(ExternalApp->scene->rootGameObject, UI_Type::CANV, App->editor->GetWindowSize().x, App->editor->GetWindowSize().y, 200, 200, nullptr, nullptr);
 
 	ComponentCanvas* canvUI = new ComponentCanvas(App->scene->canvas, App->editor->GetWindowSize().x, App->editor->GetWindowSize().y, 0, 0);
 
@@ -317,8 +317,8 @@ void ModuleScene::IntroScene()
 	compTrans->SetScale(float3(66, 0.5, 0));
 
 	compUI->CreateGameObjectUI(App->scene->canvas, UI_Type::IMAGE, (uint)canvUI->widthPanel, (uint)canvUI->heigthPanel, 0, 0, "Assets/Textures/background.png", nullptr, 0, nullptr, 0, 0, (uint)canvUI->widthPanel, (uint)canvUI->heigthPanel);
-	transform = dynamic_cast<ComponentTransform*>(App->scene->gameObjects[App->scene->gameObjects.size() - 1]->GetComponent(typeComponent::Transform));
-	transform->SetPosition(float3(App->editor->GetWindowSize().x, App->editor->GetWindowSize().y, 0));
+	compTrans = dynamic_cast<ComponentTransform*>(App->scene->gameObjects[App->scene->gameObjects.size() - 1]->GetComponent(typeComponent::Transform));
+	compTrans->SetPosition(float3(App->editor->GetWindowSize().x, App->editor->GetWindowSize().y, 0));
 
 	compTrans->SetScale(float3(210, 7, 0));
 }

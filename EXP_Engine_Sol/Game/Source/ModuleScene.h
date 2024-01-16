@@ -42,7 +42,7 @@ public:
 	bool InsideBBObject(const float3& point, AABB& aabb);
 
 	//User interface
-	void DemoScene();
+	void IntroScene();
 	void GameScene();
 	void OpenPauseMenu();
 
