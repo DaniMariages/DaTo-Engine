@@ -50,6 +50,9 @@ Developed by:
 ## Photos and references
 
 ![CapturaReadme](https://github.com/DaniMariages/DaTo-Engine/assets/99719601/fbd3d4fb-65b5-4bae-8e8a-eecb906d76ed)
+![Captura](https://github.com/DaniMariages/DaTo-Engine/assets/99950347/db766dc5-2d78-47af-b646-22573ea40dd4)
+![Captura2](https://github.com/DaniMariages/DaTo-Engine/assets/99950347/8944a6bc-a93e-43f2-a9cf-141603acc6f3)
+
 
 ### Keybinds:
 - Left Control --> Center selected object
