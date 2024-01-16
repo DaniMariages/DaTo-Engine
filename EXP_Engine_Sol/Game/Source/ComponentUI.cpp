@@ -134,11 +134,11 @@ ComponentUI::ComponentUI(GameObject* _parent) : Component(_parent)
 
 	parent = _parent;
 
-	widthPanel = 150;
-	heigthPanel = 150;
+	widthPanel = 1;
+	heigthPanel = 1;
 
-	positionX = 400;
-	positionY = 100;
+	positionX = 0;
+	positionY = 0;
 
 	texture = nullptr;
 
