@@ -71,6 +71,7 @@ Developed by:
 - Down Arrow --> Back view
 - Scroll up --> Zoom in
 - Scroll down --> Zoom out
+- Space --> Next Scene
   
 ### FPS movement:
 - W --> Move forward
