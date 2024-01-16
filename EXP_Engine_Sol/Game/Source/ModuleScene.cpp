@@ -282,7 +282,7 @@ void ModuleScene::DemoScene()
 	ComponentUI* compUI = new ComponentUI(UI_Type::DEF, App->scene->rootGameObject, 0, 0, 0, 0, nullptr);
 	ComponentTransform* transform;
 
-	compUI->CreateGameObjectUI(App->scene->rootGameObject, UI_Type::CANV, App->editor->GetWindowSize().x, App->editor->GetWindowSize().y, 0, 0, nullptr, nullptr);
+	compUI->CreateGameObjectUI(App->scene->rootGameObject, UI_Type::CANV, App->editor->GetWindowSize().x, App->editor->GetWindowSize().y, 200, 200, nullptr, nullptr);
 
 	ComponentCanvas* canvUI = new ComponentCanvas(App->scene->canvas, App->editor->GetWindowSize().x, App->editor->GetWindowSize().y, 0, 0);
 
@@ -294,11 +294,11 @@ void ModuleScene::DemoScene()
 	transform = dynamic_cast<ComponentTransform*>(App->scene->gameObjects[App->scene->gameObjects.size() - 1]->GetComponent(typeComponent::Transform));
 	transform->SetPosition(float3((float)((canvUI->widthPanel / 2) - (canvUI->widthPanel / 10)), (float)((canvUI->heigthPanel / 2) + (canvUI->heigthPanel / 3.6)), 0));
 
-	compUI->CreateGameObjectUI(App->scene->canvas, UI_Type::BUTTON, 160, 80, 0, 0, "Assets/Textures/Button3.png", nullptr, 0, nullptr, (canvUI->widthPanel / 2) - (canvUI->widthPanel / 6), (canvUI->heigthPanel / 2) + (canvUI->heigthPanel / 20), 160, 80);
+	compUI->CreateGameObjectUI(App->scene->canvas, UI_Type::BUTTON, 1, 1, 0, 0, "Assets/Textures/Button3.png", nullptr, 0, nullptr, (canvUI->widthPanel / 2) - (canvUI->widthPanel / 6), (canvUI->heigthPanel / 2) + (canvUI->heigthPanel / 20), 160, 80);
 	transform = dynamic_cast<ComponentTransform*>(App->scene->gameObjects[App->scene->gameObjects.size() - 1]->GetComponent(typeComponent::Transform));
 	transform->SetPosition(float3((float)((canvUI->widthPanel / 2) - (canvUI->widthPanel / 6)), (float)((canvUI->heigthPanel / 2) + (canvUI->heigthPanel / 20)), 0));
 
-	compUI->CreateGameObjectUI(App->scene->canvas, UI_Type::IMAGE, 160, 40, 0, 0, "Assets/Textures/Unchecked-checkbox.png", nullptr, 0, 0, 160, 40);
+	compUI->CreateGameObjectUI(App->scene->canvas, UI_Type::IMAGE, 1, 1, 0, 0, "Assets/Textures/Unchecked-checkbox.png", nullptr, 0, 0, 160, 40);
 	transform = dynamic_cast<ComponentTransform*>(App->scene->gameObjects[App->scene->gameObjects.size() - 1]->GetComponent(typeComponent::Transform));
 	transform->SetPosition(float3((float)((canvUI->widthPanel / 2) - (canvUI->widthPanel / 6)), (float)((canvUI->heigthPanel / 2) + (canvUI->heigthPanel / 4)), 0));
 

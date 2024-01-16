@@ -61,7 +61,7 @@ void ComponentCanvas::Enable()
 
 void ComponentCanvas::Update()
 {
-	comp_transform->SetScale(float3(1, 1, 1));
+	comp_transform->SetScale(float3(ExternalApp->editor->GetWindowSize().x - 400, ExternalApp->editor->GetWindowSize().y - 500, 1));
 }
 
 void ComponentCanvas::Disable()
