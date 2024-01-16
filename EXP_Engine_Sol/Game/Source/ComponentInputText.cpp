@@ -48,7 +48,7 @@ InputText::InputText(UI_Type type, GameObject* gameObject, uint width, uint heig
 
 InputText::~InputText()
 {
-	gmAtached = nullptr;
+	parent = nullptr;
 	font = nullptr;
 	timeWait.ReStart();
 	timeWait.Stop();

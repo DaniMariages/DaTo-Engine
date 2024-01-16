@@ -161,7 +161,7 @@ void ComponentButton::ShowInfo(int* action)
 
 void ComponentButton::PassScene()
 {
-	//MYTODO: HACER UN FADE 
+	LOG("PASANDOE SCENE");
 }
 
 void ComponentButton::CreatePauseMenu()

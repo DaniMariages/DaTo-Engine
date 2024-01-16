@@ -96,8 +96,10 @@ public:
 	bool borderless = false;
 
 	bool IoConfirmer = false;
+	bool isRunning = false;
+	bool Vsync = false;
 
-private:
+
 	ImVec2 GameWindowSize;
 	ImVec2 GameWindowPos;
 	ImVec2 mousePosInViewport;

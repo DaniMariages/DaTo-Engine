@@ -17,7 +17,7 @@
 
 ComponentImage::ComponentImage(UI_Type type, GameObject* gameObject, uint width, uint heigt, uint PosX, uint PosY, const char* imagePath) : ComponentUI(type, gameObject, width, heigt, PosX, PosY, imagePath)
 {
-	gmAtached = gameObject;
+	parent = gameObject;
 
 	image_Path = new Texture();
 
@@ -26,7 +26,7 @@ ComponentImage::ComponentImage(UI_Type type, GameObject* gameObject, uint width,
 
 ComponentImage::~ComponentImage()
 {
-	gmAtached = nullptr;
+	parent = nullptr;
 	delete image_Path;
 	image_Path = nullptr;
 }

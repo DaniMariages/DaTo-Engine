@@ -28,7 +28,7 @@ ComponentText::ComponentText(UI_Type type, GameObject* gameObject, uint width, u
 
 	font = ExternalApp->fonts->actualFont;
 
-	hasBeenModified = false;
+	modified = false;
 
 	widthPanel = width;
 	heigthPanel = heigt;
@@ -51,7 +51,7 @@ ComponentText::ComponentText(GameObject* _parent) : ComponentUI(_parent)
 	text = "ComponentText";
 	font = ExternalApp->fonts->actualFont;
 
-	hasBeenModified = false;
+	modified = false;
 	widthPanel = 150;
 	heigthPanel = 150;
 
@@ -77,77 +77,9 @@ void ComponentText::ShowInfo(ComponentUI* compUI, string actText, string newText
 
 void ComponentText::DoText()
 {
-	/*if (text != "")
-	{
-		uint size_of_character = widthPanel / text.length();
-
-		for (int i = 0; i < text.length(); i++)
-		{
-			uint position_of_character = positionX + 1 * i;
-
-			ComponentMesh* mesh = (ComponentMesh*)parent->AddComponent(typeComponent::Mesh);
-
-			float3 vertex[4];
-			float2 uv[4];
-			uint buffer[3];
-			float3 transform = { (float)position_of_character, (float)positionY, 0 };
-
-			CreatePanel(vertex, transform, size_of_character, heigthPanel);
-
-			mesh->Name = "Letter";
-			mesh->C_Mesh->num_vertex = 4;
-			mesh->C_Mesh->num_index = 6;
-			mesh->C_Mesh->num_Tex = 2;
-
-			uv[0] = float2(0, 1);
-			uv[1] = float2(1, 1);
-			uv[3] = float2(1, 0);
-			uv[2] = float2(0, 0);
-
-			GenerateBuffers(buffer, vertex, uv);
-
-			mesh->C_Mesh->VBO = buffer[0];
-			mesh->C_Mesh->EBO = buffer[1];
-			mesh->C_Mesh->VT = buffer[2];
-		}
-	}*/
+	
 }
 void ComponentText::RecreateText(string new_Text, GameObject* gm, uint width, uint heigth, uint _posX, uint _posY)
 {
-	/*gm->DeleteComponentType(ComponentType::MESH);
-
-	if (new_Text != "")
-	{
-		uint size_of_character = width / new_Text.length();
-
-		for (int i = 0; i < new_Text.length(); i++)
-		{
-			uint position_of_character = _posX + 1 * i;
-
-			ComponentMesh* mesh = dynamic_cast<ComponentMesh*>(gm->AddComponent(ComponentType::MESH));
-
-			float3 vertex[4];
-			float2 uv[4];
-			uint buffer[3];
-			float3 transform = { (float)position_of_character, (float)_posY, 0 };
-
-			CreatePanel(vertex, transform, size_of_character, heigth);
-
-			mesh->Name = "Letter";
-			mesh->C_Mesh->num_vertex = 4;
-			mesh->C_Mesh->num_index = 6;
-			mesh->C_Mesh->num_Tex = 2;
-
-			uv[0] = float2(0, 1);
-			uv[1] = float2(1, 1);
-			uv[3] = float2(1, 0);
-			uv[2] = float2(0, 0);
-
-			GenerateBuffers(buffer, vertex, uv);
-
-			mesh->C_Mesh->VBO = buffer[0];
-			mesh->C_Mesh->EBO = buffer[1];
-			mesh->C_Mesh->VT = buffer[2];
-		}
-	}*/
+	
 }
