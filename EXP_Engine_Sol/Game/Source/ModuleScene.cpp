@@ -3,6 +3,7 @@
 #include "ModuleCamera3D.h"
 #include "ModuleImport.h"
 #include "ModuleWindow.h"
+#include "ComponentCanvas.h"
 
 #include <map>
 
@@ -10,6 +11,7 @@ ModuleScene::ModuleScene(Application* app, bool start_enabled) : Module(app, sta
 {
 	rootGameObject = CreateGameObject("Scene", nullptr);
 	gameCameraObject = CreateGameObject("MainCamera", rootGameObject);
+	canvas = CreateGameObject("Canvas", rootGameObject);
 
 	ImGuizmo::Enable(true);
 
@@ -27,8 +29,11 @@ bool ModuleScene::Init()
 	LOG("Creating Module Scene");
 	bool ret = true;
 
+	compCanvas = new ComponentCanvas(canvas);
+	canvas->AddComponent(typeComponent::Canvas);
+
 	gameCamera = new ComponentCamera(gameCameraObject);
-	gameCameraObject->AddComponent(gameCamera);
+	gameCameraObject->AddComponent(typeComponent::Camera);
 
 	//Set the game camera starter position
 	gameCameraObject->transform->SetPosition(float3(0.0f, 5.0f, -20.0f));

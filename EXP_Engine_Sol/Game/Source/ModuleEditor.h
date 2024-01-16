@@ -93,6 +93,11 @@ public:
 	bool borderless = false;
 
 	bool IoConfirmer = false;
+
+	ImVec2 GameWindowSize;
+	ImVec2 GameWindowPos;
+	ImVec2 mousePosInViewport;
+
 };
 
 #endif //MODULE_EDITOR

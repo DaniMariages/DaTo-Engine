@@ -84,6 +84,9 @@ public:
 	//Function that check if the name exists in game objects, if exists, call ReName.
 	std::string GetUniqueName(std::string Name);
 
+	//Needed to User Interface
+	void LoadTextureUI(Texture* texture = nullptr, const char* buffer = nullptr, uint size = 0);
+
 private:
 	
 	//Get the name of game object from the file path.

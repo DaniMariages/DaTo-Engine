@@ -126,6 +126,12 @@ void ModuleEditor::DrawEditor()
 		ImGui::End();
 	}
 
+	GameWindowSize = ImVec2(ImGui::GetWindowWidth(), ImGui::GetWindowHeight());
+	GameWindowPos = ImGui::GetWindowPos();
+	mousePosInViewport.x = App->input->GetMouseX() - ImGui::GetCursorScreenPos().x;
+	mousePosInViewport.y = App->input->GetMouseY() - ImGui::GetCursorScreenPos().y;
+
+
 	Config();
 	Console();
 	DrawPausePlay();

@@ -13,6 +13,7 @@
 #include <vector>
 
 class ComponentCamera;
+class ComponentCanvas;
 
 class ModuleScene : public Module
 {
@@ -48,6 +49,9 @@ public:
 	GameObject* gameCameraObject = nullptr;
 	ComponentCamera* gameCamera = nullptr;
 	std::vector<ComponentCamera*> totalCameras;
+
+	GameObject* canvas = nullptr;
+	ComponentCanvas* compCanvas = nullptr;
 
 	//Timer
 	Timer gameTime;
