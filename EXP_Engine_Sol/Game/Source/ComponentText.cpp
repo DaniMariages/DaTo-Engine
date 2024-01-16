@@ -28,8 +28,6 @@ ComponentText::ComponentText(UI_Type type, GameObject* gameObject, uint width, u
 
 	font = ExternalApp->fonts->actualFont;
 
-	modified = false;
-
 	widthPanel = width;
 	heigthPanel = heigt;
 
@@ -51,7 +49,6 @@ ComponentText::ComponentText(GameObject* _parent) : ComponentUI(_parent)
 	text = "ComponentText";
 	font = ExternalApp->fonts->actualFont;
 
-	modified = false;
 	widthPanel = 150;
 	heigthPanel = 150;
 

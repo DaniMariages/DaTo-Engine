@@ -7,7 +7,6 @@
 #include "ComponentButton.h"
 #include "ComponentImage.h"
 #include "ComponentCanvas.h"
-#include "ComponentCheck.h"
 #include "ComponentInputText.h"
 
 
@@ -232,73 +231,6 @@ void ComponentUI::Update()
 		//inputText->Update(this);
 	}
 
-	if (ExternalApp->editor->isRunning)
-	{
-		switch (actualMouseState)
-		{
-		case IDLE_UI:
-			if (ui_Type == BUTTON) {
-				ComponentButton* button = (ComponentButton*)this;
-				button->OnIdle(this);
-			}
-			break;
-			if (ui_Type == CHECKER) {
-				ComponentCheck* checker = (ComponentCheck*)this;
-				checker->OnIdle(this);
-			}
-			break;
-		case HOVER_UI:
-			if (ui_Type == BUTTON) {
-				ComponentButton* button = (ComponentButton*)this;
-				button->OnHover(this);
-			}
-			if (ui_Type == CHECKER) {
-				ComponentCheck* checker = (ComponentCheck*)this;
-				checker->OnHover(this);
-			}
-			break;
-		case CLICK_UI:
-			if (ui_Type == INPUT_TEXT)
-			{
-				InputText* inputText = (InputText*)this;
-				inputText->OnClick(this);
-			}
-			if (ui_Type == BUTTON)
-			{
-				ComponentButton* button = (ComponentButton*)this;
-				button->OnClick(&actualButtonAction);
-			}
-			if (ui_Type == CHECKER)
-			{
-				ComponentCheck* checker = (ComponentCheck*)this;
-				checker->OnClick(this);
-			}
-			break;
-		case CLICKED_UI:
-			if (ExternalApp->scene->draggable)
-			{
-				MoveComponent();
-			}
-			break;
-		case CLICKED_RELEASED_UI:
-			this->isBeeingClicked = false;
-
-			if (ui_Type == BUTTON)
-			{
-				ComponentButton* button = (ComponentButton*)this;
-				button->OnIdle(this);
-				isDragabble = false;
-			}
-			if (ui_Type == CHECKER) {
-				ComponentCheck* checker = (ComponentCheck*)this;
-				checker->OnIdle(this);
-				isDragabble = false;
-			}
-			break;
-		default:
-			break;
-		}
-	}
 }
 
 void ComponentUI::Disable()
@@ -432,40 +364,6 @@ ComponentUI* ComponentUI::CreateGameObjectUI(GameObject* parent, UI_Type type, u
 
 		ComponentTexture* compTex = new ComponentTexture(Image);
 		Image->AddComponent(compTex);
-
-		compTex->texColor.r = 255;
-		compTex->texColor.g = 255;
-		compTex->texColor.b = 255;
-		compTex->texColor.a = 255;
-
-		if (comp_UI->texture != nullptr)
-		{
-			compTex->SetTexture(comp_UI->texture);
-		}
-	}
-	break;
-	case UI_Type::CHECKER:
-	{
-		GameObject* Checker = ExternalApp->scene->CreateGameObject("Checker", parent);
-
-		ComponentUI* compUI = new ComponentUI(type, Checker, width, heigth, posX, posY, imagePath);
-		comp_UI = compUI;
-
-		ComponentCheck check_UI = ComponentCheck(type, Checker, width, heigth, posX, posY, imagePath, imagePathDisabled);
-		Checker->AddComponent(&check_UI);
-
-		comp_UI->AsRootPositionX = OrinigalPosX; 
-		comp_UI->AsRootPositionY = OrinigalPosY; 
-		comp_UI->AsRootWidthPanel = OrinigalWidth; 
-		comp_UI->AsRootHeigthPanel = Orinigalheight;
-		comp_UI->actualChecker = (_functions)buttonFuntion;
-		comp_UI->positionX = check_UI.positionX;
-		comp_UI->positionY = check_UI.positionY;
-		comp_UI->widthPanel = check_UI.widthPanel;
-		comp_UI->heigthPanel = check_UI.heigthPanel;
-
-		ComponentTexture* compTex = new ComponentTexture(Checker);
-		Checker->AddComponent(compTex);
 
 		compTex->texColor.r = 255;
 		compTex->texColor.g = 255;
